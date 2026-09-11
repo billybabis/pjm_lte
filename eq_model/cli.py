@@ -7,6 +7,7 @@ Command line interface.
     python -m eq_model run   --panel panel.npz --regimes P1,P2,R2,R3,R4,R5,R6 --gamma 0.3 --out results/
     python -m eq_model sweep --panel panel.npz --regime R2 --gammas 0,0.1,0.25,0.5,1 --out results/
     python -m eq_model combine results/ --out results/summary.csv
+    python -m eq_model plot results/ --gammas 0,0.3,1 --out figs/capacity.pdf
 
 ``run``/``sweep`` take --jobs N to solve regimes (resp. gammas) in N parallel processes, and
 --workers M to solve the yearly dispatch LPs of each of those in M processes.  When the work is
@@ -198,6 +199,13 @@ def _solve_and_write(panel, P: ModelParams, name: str, gamma: float, out: str, c
     res = solve_regime(panel, P, reg, gamma=gamma, cap=cap, K0=K0, tol=tol, max_outer=max_outer, verbose=verbose)
     w = evaluate_welfare(panel, P, res)
     row = summary_row(w, res, P)
+    # The planner regimes are risk-neutral by construction and always report gamma=0, so the
+    # gamma the run was launched with is recorded separately; without it the P1/P2 rows of
+    # different gamma runs are indistinguishable and collapse into one.
+    row["gamma_requested"] = float(gamma)
+    # How much of the runtime is the single-process completion LP: the part extra cores cannot help.
+    row["completion_s"] = float(sum(h.get("completion_s", 0.0) for h in res.outer_history))
+    row["n_evaluations"] = int(sum(h.get("evals", 0) for h in res.outer_history))
     suffix = f"{name}{tag}"
     with open(os.path.join(out, f"result_{suffix}.json"), "w") as fh:
         json.dump({"regime": dataclasses.asdict(reg), "gamma": res.gamma, "tau": res.tau, "K": res.K, "I": res.I,
@@ -207,10 +215,18 @@ def _solve_and_write(panel, P: ModelParams, name: str, gamma: float, out: str, c
                    "forward": dataclasses.asdict(res.forward) if res.forward else None, "markdown": res.markdown,
                    "converged": res.converged, "outer_history": res.outer_history,
                    "capacity_iterations": res.capacity_result.iterations, "foc": res.capacity_result.foc,
+                   "n_evaluations": res.capacity_result.n_evaluations,
+                   # Provenance: the full parameter set this result was produced with, so a
+                   # results directory is a record rather than an assertion about which
+                   # --param flags were typed.
+                   "params": dataclasses.asdict(P),
                    "welfare": {"C_y": w.C_y, "C_mean": w.C_mean, "C_max": w.C_max, "C_risk_adjusted": w.C_risk_adjusted,
                                "tau_welfare": w.tau_welfare, "components_mean": w.components_mean, "emissions_y": w.emissions_y,
                                "lost_load_mwh_y": w.lost_load_mwh_y, "psi_load_mean": w.psi_load_mean,
-                               "energy_share": w.energy_share, "curtailment_share": w.curtailment_share},
+                               "energy_share": w.energy_share, "curtailment_share": w.curtailment_share,
+                               "curtailment_mwh_y": w.curtailment_mwh_y,
+                               "curtailment_hours_y": w.curtailment_hours_y,
+                               "curtailment_hours_any_y": w.curtailment_hours_any_y},
                    "runtime_s": time.time() - t0}, fh, indent=1, default=_json_default)
     profit_table(res, panel).to_csv(os.path.join(out, f"profits_{suffix}.csv"), index=False)
     np.savez_compressed(os.path.join(out, f"prices_{suffix}.npz"), price=res.evaluation.price, years=panel.years,
@@ -262,10 +278,15 @@ def _execute(panel, P: ModelParams, units, out: str, tol: float, max_outer: int,
     return rows
 
 
+def _gamma_col(df: pd.DataFrame) -> str:
+    """The gamma to group/sort by: what the run asked for, not what a risk-neutral planner used."""
+    return "gamma_requested" if "gamma_requested" in df.columns else "gamma"
+
+
 def _order_rows(rows: List[dict], regimes: List[str]) -> pd.DataFrame:
     df = pd.DataFrame(rows)
     df["regime"] = pd.Categorical(df["regime"], categories=regimes, ordered=True)   # restore requested order
-    df = df.sort_values(["regime", "gamma"]).reset_index(drop=True)
+    df = df.sort_values(["regime", _gamma_col(df)]).reset_index(drop=True)
     df["regime"] = df["regime"].astype(str)
     return df
 
@@ -314,39 +335,114 @@ def cmd_sweep(args):
     # One gamma per unit: each gamma re-solves the whole fixed point, so gammas parallelise cleanly.
     units = [(g, f"_gamma{g:g}", [args.regime]) for g in gammas]
     rows = _execute(panel, P, units, args.out, args.tol, args.max_outer, not args.quiet, args.workers, args.jobs)
-    df = _order_rows(rows, [args.regime]).sort_values("gamma").reset_index(drop=True)
+    df = _order_rows(rows, [args.regime]).sort_values(_gamma_col(pd.DataFrame(rows))).reset_index(drop=True)
     df.to_csv(os.path.join(args.out, f"sweep_{args.regime}.csv"), index=False)
     _print_table(df, ["gamma", "converged", "C_mean_$bn", "price_load_wtd", "p_hat"] +
                  [c for c in df.columns if c.startswith("K_") or c.startswith("premium_pct_")])
     print("written to", args.out)
 
 
-def cmd_combine(args):
-    """Stitch the per-regime ``row_*.json`` files written by separate processes or machines (one
-    GitHub Actions matrix job per regime) into a single summary table."""
-    rows, seen = [], set()
-    for d in args.dirs:
+def _rows_agree(a: dict, b: dict, rtol: float = 1e-9) -> bool:
+    """Same solve, allowing for wall-clock noise and float round-trips through JSON."""
+    skip = {"runtime_s"}
+    if set(a) - skip != set(b) - skip:
+        return False
+    for k in set(a) - skip:
+        x, y = a[k], b[k]
+        if isinstance(x, (int, float)) and isinstance(y, (int, float)) and not isinstance(x, bool):
+            if x != y and not (np.isnan(x) and np.isnan(y)) and abs(x - y) > rtol * max(1.0, abs(x), abs(y)):
+                return False
+        elif x != y:
+            return False
+    return True
+
+
+def _first_difference(a: dict, b: dict) -> str:
+    for k in sorted(set(a) | set(b)):
+        if k == "runtime_s":
+            continue
+        if a.get(k) != b.get(k):
+            return f"{k}: {a.get(k)!r} vs {b.get(k)!r}"
+    return "(none found outside runtime_s)"
+
+
+def _collect_rows(dirs: List[str], regimes: Optional[str] = None) -> pd.DataFrame:
+    """Read every ``row_*.json`` under ``dirs`` (recursively) into one ordered table.  This is what
+    lets results produced by separate processes, or by separate CI matrix jobs, be merged."""
+    rows, seen = [], {}
+    for d in dirs:
         for fn in sorted(glob.glob(os.path.join(d, "**", "row_*.json"), recursive=True)):
             with open(fn) as fh:
                 row = json.load(fh)
-            key = (row.get("regime"), row.get("gamma"))
+            key = (row.get("regime"), row.get("gamma_requested", row.get("gamma")))
             if key in seen:
-                log.warning("duplicate %s at gamma=%s (%s); keeping the first", key[0], key[1], fn)
-                continue
-            seen.add(key)
+                prev_fn, prev = seen[key]
+                if _rows_agree(prev, row):
+                    # The same solve reached us twice - e.g. one regime present in two
+                    # downloaded CI artifact directories.  Harmless: keep either.
+                    log.info("%s at gamma=%s seen twice with identical values (%s); keeping the first",
+                             key[0], key[1], fn)
+                    continue
+                raise SystemExit(
+                    f"{key[0]} at gamma={key[1]} appears twice with DIFFERENT results:\n"
+                    f"    {prev_fn}\n    {fn}\n"
+                    f"  first differing field: {_first_difference(prev, row)}\n"
+                    "These are different runs (different --param settings?) that cannot share "
+                    "one table or figure. Point the command at one of them, or plot them "
+                    "separately.")
+            seen[key] = (fn, row)
             rows.append(row)
     if not rows:
-        raise SystemExit(f"no row_*.json found under {args.dirs}")
-    order = [r.strip() for r in args.regimes.split(",")] if args.regimes else list(REGIMES)
-    order += [r["regime"] for r in rows if r["regime"] not in order]
-    df = _order_rows(rows, order)
+        raise SystemExit(f"no row_*.json found under {dirs}")
+    order = [r.strip() for r in regimes.split(",")] if regimes else list(REGIMES)
+    for r in rows:                                     # append-in-place: a regime present in the
+        if r["regime"] not in order:                   # data but not requested must be added once,
+            order.append(r["regime"])                  # not once per gamma
+    return _order_rows(rows, order)
+
+
+def cmd_combine(args):
+    """Stitch the per-regime ``row_*.json`` files written by separate processes or machines (one
+    GitHub Actions matrix job per regime) into a single summary table."""
+    df = _collect_rows(args.dirs, args.regimes)
     if args.by_gamma:
-        df = df.sort_values(["gamma", "regime"]).reset_index(drop=True)
+        df = df.sort_values([_gamma_col(df), "regime"]).reset_index(drop=True)
     d = os.path.dirname(os.path.abspath(args.out))
     os.makedirs(d, exist_ok=True)
     df.to_csv(args.out, index=False)
     _print_table(df, _RUN_COLS + [c for c in df.columns if c.startswith("K_")])
     print(len(df), "rows written to", args.out)
+
+
+def _suffixed(path: str, suffix: str) -> str:
+    root, ext = os.path.splitext(path)
+    return f"{root}_{suffix}{ext or '.pdf'}"
+
+
+def cmd_plot(args):
+    """Capacity and/or energy-share figures: stacked bars by regime, one panel per gamma."""
+    from .plots import capacity_panels, energy_panels, contract_panels
+    df = _collect_rows(args.dirs, args.regimes)
+    gammas = [float(g) for g in args.gammas.split(",")] if args.gammas else None
+    regimes = [r.strip() for r in args.regimes.split(",") if r.strip()] if args.regimes else None
+    kinds = {"both": ["capacity", "energy"],
+             "all": ["capacity", "energy", "contract"]}.get(args.kind, [args.kind])
+    common = dict(gammas=gammas, regimes=regimes, title=args.title, panel_width=args.panel_width,
+                  height=args.height, dpi=args.dpi)
+    for kind in kinds:
+        # With several figures the name is disambiguated; with one, --out is taken literally.
+        out = _suffixed(args.out, kind) if len(kinds) > 1 else args.out
+        d = os.path.dirname(os.path.abspath(out))
+        os.makedirs(d, exist_ok=True)
+        if kind == "capacity":
+            out = capacity_panels(df, out=out, capacity_unit=args.unit,
+                                  show_curtailment=not args.no_curtailment, **common)
+        elif kind == "energy":
+            out = energy_panels(df, out=out, show_curtailment=not args.no_curtailment, **common)
+        else:
+            out = contract_panels(df, out=out, capacity_unit=args.unit,
+                                  show_price=not args.no_price, show_empty=args.keep_empty, **common)
+        print("figure written to", out)
 
 
 def main(argv=None):
@@ -394,6 +490,31 @@ def main(argv=None):
     s.add_argument("--regimes", help="column order, e.g. P1,P2,R2,R3,R4,R5,R6 (default: the REGIMES order)")
     s.add_argument("--by-gamma", action="store_true", help="sort by gamma first (for sweeps)")
     s.set_defaults(fn=cmd_combine)
+
+    s = sub.add_parser("plot", help="stacked capacity and/or energy-share bars by regime, "
+                                    "one panel per gamma, with curtailment on a secondary axis")
+    s.add_argument("dirs", nargs="+", help="directories to scan recursively for row_*.json")
+    s.add_argument("--out", default="capacity.pdf", help="output figure (.pdf/.png/.svg); with "
+                                                       "--kind both the kind is appended to the stem")
+    s.add_argument("--kind", default="capacity",
+                   choices=["capacity", "energy", "contract", "both", "all"],
+                   help="capacity: installed MW stacked by technology, curtailment hours overlaid; "
+                        "energy: share of load served, curtailed VRE share overlaid; "
+                        "contract: contracted capacity chi_z*K_z, forward price overlaid; "
+                        "both: capacity+energy; all: all three")
+    s.add_argument("--gammas", help="which gammas to draw, in panel order (default: all present)")
+    s.add_argument("--regimes", help="which regimes to draw, in bar order (default: the REGIMES order)")
+    s.add_argument("--title")
+    s.add_argument("--unit", default="GW", choices=["GW", "MW"])
+    s.add_argument("--panel-width", type=float, default=3.4, help="inches per panel")
+    s.add_argument("--height", type=float, default=4.0, help="figure height, inches")
+    s.add_argument("--dpi", type=int, default=300)
+    s.add_argument("--no-curtailment", action="store_true", help="drop the curtailment overlay")
+    s.add_argument("--no-price", action="store_true", help="drop the forward-price overlay (contract)")
+    s.add_argument("--keep-empty", action="store_true",
+                   help="contract figure: keep slots for regimes with no forward market "
+                        "(P1/P2/R2/R6), so the regime axis matches the other figures")
+    s.set_defaults(fn=cmd_plot)
 
     args = ap.parse_args(argv)
     logging.basicConfig(level=logging.DEBUG if args.verbose else logging.INFO, format="%(asctime)s %(levelname)s %(message)s",

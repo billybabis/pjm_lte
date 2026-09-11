@@ -149,6 +149,11 @@ class ModelParams:
     markdown_solar_cf: float = 0.25          # used by "regulation"/"full" to convert $/MW-yr -> $/MWh
     markdown_daylight_share: float = 0.5
 
+    # An hour counts as curtailed for VRE r when available output theta_rh * K_r exceeds
+    # dispatched output by more than this many MW (an absolute floor, so that LP round-off
+    # in the many hours where VRE is fully absorbed does not register as curtailment).
+    curtailment_hour_threshold_mw: float = 1.0
+
     # --- Welfare evaluation ----------------------------------------------
     # Carbon valued at the SCC in the welfare metric for ALL regimes (so that P2 is the
     # first-best benchmark).  Set False to value emissions only where tau is priced.

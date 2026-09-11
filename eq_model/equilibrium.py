@@ -364,7 +364,14 @@ def solve_regime(panel: HourlyPanel, params: ModelParams, regime: Regime, gamma:
                  cap: Optional[CapacityProblem] = None, K0: Optional[Dict[str, float]] = None,
                  tol: float = 1e-3, max_outer: int = 60, verbose: bool = True) -> RegimeResult:
     """Solve one regime.  ``cap`` (a CapacityProblem for the same panel and tau) can be passed
-    to share its cut pool across regimes/gammas."""
+    to share its cut pool across regimes/gammas.
+
+    Note: the price completion runs on every outer iteration and is single-process, which makes it
+    the bulk of the runtime.  Deferring it to late iterations was tried and abandoned -- the
+    dispatch LPs' degenerate duals understate scarcity rents, which both traps a residual-based
+    trigger (the residual never falls) and degrades the secant update enough to need 2-3x the
+    outer iterations.  Every variant measured slower than completing every time.  The per-iteration
+    cost split is recorded in ``outer_history`` (``secs``, ``completion_s``)."""
     t0 = time.time()
     gamma = params.gamma if gamma is None else gamma
     tau = params.tau_scc if regime.carbon_priced else 0.0
@@ -414,7 +421,9 @@ def solve_regime(panel: HourlyPanel, params: ModelParams, regime: Regime, gamma:
     for outer in range(1, max_outer + 1):
         I_solved = I_eff.copy()
         inner_gap = 1e-5 if (not np.isfinite(resid) or resid > 1e-2) else 1e-6   # loose early; completion re-optimises K
+        t_outer = time.time()
         cr = cap.solve(dict(zip(names, I_eff)), Kc, tol_gap=inner_gap, verbose=False)
+        t_outer = time.time() - t_outer
         ev = cr.evaluation
         Kc = cr.K
         Pbar = (lam_hy * ev.price).sum(axis=1)
@@ -426,7 +435,11 @@ def solve_regime(panel: HourlyPanel, params: ModelParams, regime: Regime, gamma:
         resid = float(max(np.max(np.abs(rel[active])) if active.any() else 0.0,
                           np.max(rel[~active]) if (~active).any() else 0.0))
         fm = np.array([cap.f @ ev.margins[z] for z in names])
-        rec = {"outer": outer, "resid": resid, "inner_iters": cr.iterations, "inner_foc": cr.foc_residual,
+        # Timing split: ``completion_s`` is the monolithic price-completion LP, which is
+        # single-process by construction -- extra cores do not touch it.
+        rec = {"outer": outer, "resid": resid, "secs": round(t_outer, 1),
+               "completion_s": round(cr.completion_time, 1), "evals": cr.n_evaluations,
+               "inner_iters": cr.iterations, "inner_foc": cr.foc_residual,
                "p_hat": fwd.p_hat, "K": {z: round(cr.K[z]) for z in names},
                "I_eff": dict(zip(names, I_eff.round(0))), "rho_star": dict(zip(names, rs.round(0)))}
         outer_hist.append(rec)

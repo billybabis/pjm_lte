@@ -37,10 +37,12 @@ vintage, run `check-load` and `build-panel` first and read the diagnostics they 
 | `eq_model/agents.py` | risk measure, contract choice (χ), forward-market clearing, spot margins |
 | `eq_model/equilibrium.py` | trust-region cutting planes over K, exact price completion, market fixed point, `solve_regime` |
 | `eq_model/welfare.py` | C_y, risk-adjusted 𝒞, cost components, emissions, summary rows |
-| `eq_model/cli.py` | `check-load`, `build-panel`, `run`, `sweep`, `combine`, `params` |
+| `eq_model/cli.py` | `check-load`, `build-panel`, `run`, `sweep`, `combine`, `plot`, `params` |
+| `eq_model/plots.py` | capacity/curtailment figure (stacked bars by regime, one panel per γ) |
 | `eq_model/synthetic.py` | synthetic raw files / panels for tests |
 | `tests/test_model.py` | pytest suite |
 | `.github/workflows/run-model.yml` | one CI job per regime, results merged by `combine` |
+| `docs/github-actions.md` | how to dispatch a run, collect artifacts, and build the multi-γ figure |
 
 ## 2. Data pipeline
 
@@ -92,12 +94,19 @@ python -m eq_model run   ... --param voll=20000 --param q_bar_rule=peak_load --p
 python -m eq_model run   ... --workers 4                                          # parallel yearly dispatch
 python -m eq_model run   ... --jobs 4                                             # parallel regimes
 python -m eq_model combine results/ --out results/summary.csv                     # stitch split runs
+python -m eq_model plot results/ --gammas 0,0.3,1 --out figs/capacity.pdf         # paper figure
 ```
 
 Outputs per regime: `result_<R>.json` (K, χ, p̂, effective costs, risk premia, implied
 discount rates, ρ*, convergence history, welfare block), `profits_<R>.csv` (per-MW annual
 profit by technology and year), `prices_<R>.npz` (hourly prices and lost load), `row_<R>.json`
 (that regime's summary row on its own), and `summary.csv` across regimes.
+
+Curtailment is reported two ways. `curt_share_<r>` is the fraction of available VRE energy
+θ_rh·K_r that went undispatched; `curt_hours_<r>_mean` and `curt_hours_any_mean` count hours per
+year in which curtailment exceeded `curtailment_hour_threshold_mw` (default 1 MW — an absolute
+floor, so that LP round-off in hours where VRE is fully absorbed does not register). The threshold
+is a reporting convention only and does not affect the solution.
 
 ### Parallelism
 
@@ -112,11 +121,61 @@ There are two independent axes, and they multiply:
   every process. Each process holds its own cut pool and monolithic LP (≈ 3 GB at full size), so
   N × 3 GB is the memory bound.
 
+### Figures
+
+```
+python -m eq_model plot results/ --kind all --gammas 0,0.3,0.6,1 --out figs/fig.pdf
+```
+
+`--kind` selects the figure: `capacity`, `energy`, `contract`, `both` (capacity + energy) or
+`all`. With more than one the kind is appended to the output stem.
+
+* **capacity** — installed K_z stacked by technology, mean annual curtailment *hours* on a
+  secondary axis (`--no-curtailment` drops the overlay).
+* **energy** — share of load served, stacked by technology; columns sum to 100 %. Storage is net
+  of round-trip losses so its segment is drawn below the axis; unserved energy is its own segment.
+  Curtailed VRE (% of available) on the secondary axis.
+* **contract** — contracted capacity Q_z = χ_z·K_z stacked by technology, with the forward
+  clearing price p̂ on the secondary axis and a dashed line at Q̄. Every contracting regime clears
+  at Σ_z Q_z = Q̄, so the bars are all the same height and the figure is about the *mix*. Only
+  R3/R4/R5 have forward markets; the other regimes are omitted (`--keep-empty` keeps their slots
+  labelled, so the regime axis lines up with the other two figures).
+
+All three share the γ-panel layout: Technology colours are fixed in
+`plots.py::TECH_COLORS` (Okabe–Ito, colour-blind safe) so a technology keeps its colour across
+every figure. Output format follows the extension — `.pdf` for LaTeX, `.png`/`.svg` otherwise —
+and `--unit MW`, `--panel-width`, `--height`, `--dpi` control the rest.
+
+The planner regimes P1 and P2 are risk-neutral by construction and solve identically at every γ.
+They are drawn in every panel as the fixed benchmark, which is why the summary rows carry both
+`gamma` (what the regime used — always 0 for a planner) and `gamma_requested` (what the run was
+launched with). Panels group on the latter.
+
+### Scenarios
+
+A scenario is a set of `--param` overrides. Give each its own output directory and point `plot`
+and `combine` at one directory at a time:
+
+```
+python -m eq_model run ... --param voll=20000 --out results/high_voll/g0.3
+python -m eq_model plot results/high_voll --kind both --gammas 0,0.3,0.6,1 --out figs/high_voll.pdf
+```
+
+Results are keyed by `(regime, gamma_requested)`, which does not include the scenario, so two
+scenarios cannot share one table or figure. Pointing a command at a directory spanning two of them
+is refused, naming both files and the first field that differs — it is never silently merged.
+Results that genuinely reached the command twice with identical values (one regime downloaded in
+two CI artifact directories, say) are deduplicated quietly.
+
+Every `result_<R>.json` carries a `params` block with the full `ModelParams` used, so a results
+directory records the settings that produced it rather than relying on the directory name.
+
 `combine` stitches the `row_*.json` files back into one `summary.csv` when the work is split
 across *machines* rather than processes — as in the `run-model` GitHub Actions workflow
 (`.github/workflows/run-model.yml`), which builds the panel once and then runs one matrix job per
 regime. It scans its directory arguments recursively, so pointing it at a directory of downloaded
-artifacts is enough.
+artifacts is enough. See [docs/github-actions.md](docs/github-actions.md) for the dispatch,
+artifact-collection and figure-building steps.
 
 ### Runtime
 

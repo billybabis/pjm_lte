@@ -198,6 +198,10 @@ jobs:
           if [ -d downloaded-sweep ] && compgen -G 'downloaded-sweep/*' > /dev/null; then
             python -m eq_model combine downloaded-sweep --by-gamma --out combined/sweep.csv
           fi
+      - name: figure
+        run: |
+          python -m eq_model plot downloaded --regimes "$REGIMES" --out combined/capacity.pdf
+          python -m eq_model plot downloaded --regimes "$REGIMES" --out combined/capacity.png
       - name: job summary
         run: |
           {

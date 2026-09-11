@@ -39,7 +39,11 @@ class Welfare:
     lost_load_hours_y: np.ndarray     # (Y,) hours with l > 0
     psi_load_mean: float              # decision-independent regulation cost (not in C)
     energy_share: Dict[str, float]    # z -> share of generation (storage net counts negative)
-    curtailment_share: Dict[str, float]  # r -> curtailed / available
+    curtailment_share: Dict[str, float]  # r -> curtailed / available (energy)
+    curtailment_mwh_y: Dict[str, np.ndarray]     # r -> (Y,) curtailed energy
+    curtailment_hours_y: Dict[str, np.ndarray]   # r -> (Y,) hours with curtailment > threshold
+    curtailment_hours_any_y: np.ndarray          # (Y,) hours with ANY VRE curtailed
+    curtailment_share_vre: float                 # curtailed / available, VRE technologies pooled
     price_mean: float                 # simple average $/MWh
     price_load_weighted: float
     price_max: float
@@ -79,16 +83,30 @@ def evaluate_welfare(panel: HourlyPanel, params: ModelParams, res: RegimeResult)
     total_load = float(panel.D.sum())
     shares = {z: v / total_load for z, v in gen.items()}
     shares["lost_load"] = float(ll.sum() / total_load)
-    curt = {}
+    # curtailment: available theta*K that was not dispatched, by energy and by hour count
+    curt, curt_mwh, curt_hrs = {}, {}, {}
+    thr = params.curtailment_hour_threshold_mw
+    any_curt = np.zeros((Y, H), dtype=bool)
+    vre_avail = vre_spill = 0.0
     for t in params.vre:
-        avail = float((panel.theta[t.vre_key] * K[t.name]).sum())
+        avail_hy = panel.theta[t.vre_key] * K[t.name]
+        spill_hy = np.maximum(avail_hy - np.stack([d.q[t.name] for d in ev.dispatch]), 0.0)
+        avail = float(avail_hy.sum())
         curt[t.name] = float(1 - gen[t.name] / avail) if avail > 0 else float("nan")
+        curt_mwh[t.name] = spill_hy.sum(axis=1)
+        curt_hrs[t.name] = (spill_hy > thr).sum(axis=1)
+        any_curt |= spill_hy > thr
+        vre_avail += avail
+        vre_spill += float(spill_hy.sum())
     p = ev.price
     return Welfare(regime=res.regime.name, gamma=gamma, tau_market=res.tau, tau_welfare=tau_w, C_y=C_y,
                    C_mean=float(C_y.mean()), C_max=float(C_y.max()), C_risk_adjusted=float(C_y.mean() + gamma * C_y.max()),
                    components_mean=comps, emissions_y=emis, lost_load_mwh_y=ll.sum(axis=1),
                    lost_load_hours_y=(ll > 1e-6).sum(axis=1), psi_load_mean=psi_load, energy_share=shares,
-                   curtailment_share=curt, price_mean=float(p.mean()), price_load_weighted=float((p * panel.D).sum() / panel.D.sum()),
+                   curtailment_share=curt, curtailment_mwh_y=curt_mwh, curtailment_hours_y=curt_hrs,
+                   curtailment_hours_any_y=any_curt.sum(axis=1),
+                   curtailment_share_vre=(vre_spill / vre_avail) if vre_avail > 0 else float("nan"),
+                   price_mean=float(p.mean()), price_load_weighted=float((p * panel.D).sum() / panel.D.sum()),
                    price_max=float(p.max()), hours_at_voll=int((p >= params.voll - 1e-6).sum()), capacity=dict(K))
 
 
@@ -105,6 +123,13 @@ def summary_row(w: Welfare, res: RegimeResult, params: ModelParams) -> dict:
         row[f"K_{z}_MW"] = res.K[z]
     for z in params.tech_names:
         row[f"share_{z}"] = w.energy_share[z]
+    row["share_lost_load"] = w.energy_share.get("lost_load", 0.0)
+    row["curt_hours_any_mean"] = float(w.curtailment_hours_any_y.mean())
+    row["curt_share_vre"] = w.curtailment_share_vre
+    for t in params.vre:
+        row[f"curt_hours_{t.name}_mean"] = float(w.curtailment_hours_y[t.name].mean())
+        row[f"curt_share_{t.name}"] = w.curtailment_share[t.name]
+        row[f"curt_GWh_{t.name}_mean"] = float(w.curtailment_mwh_y[t.name].mean()) / 1e3
     for z in params.tech_names:
         row[f"premium_pct_{z}"] = 100 * res.risk_premium[z] / res.I[z] if res.K[z] > 1.0 else float("nan")
     for z in params.tech_names:
