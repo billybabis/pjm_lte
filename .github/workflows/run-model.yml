@@ -1,0 +1,213 @@
+name: run-model
+
+# One matrix job per regime. Each job builds nothing but the solve: the panel is built once in
+# the `panel` job and passed down as an artifact, so every regime sees identical inputs. The
+# `combine` job stitches the per-regime row_*.json files back into a single summary.csv.
+
+on:
+  workflow_dispatch:
+    inputs:
+      regimes:
+        description: "Comma-separated regimes, one matrix job each"
+        default: "P1,P2,R2,R3,R4,R5,R6"
+      gamma:
+        description: "Risk aversion gamma"
+        default: "0.3"
+      workers:
+        description: "Parallel yearly-dispatch processes inside each job (runner has 4 vCPU)"
+        default: "3"
+      params:
+        description: "Extra --param overrides, space separated, e.g. voll=20000 markdown_mode=full"
+        default: ""
+      sweep_gammas:
+        description: "Gamma sweep values (one matrix job each); leave empty to skip the sweep"
+        default: ""
+      sweep_regime:
+        description: "Regime for the gamma sweep"
+        default: "R2"
+  push:
+    branches: [main]
+    paths: ["eq_model/**", ".github/workflows/run-model.yml"]
+
+concurrency:
+  group: run-model-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PYTHON_VERSION: "3.11"
+  REGIMES: ${{ github.event.inputs.regimes || 'P1,P2,R2,R3,R4,R5,R6' }}
+  GAMMA: ${{ github.event.inputs.gamma || '0.3' }}
+  WORKERS: ${{ github.event.inputs.workers || '3' }}
+  EXTRA_PARAMS: ${{ github.event.inputs.params || '' }}
+
+jobs:
+  # ---------------------------------------------------------------- fan-out keys
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      regimes: ${{ steps.split.outputs.regimes }}
+      gammas: ${{ steps.split.outputs.gammas }}
+      run_sweep: ${{ steps.split.outputs.run_sweep }}
+    steps:
+      - id: split
+        shell: bash
+        env:
+          SWEEP_GAMMAS: ${{ github.event.inputs.sweep_gammas }}
+        run: |
+          to_json () { python3 -c "import json,sys; print(json.dumps([s.strip() for s in sys.argv[1].split(',') if s.strip()]))" "$1"; }
+          echo "regimes=$(to_json "$REGIMES")" >> "$GITHUB_OUTPUT"
+          echo "gammas=$(to_json "${SWEEP_GAMMAS:-0}")" >> "$GITHUB_OUTPUT"
+          if [ -n "$SWEEP_GAMMAS" ]; then echo "run_sweep=true" >> "$GITHUB_OUTPUT"; else echo "run_sweep=false" >> "$GITHUB_OUTPUT"; fi
+
+  # ---------------------------------------------------------------- panel, built once
+  panel:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+          cache-dependency-path: requirements.txt
+      - run: pip install -r requirements.txt
+      - name: check-load
+        run: python -m eq_model check-load --load data/raw/load
+      - name: build-panel
+        run: |
+          python -m eq_model build-panel \
+            --load data/raw/load --gen data/raw/gen_by_fuel \
+            --capacity data/raw/capacity/vre_capacity.csv \
+            --eia-active data/raw/capacity/generators_active_07_2026.csv \
+            --eia-retired data/raw/capacity/generators_retired_07_2026.csv \
+            --save-capacity vre_capacity_with_coverage.csv \
+            --out panel.npz
+      - uses: actions/upload-artifact@v4
+        with:
+          name: panel
+          path: |
+            panel.npz
+            vre_capacity_with_coverage.csv
+          retention-days: 7
+
+  # ---------------------------------------------------------------- one job per regime
+  regime:
+    needs: [setup, panel]
+    runs-on: ubuntu-latest
+    timeout-minutes: 350        # GitHub-hosted jobs are killed at 360
+    strategy:
+      fail-fast: false          # a diverging regime must not cancel the others
+      max-parallel: 7
+      matrix:
+        regime: ${{ fromJSON(needs.setup.outputs.regimes) }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+          cache-dependency-path: requirements.txt
+      - run: pip install -r requirements.txt
+      - uses: actions/download-artifact@v4
+        with:
+          name: panel
+      - name: solve ${{ matrix.regime }}
+        env:
+          REGIME: ${{ matrix.regime }}
+        run: |
+          python -m eq_model run \
+            --panel panel.npz \
+            --regimes "$REGIME" \
+            --gamma "$GAMMA" \
+            --workers "$WORKERS" \
+            --out "results/gamma$GAMMA" \
+            $(for p in $EXTRA_PARAMS; do printf -- '--param %s ' "$p"; done)
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: results-${{ matrix.regime }}
+          path: results/
+          retention-days: 30
+
+  # ---------------------------------------------------------------- one job per gamma
+  sweep:
+    needs: [setup, panel]
+    if: needs.setup.outputs.run_sweep == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    strategy:
+      fail-fast: false
+      matrix:
+        gamma: ${{ fromJSON(needs.setup.outputs.gammas) }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+          cache-dependency-path: requirements.txt
+      - run: pip install -r requirements.txt
+      - uses: actions/download-artifact@v4
+        with:
+          name: panel
+      - name: sweep gamma=${{ matrix.gamma }}
+        env:
+          SWEEP_REGIME: ${{ github.event.inputs.sweep_regime || 'R2' }}
+          GAMMA_VALUE: ${{ matrix.gamma }}
+        run: |
+          python -m eq_model sweep \
+            --panel panel.npz \
+            --regime "$SWEEP_REGIME" \
+            --gammas "$GAMMA_VALUE" \
+            --workers "$WORKERS" \
+            --out "results/sweep" \
+            $(for p in $EXTRA_PARAMS; do printf -- '--param %s ' "$p"; done)
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sweep-gamma${{ matrix.gamma }}
+          path: results/
+          retention-days: 30
+
+  # ---------------------------------------------------------------- stitch it back together
+  combine:
+    needs: [setup, regime, sweep]
+    if: always() && needs.regime.result != 'skipped'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+          cache-dependency-path: requirements.txt
+      - run: pip install -r requirements.txt
+      - uses: actions/download-artifact@v4
+        with:
+          path: downloaded
+          pattern: results-*
+      - uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          path: downloaded-sweep
+          pattern: sweep-gamma*
+      - name: combine
+        run: |
+          mkdir -p combined
+          python -m eq_model combine downloaded --regimes "$REGIMES" --out combined/summary.csv
+          if [ -d downloaded-sweep ] && compgen -G 'downloaded-sweep/*' > /dev/null; then
+            python -m eq_model combine downloaded-sweep --by-gamma --out combined/sweep.csv
+          fi
+      - name: job summary
+        run: |
+          {
+            echo '## summary (gamma='"$GAMMA"')'
+            echo
+            python -c "import pandas as pd,sys; print(pd.read_csv('combined/summary.csv').to_markdown(index=False))" 2>/dev/null \
+              || { echo '```'; cat combined/summary.csv; echo '```'; }
+          } >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: summary
+          path: combined/
+          retention-days: 90
