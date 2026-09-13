@@ -1,0 +1,2830 @@
+{
+ "regime": {
+  "name": "R6",
+  "description": "Carbon price only, merchant",
+  "planner": false,
+  "reliability": "socialized",
+  "contracts": false,
+  "carbon_priced": true
+ },
+ "gamma": 0.9,
+ "tau": 280.0,
+ "K": {
+  "nuclear": 81449.95540856065,
+  "ccgt": 30403.981001803266,
+  "ct": 14125.754634510793,
+  "coal": -0.0,
+  "solar": 37972.10093144414,
+  "wind": 26507.156206041822,
+  "storage4": 3959.6598925449375,
+  "storage8": -0.0
+ },
+ "I": {
+  "nuclear": 393791.0855015716,
+  "ccgt": 95537.60126819545,
+  "ct": 81179.84459482426,
+  "coal": 250433.9871366213,
+  "solar": 74370.95515776894,
+  "wind": 95974.26094574045,
+  "storage4": 149446.06822502337,
+  "storage8": 262946.94265621604
+ },
+ "psi_coef": {
+  "nuclear": 0.0,
+  "ccgt": 0.0,
+  "ct": 0.0,
+  "coal": 0.0,
+  "solar": 521.1404629799999,
+  "wind": 795.8959891164009,
+  "storage4": 0.0,
+  "storage8": 0.0
+ },
+ "cost_K_effective": {
+  "nuclear": 494761.8947381279,
+  "ccgt": 168965.7006368035,
+  "ct": 153257.4558991217,
+  "coal": 475824.57555958047,
+  "solar": 89731.73450731856,
+  "wind": 115342.04176283396,
+  "storage4": 212068.21536488304,
+  "storage8": 383502.476839042
+ },
+ "risk_premium": {
+  "nuclear": 100970.80923655629,
+  "ccgt": 73428.09936860805,
+  "ct": 72077.61130429745,
+  "coal": 225390.58842295918,
+  "solar": 15360.779349549615,
+  "wind": 19367.780817093517,
+  "storage4": 62622.14713985968,
+  "storage8": 120555.53418282594
+ },
+ "implied_discount_rate": {
+  "nuclear": 0.04500935533109102,
+  "ccgt": 0.09853726976930693,
+  "ct": 0.10590414781861532,
+  "coal": null,
+  "solar": 0.044839529447819784,
+  "wind": 0.04617372666779945,
+  "storage4": 0.09122841959747002,
+  "storage8": null
+ },
+ "rho_star": {
+  "nuclear": -916.9976728240144,
+  "ccgt": 583.5031927987584,
+  "ct": 629.474930635377,
+  "coal": -321770.7908563918,
+  "solar": -135.94294579862617,
+  "wind": 299.5724793251975,
+  "storage4": 732.2820958748198,
+  "storage8": -100419.17186730787
+ },
+ "q_bar": 0.0,
+ "Lambda": 7813.949610228729,
+ "Pbar_by_year": [
+  379814.6486880159,
+  613529.0912149957,
+  463747.4398595777,
+  353381.3047689635,
+  521868.12675390096,
+  399310.152849021,
+  328734.7186384849,
+  720392.0416183074,
+  1008993.3987795021
+ ],
+ "forward": {
+  "p_hat": NaN,
+  "chi": {
+   "nuclear": 0.0,
+   "ccgt": 0.0,
+   "ct": 0.0,
+   "coal": 0.0,
+   "solar": 0.0,
+   "wind": 0.0,
+   "storage4": 0.0,
+   "storage8": 0.0
+  },
+  "Q": {
+   "nuclear": 0.0,
+   "ccgt": 0.0,
+   "ct": 0.0,
+   "coal": 0.0,
+   "solar": 0.0,
+   "wind": 0.0,
+   "storage4": 0.0,
+   "storage8": 0.0
+  },
+  "chi_interval": {
+   "nuclear": [
+    0.0,
+    0.0
+   ],
+   "ccgt": [
+    0.0,
+    0.0
+   ],
+   "ct": [
+    0.0,
+    0.0
+   ],
+   "coal": [
+    0.0,
+    0.0
+   ],
+   "solar": [
+    0.0,
+    0.0
+   ],
+   "wind": [
+    0.0,
+    0.0
+   ],
+   "storage4": [
+    0.0,
+    0.0
+   ],
+   "storage8": [
+    0.0,
+    0.0
+   ]
+  },
+  "rho_star": {
+   "nuclear": -916.9976728240144,
+   "ccgt": 583.5031927987584,
+   "ct": 629.474930635377,
+   "coal": -321770.7908563918,
+   "solar": -135.94294579862617,
+   "wind": 299.5724793251975,
+   "storage4": 732.2820958748198,
+   "storage8": -100419.17186730787
+  },
+  "supply": 0.0,
+  "q_bar": 0.0,
+  "rationed": false,
+  "notes": []
+ },
+ "markdown": {
+  "solar": 0.0,
+  "wind": 0.0
+ },
+ "converged": false,
+ "outer_history": [
+  {
+   "outer": 1,
+   "resid": 0.8999999999999685,
+   "secs": 330.5,
+   "completion_s": 291.9,
+   "evals": 35,
+   "inner_iters": 35,
+   "inner_foc": 4.0722634848970627e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 81666,
+    "ccgt": 29849,
+    "ct": 16213,
+    "coal": 0,
+    "solar": 39232,
+    "wind": 30451,
+    "storage4": 4121,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 393791.0,
+    "ccgt": 95538.0,
+    "ct": 81180.0,
+    "coal": 250434.0,
+    "solar": 74371.0,
+    "wind": 95974.0,
+    "storage4": 149446.0,
+    "storage8": 262947.0
+   },
+   "rho_star": {
+    "nuclear": -129137.0,
+    "ccgt": -76117.0,
+    "ct": -73062.0,
+    "coal": -395065.0,
+    "solar": -18703.0,
+    "wind": -28638.0,
+    "storage4": -71516.0,
+    "storage8": -192336.0
+   }
+  },
+  {
+   "outer": 2,
+   "resid": 0.8010989010989022,
+   "secs": 170.2,
+   "completion_s": 162.5,
+   "evals": 44,
+   "inner_iters": 10,
+   "inner_foc": 4.3729013021460587e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 81657,
+    "ccgt": 29990,
+    "ct": 15817,
+    "coal": 0,
+    "solar": 38889,
+    "wind": 29468,
+    "storage4": 4042,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 407982.0,
+    "ccgt": 103902.0,
+    "ct": 89209.0,
+    "coal": 475825.0,
+    "solar": 76426.0,
+    "wind": 99121.0,
+    "storage4": 157305.0,
+    "storage8": 396264.0
+   },
+   "rho_star": {
+    "nuclear": -110347.0,
+    "ccgt": -67071.0,
+    "ct": -65033.0,
+    "coal": -387085.0,
+    "solar": -15794.0,
+    "wind": -24102.0,
+    "storage4": -63833.0,
+    "storage8": -183634.0
+   }
+  },
+  {
+   "outer": 3,
+   "resid": 0.713066054824298,
+   "secs": 159.2,
+   "completion_s": 154.3,
+   "evals": 50,
+   "inner_iters": 7,
+   "inner_foc": 4.518247091888397e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 81793,
+    "ccgt": 30014,
+    "ct": 15618,
+    "coal": 0,
+    "solar": 38538,
+    "wind": 28174,
+    "storage4": 4048,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 420108.0,
+    "ccgt": 111273.0,
+    "ct": 96355.0,
+    "coal": 475825.0,
+    "solar": 78162.0,
+    "wind": 101770.0,
+    "storage4": 164320.0,
+    "storage8": 396946.0
+   },
+   "rho_star": {
+    "nuclear": -95468.0,
+    "ccgt": -59382.0,
+    "ct": -57887.0,
+    "coal": -379971.0,
+    "solar": -13558.0,
+    "wind": -20630.0,
+    "storage4": -56872.0,
+    "storage8": -174913.0
+   }
+  },
+  {
+   "outer": 4,
+   "resid": 0.6347071477007464,
+   "secs": 154.5,
+   "completion_s": 151.2,
+   "evals": 54,
+   "inner_iters": 5,
+   "inner_foc": 2.0168609059236717e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 81709,
+    "ccgt": 30164,
+    "ct": 15646,
+    "coal": 0,
+    "solar": 38436,
+    "wind": 27739,
+    "storage4": 3866,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 430599.0,
+    "ccgt": 117798.0,
+    "ct": 102716.0,
+    "coal": 475825.0,
+    "solar": 79652.0,
+    "wind": 104037.0,
+    "storage4": 170569.0,
+    "storage8": 396556.0
+   },
+   "rho_star": {
+    "nuclear": -81203.0,
+    "ccgt": -52783.0,
+    "ct": -51525.0,
+    "coal": -373637.0,
+    "solar": -11300.0,
+    "wind": -17316.0,
+    "storage4": -49241.0,
+    "storage8": -164798.0
+   }
+  },
+  {
+   "outer": 5,
+   "resid": 0.5649591094918742,
+   "secs": 167.2,
+   "completion_s": 163.9,
+   "evals": 58,
+   "inner_iters": 5,
+   "inner_foc": 4.700079027027326e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 81632,
+    "ccgt": 30275,
+    "ct": 15633,
+    "coal": 0,
+    "solar": 38437,
+    "wind": 27533,
+    "storage4": 3721,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 439522.0,
+    "ccgt": 123598.0,
+    "ct": 108378.0,
+    "coal": 475825.0,
+    "solar": 80894.0,
+    "wind": 105940.0,
+    "storage4": 175980.0,
+    "storage8": 394699.0
+   },
+   "rho_star": {
+    "nuclear": -69210.0,
+    "ccgt": -46717.0,
+    "ct": -45863.0,
+    "coal": -368002.0,
+    "solar": -9874.0,
+    "wind": -14490.0,
+    "storage4": -42229.0,
+    "storage8": -155083.0
+   }
+  },
+  {
+   "outer": 6,
+   "resid": 0.5028756908663945,
+   "secs": 161.2,
+   "completion_s": 159.5,
+   "evals": 60,
+   "inner_iters": 3,
+   "inner_foc": 4.858363539000483e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 81471,
+    "ccgt": 30327,
+    "ct": 15379,
+    "coal": 0,
+    "solar": 38658,
+    "wind": 27515,
+    "storage4": 3820,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 447128.0,
+    "ccgt": 128732.0,
+    "ct": 113418.0,
+    "coal": 475825.0,
+    "solar": 81979.0,
+    "wind": 107532.0,
+    "storage4": 180621.0,
+    "storage8": 392670.0
+   },
+   "rho_star": {
+    "nuclear": -58639.0,
+    "ccgt": -41563.0,
+    "ct": -40823.0,
+    "coal": -362995.0,
+    "solar": -8595.0,
+    "wind": -12338.0,
+    "storage4": -38297.0,
+    "storage8": -150987.0
+   }
+  },
+  {
+   "outer": 7,
+   "resid": 0.44761462593601814,
+   "secs": 122.1,
+   "completion_s": 119.6,
+   "evals": 63,
+   "inner_iters": 4,
+   "inner_foc": 2.467819900615326e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 81351,
+    "ccgt": 30430,
+    "ct": 15285,
+    "coal": 0,
+    "solar": 38724,
+    "wind": 27633,
+    "storage4": 3693,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 453572.0,
+    "ccgt": 133299.0,
+    "ct": 117904.0,
+    "coal": 475825.0,
+    "solar": 82923.0,
+    "wind": 108888.0,
+    "storage4": 184829.0,
+    "storage8": 393415.0
+   },
+   "rho_star": {
+    "nuclear": -46832.0,
+    "ccgt": -36948.0,
+    "ct": -36337.0,
+    "coal": -358525.0,
+    "solar": -7650.0,
+    "wind": -9680.0,
+    "storage4": -26573.0,
+    "storage8": -135491.0
+   }
+  },
+  {
+   "outer": 8,
+   "resid": 0.39842620550349167,
+   "secs": 117.1,
+   "completion_s": 117.0,
+   "evals": 63,
+   "inner_iters": 1,
+   "inner_foc": 5.140395520603967e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 81308,
+    "ccgt": 30393,
+    "ct": 15250,
+    "coal": 0,
+    "solar": 38857,
+    "wind": 27532,
+    "storage4": 3752,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 458718.0,
+    "ccgt": 137360.0,
+    "ct": 121898.0,
+    "coal": 475825.0,
+    "solar": 83764.0,
+    "wind": 109952.0,
+    "storage4": 187749.0,
+    "storage8": 383575.0
+   },
+   "rho_star": {
+    "nuclear": -40237.0,
+    "ccgt": -32820.0,
+    "ct": -32344.0,
+    "coal": -354554.0,
+    "solar": -6795.0,
+    "wind": -8285.0,
+    "storage4": -23961.0,
+    "storage8": -132268.0
+   }
+  },
+  {
+   "outer": 9,
+   "resid": 0.35464310599761334,
+   "secs": 178.2,
+   "completion_s": 173.1,
+   "evals": 69,
+   "inner_iters": 7,
+   "inner_foc": 5.125253053887139e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 81406,
+    "ccgt": 30347,
+    "ct": 15071,
+    "coal": 0,
+    "solar": 38733,
+    "wind": 27113,
+    "storage4": 3785,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 463140.0,
+    "ccgt": 140966.0,
+    "ct": 125452.0,
+    "coal": 475825.0,
+    "solar": 84510.0,
+    "wind": 110862.0,
+    "storage4": 190383.0,
+    "storage8": 383961.0
+   },
+   "rho_star": {
+    "nuclear": -34860.0,
+    "ccgt": -29145.0,
+    "ct": -28790.0,
+    "coal": -351016.0,
+    "solar": -5820.0,
+    "wind": -7061.0,
+    "storage4": -21348.0,
+    "storage8": -128706.0
+   }
+  },
+  {
+   "outer": 10,
+   "resid": 0.31567133610776565,
+   "secs": 130.5,
+   "completion_s": 129.7,
+   "evals": 70,
+   "inner_iters": 2,
+   "inner_foc": 5.229048732134835e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 81524,
+    "ccgt": 30321,
+    "ct": 14854,
+    "coal": 0,
+    "solar": 38465,
+    "wind": 26647,
+    "storage4": 3816,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 466970.0,
+    "ccgt": 144169.0,
+    "ct": 128616.0,
+    "coal": 475825.0,
+    "solar": 85150.0,
+    "wind": 111638.0,
+    "storage4": 192728.0,
+    "storage8": 384144.0
+   },
+   "rho_star": {
+    "nuclear": -30673.0,
+    "ccgt": -25875.0,
+    "ct": -25626.0,
+    "coal": -347869.0,
+    "solar": -5021.0,
+    "wind": -6012.0,
+    "storage4": -18910.0,
+    "storage8": -125708.0
+   }
+  },
+  {
+   "outer": 11,
+   "resid": 0.2809821782937255,
+   "secs": 113.6,
+   "completion_s": 113.6,
+   "evals": 70,
+   "inner_iters": 1,
+   "inner_foc": 5.290580421303459e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 81506,
+    "ccgt": 30300,
+    "ct": 14832,
+    "coal": 0,
+    "solar": 38557,
+    "wind": 26604,
+    "storage4": 3828,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 470341.0,
+    "ccgt": 147012.0,
+    "ct": 131432.0,
+    "coal": 475825.0,
+    "solar": 85702.0,
+    "wind": 112299.0,
+    "storage4": 194806.0,
+    "storage8": 384077.0
+   },
+   "rho_star": {
+    "nuclear": -26744.0,
+    "ccgt": -23031.0,
+    "ct": -22810.0,
+    "coal": -345060.0,
+    "solar": -4476.0,
+    "wind": -5130.0,
+    "storage4": -17052.0,
+    "storage8": -122534.0
+   }
+  },
+  {
+   "outer": 12,
+   "resid": 0.2501050158438481,
+   "secs": 122.0,
+   "completion_s": 121.1,
+   "evals": 71,
+   "inner_iters": 2,
+   "inner_foc": 2.6442373870471645e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 81532,
+    "ccgt": 30306,
+    "ct": 14759,
+    "coal": 0,
+    "solar": 38454,
+    "wind": 26439,
+    "storage4": 3870,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 473280.0,
+    "ccgt": 149543.0,
+    "ct": 133938.0,
+    "coal": 475825.0,
+    "solar": 86194.0,
+    "wind": 112863.0,
+    "storage4": 196680.0,
+    "storage8": 383766.0
+   },
+   "rho_star": {
+    "nuclear": -23744.0,
+    "ccgt": -20501.0,
+    "ct": -20303.0,
+    "coal": -342567.0,
+    "solar": -3977.0,
+    "wind": -4440.0,
+    "storage4": -15266.0,
+    "storage8": -120462.0
+   }
+  },
+  {
+   "outer": 13,
+   "resid": 0.22262094816871758,
+   "secs": 112.0,
+   "completion_s": 111.2,
+   "evals": 72,
+   "inner_iters": 2,
+   "inner_foc": 5.374453206091887e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 81559,
+    "ccgt": 30284,
+    "ct": 14721,
+    "coal": 0,
+    "solar": 38350,
+    "wind": 26321,
+    "storage4": 3918,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 475889.0,
+    "ccgt": 151796.0,
+    "ct": 136169.0,
+    "coal": 475825.0,
+    "solar": 86631.0,
+    "wind": 113350.0,
+    "storage4": 198358.0,
+    "storage8": 384028.0
+   },
+   "rho_star": {
+    "nuclear": -20945.0,
+    "ccgt": -18219.0,
+    "ct": -18072.0,
+    "coal": -340341.0,
+    "solar": -3496.0,
+    "wind": -4021.0,
+    "storage4": -13885.0,
+    "storage8": -119152.0
+   }
+  },
+  {
+   "outer": 14,
+   "resid": 0.1981571077106163,
+   "secs": 123.0,
+   "completion_s": 122.2,
+   "evals": 73,
+   "inner_iters": 2,
+   "inner_foc": 2.679161425805207e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 81597,
+    "ccgt": 30213,
+    "ct": 14652,
+    "coal": 0,
+    "solar": 38449,
+    "wind": 26083,
+    "storage4": 3995,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 478191.0,
+    "ccgt": 153798.0,
+    "ct": 138155.0,
+    "coal": 475825.0,
+    "solar": 87015.0,
+    "wind": 113792.0,
+    "storage4": 199884.0,
+    "storage8": 384527.0
+   },
+   "rho_star": {
+    "nuclear": -18704.0,
+    "ccgt": -16198.0,
+    "ct": -16086.0,
+    "coal": -338366.0,
+    "solar": -3124.0,
+    "wind": -3433.0,
+    "storage4": -12753.0,
+    "storage8": -117865.0
+   }
+  },
+  {
+   "outer": 15,
+   "resid": 0.1763816013687934,
+   "secs": 190.1,
+   "completion_s": 190.1,
+   "evals": 73,
+   "inner_iters": 1,
+   "inner_foc": 1.9465327721941503e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 81671,
+    "ccgt": 30162,
+    "ct": 14585,
+    "coal": 0,
+    "solar": 38407,
+    "wind": 25741,
+    "storage4": 4032,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 480246.0,
+    "ccgt": 155578.0,
+    "ct": 139923.0,
+    "coal": 475825.0,
+    "solar": 87358.0,
+    "wind": 114170.0,
+    "storage4": 201285.0,
+    "storage8": 384789.0
+   },
+   "rho_star": {
+    "nuclear": -16403.0,
+    "ccgt": -14398.0,
+    "ct": -14319.0,
+    "coal": -336609.0,
+    "solar": -2780.0,
+    "wind": -2859.0,
+    "storage4": -11482.0,
+    "storage8": -116175.0
+   }
+  },
+  {
+   "outer": 16,
+   "resid": 0.15699900781178394,
+   "secs": 114.2,
+   "completion_s": 114.2,
+   "evals": 73,
+   "inner_iters": 1,
+   "inner_foc": 2.719302735260031e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 81691,
+    "ccgt": 30138,
+    "ct": 14556,
+    "coal": 0,
+    "solar": 38485,
+    "wind": 25618,
+    "storage4": 4027,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 482049.0,
+    "ccgt": 157160.0,
+    "ct": 141497.0,
+    "coal": 475825.0,
+    "solar": 87663.0,
+    "wind": 114484.0,
+    "storage4": 202547.0,
+    "storage8": 384691.0
+   },
+   "rho_star": {
+    "nuclear": -14630.0,
+    "ccgt": -12883.0,
+    "ct": -12745.0,
+    "coal": -335041.0,
+    "solar": -2475.0,
+    "wind": -2346.0,
+    "storage4": -9927.0,
+    "storage8": -114139.0
+   }
+  },
+  {
+   "outer": 17,
+   "resid": 0.1397463695907097,
+   "secs": 127.2,
+   "completion_s": 127.2,
+   "evals": 73,
+   "inner_iters": 1,
+   "inner_foc": 5.422934010336672e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 81704,
+    "ccgt": 30130,
+    "ct": 14537,
+    "coal": 0,
+    "solar": 38450,
+    "wind": 25564,
+    "storage4": 4034,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 483656.0,
+    "ccgt": 158576.0,
+    "ct": 142897.0,
+    "coal": 475825.0,
+    "solar": 87935.0,
+    "wind": 114742.0,
+    "storage4": 203638.0,
+    "storage8": 384469.0
+   },
+   "rho_star": {
+    "nuclear": -13024.0,
+    "ccgt": -11400.0,
+    "ct": -11345.0,
+    "coal": -333646.0,
+    "solar": -2202.0,
+    "wind": -2088.0,
+    "storage4": -8826.0,
+    "storage8": -112722.0
+   }
+  },
+  {
+   "outer": 18,
+   "resid": 0.12438962567964072,
+   "secs": 107.9,
+   "completion_s": 107.0,
+   "evals": 74,
+   "inner_iters": 2,
+   "inner_foc": 2.554674422498318e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 81715,
+    "ccgt": 30149,
+    "ct": 14365,
+    "coal": 0,
+    "solar": 38250,
+    "wind": 25547,
+    "storage4": 4054,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 485088.0,
+    "ccgt": 159829.0,
+    "ct": 144144.0,
+    "coal": 475825.0,
+    "solar": 88177.0,
+    "wind": 114971.0,
+    "storage4": 204608.0,
+    "storage8": 384469.0
+   },
+   "rho_star": {
+    "nuclear": -11381.0,
+    "ccgt": -10147.0,
+    "ct": -10098.0,
+    "coal": -332411.0,
+    "solar": -1905.0,
+    "wind": -1562.0,
+    "storage4": -8167.0,
+    "storage8": -110340.0
+   }
+  },
+  {
+   "outer": 19,
+   "resid": 0.11072043604451327,
+   "secs": 114.4,
+   "completion_s": 114.3,
+   "evals": 74,
+   "inner_iters": 1,
+   "inner_foc": 2.6881367736759513e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 81701,
+    "ccgt": 30148,
+    "ct": 14354,
+    "coal": 0,
+    "solar": 38254,
+    "wind": 25583,
+    "storage4": 4073,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 486338.0,
+    "ccgt": 160944.0,
+    "ct": 145253.0,
+    "coal": 475825.0,
+    "solar": 88387.0,
+    "wind": 115143.0,
+    "storage4": 205505.0,
+    "storage8": 383077.0
+   },
+   "rho_star": {
+    "nuclear": -9591.0,
+    "ccgt": -9032.0,
+    "ct": -8988.0,
+    "coal": -331301.0,
+    "solar": -1508.0,
+    "wind": -372.0,
+    "storage4": -7416.0,
+    "storage8": -109756.0
+   }
+  },
+  {
+   "outer": 20,
+   "resid": 0.09855335516050556,
+   "secs": 122.6,
+   "completion_s": 122.6,
+   "evals": 74,
+   "inner_iters": 1,
+   "inner_foc": 5.411223652528172e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 81651,
+    "ccgt": 30175,
+    "ct": 14339,
+    "coal": 0,
+    "solar": 38300,
+    "wind": 25693,
+    "storage4": 4077,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 487392.0,
+    "ccgt": 161937.0,
+    "ct": 146241.0,
+    "coal": 475825.0,
+    "solar": 88552.0,
+    "wind": 115184.0,
+    "storage4": 206320.0,
+    "storage8": 383340.0
+   },
+   "rho_star": {
+    "nuclear": -8400.0,
+    "ccgt": -8040.0,
+    "ct": -8001.0,
+    "coal": -330319.0,
+    "solar": -1340.0,
+    "wind": -297.0,
+    "storage4": -6852.0,
+    "storage8": -108842.0
+   }
+  },
+  {
+   "outer": 21,
+   "resid": 0.08772331613187416,
+   "secs": 113.2,
+   "completion_s": 113.2,
+   "evals": 74,
+   "inner_iters": 1,
+   "inner_foc": 2.709437364713692e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 81627,
+    "ccgt": 30249,
+    "ct": 14229,
+    "coal": 0,
+    "solar": 38072,
+    "wind": 25916,
+    "storage4": 4020,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 488315.0,
+    "ccgt": 162820.0,
+    "ct": 147120.0,
+    "coal": 475825.0,
+    "solar": 88700.0,
+    "wind": 115216.0,
+    "storage4": 207073.0,
+    "storage8": 383331.0
+   },
+   "rho_star": {
+    "nuclear": -7602.0,
+    "ccgt": -7108.0,
+    "ct": -7121.0,
+    "coal": -329445.0,
+    "solar": -1166.0,
+    "wind": -291.0,
+    "storage4": -5734.0,
+    "storage8": -107788.0
+   }
+  },
+  {
+   "outer": 22,
+   "resid": 0.07808339128221721,
+   "secs": 117.3,
+   "completion_s": 117.3,
+   "evals": 74,
+   "inner_iters": 1,
+   "inner_foc": 2.7381291200634557e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 81565,
+    "ccgt": 30290,
+    "ct": 14190,
+    "coal": 0,
+    "solar": 38046,
+    "wind": 26120,
+    "storage4": 4015,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 489151.0,
+    "ccgt": 163601.0,
+    "ct": 147903.0,
+    "coal": 475825.0,
+    "solar": 88828.0,
+    "wind": 115248.0,
+    "storage4": 207703.0,
+    "storage8": 383191.0
+   },
+   "rho_star": {
+    "nuclear": -6834.0,
+    "ccgt": -6327.0,
+    "ct": -6339.0,
+    "coal": -328673.0,
+    "solar": -1032.0,
+    "wind": -274.0,
+    "storage4": -5263.0,
+    "storage8": -106909.0
+   }
+  },
+  {
+   "outer": 23,
+   "resid": 0.06950279883362176,
+   "secs": 134.0,
+   "completion_s": 134.0,
+   "evals": 74,
+   "inner_iters": 1,
+   "inner_foc": 5.520142514174034e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 81537,
+    "ccgt": 30326,
+    "ct": 14187,
+    "coal": 0,
+    "solar": 38050,
+    "wind": 26204,
+    "storage4": 3984,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 489902.0,
+    "ccgt": 164296.0,
+    "ct": 148599.0,
+    "coal": 475825.0,
+    "solar": 88941.0,
+    "wind": 115279.0,
+    "storage4": 208282.0,
+    "storage8": 383194.0
+   },
+   "rho_star": {
+    "nuclear": -6279.0,
+    "ccgt": -5632.0,
+    "ct": -5642.0,
+    "coal": -327982.0,
+    "solar": -1053.0,
+    "wind": -257.0,
+    "storage4": -4495.0,
+    "storage8": -105796.0
+   }
+  },
+  {
+   "outer": 24,
+   "resid": 0.06186512863213061,
+   "secs": 105.3,
+   "completion_s": 105.3,
+   "evals": 74,
+   "inner_iters": 1,
+   "inner_foc": 5.412714799318612e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 81543,
+    "ccgt": 30331,
+    "ct": 14188,
+    "coal": 0,
+    "solar": 38012,
+    "wind": 26202,
+    "storage4": 3972,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 490592.0,
+    "ccgt": 164915.0,
+    "ct": 149220.0,
+    "coal": 475825.0,
+    "solar": 89057.0,
+    "wind": 115307.0,
+    "storage4": 208775.0,
+    "storage8": 383004.0
+   },
+   "rho_star": {
+    "nuclear": -5396.0,
+    "ccgt": -5013.0,
+    "ct": -5022.0,
+    "coal": -327362.0,
+    "solar": -878.0,
+    "wind": -254.0,
+    "storage4": -3722.0,
+    "storage8": -104778.0
+   }
+  },
+  {
+   "outer": 25,
+   "resid": 0.055066762848374,
+   "secs": 123.4,
+   "completion_s": 123.4,
+   "evals": 74,
+   "inner_iters": 1,
+   "inner_foc": 5.511649838304002e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 81546,
+    "ccgt": 30341,
+    "ct": 14184,
+    "coal": 0,
+    "solar": 37984,
+    "wind": 26201,
+    "storage4": 3964,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 491185.0,
+    "ccgt": 165466.0,
+    "ct": 149771.0,
+    "coal": 475825.0,
+    "solar": 89153.0,
+    "wind": 115335.0,
+    "storage4": 209184.0,
+    "storage8": 382724.0
+   },
+   "rho_star": {
+    "nuclear": -4772.0,
+    "ccgt": -4462.0,
+    "ct": -4470.0,
+    "coal": -326810.0,
+    "solar": -715.0,
+    "wind": -226.0,
+    "storage4": -3313.0,
+    "storage8": -104179.0
+   }
+  },
+  {
+   "outer": 26,
+   "resid": 0.04901547022767433,
+   "secs": 135.3,
+   "completion_s": 135.3,
+   "evals": 74,
+   "inner_iters": 1,
+   "inner_foc": 2.8304237247440113e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 81545,
+    "ccgt": 30362,
+    "ct": 14178,
+    "coal": 0,
+    "solar": 37943,
+    "wind": 26205,
+    "storage4": 3949,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 491709.0,
+    "ccgt": 165956.0,
+    "ct": 150263.0,
+    "coal": 475825.0,
+    "solar": 89232.0,
+    "wind": 115359.0,
+    "storage4": 209548.0,
+    "storage8": 382724.0
+   },
+   "rho_star": {
+    "nuclear": -4351.0,
+    "ccgt": -3972.0,
+    "ct": -3979.0,
+    "coal": -326319.0,
+    "solar": -643.0,
+    "wind": -200.0,
+    "storage4": -2949.0,
+    "storage8": -103682.0
+   }
+  },
+  {
+   "outer": 27,
+   "resid": 0.043629154818038994,
+   "secs": 152.6,
+   "completion_s": 152.5,
+   "evals": 74,
+   "inner_iters": 1,
+   "inner_foc": 2.94002407777155e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 81536,
+    "ccgt": 30372,
+    "ct": 14180,
+    "coal": 0,
+    "solar": 37946,
+    "wind": 26251,
+    "storage4": 3932,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 492187.0,
+    "ccgt": 166393.0,
+    "ct": 150700.0,
+    "coal": 475825.0,
+    "solar": 89303.0,
+    "wind": 115381.0,
+    "storage4": 209872.0,
+    "storage8": 382724.0
+   },
+   "rho_star": {
+    "nuclear": -3791.0,
+    "ccgt": -3535.0,
+    "ct": -3542.0,
+    "coal": -325882.0,
+    "solar": -572.0,
+    "wind": -105.0,
+    "storage4": -2625.0,
+    "storage8": -103067.0
+   }
+  },
+  {
+   "outer": 28,
+   "resid": 0.038834742200672914,
+   "secs": 98.4,
+   "completion_s": 98.4,
+   "evals": 74,
+   "inner_iters": 1,
+   "inner_foc": 5.377608847014263e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 81507,
+    "ccgt": 30381,
+    "ct": 14177,
+    "coal": 0,
+    "solar": 37982,
+    "wind": 26321,
+    "storage4": 3933,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 492604.0,
+    "ccgt": 166781.0,
+    "ct": 151089.0,
+    "coal": 475825.0,
+    "solar": 89366.0,
+    "wind": 115393.0,
+    "storage4": 210161.0,
+    "storage8": 382724.0
+   },
+   "rho_star": {
+    "nuclear": -3288.0,
+    "ccgt": -3147.0,
+    "ct": -3153.0,
+    "coal": -325498.0,
+    "solar": -509.0,
+    "wind": -111.0,
+    "storage4": -2510.0,
+    "storage8": -103191.0
+   }
+  },
+  {
+   "outer": 29,
+   "resid": 0.03456718811268601,
+   "secs": 128.7,
+   "completion_s": 128.6,
+   "evals": 74,
+   "inner_iters": 1,
+   "inner_foc": 2.775981569508543e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 81493,
+    "ccgt": 30381,
+    "ct": 14168,
+    "coal": 0,
+    "solar": 38002,
+    "wind": 26340,
+    "storage4": 3950,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 492965.0,
+    "ccgt": 167127.0,
+    "ct": 151436.0,
+    "coal": 475825.0,
+    "solar": 89422.0,
+    "wind": 115405.0,
+    "storage4": 210437.0,
+    "storage8": 383136.0
+   },
+   "rho_star": {
+    "nuclear": -2839.0,
+    "ccgt": -2801.0,
+    "ct": -2806.0,
+    "coal": -325151.0,
+    "solar": -520.0,
+    "wind": -85.0,
+    "storage4": -2513.0,
+    "storage8": -103205.0
+   }
+  },
+  {
+   "outer": 30,
+   "resid": 0.030768596012389786,
+   "secs": 176.1,
+   "completion_s": 176.1,
+   "evals": 74,
+   "inner_iters": 1,
+   "inner_foc": 5.551991584770977e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 81480,
+    "ccgt": 30388,
+    "ct": 14165,
+    "coal": 0,
+    "solar": 38021,
+    "wind": 26359,
+    "storage4": 3953,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 493277.0,
+    "ccgt": 167435.0,
+    "ct": 151744.0,
+    "coal": 475825.0,
+    "solar": 89479.0,
+    "wind": 115414.0,
+    "storage4": 210713.0,
+    "storage8": 383415.0
+   },
+   "rho_star": {
+    "nuclear": -2527.0,
+    "ccgt": -2493.0,
+    "ct": -2498.0,
+    "coal": -324843.0,
+    "solar": -463.0,
+    "wind": -33.0,
+    "storage4": -2237.0,
+    "storage8": -102915.0
+   }
+  },
+  {
+   "outer": 31,
+   "resid": 0.02738743161542469,
+   "secs": 109.9,
+   "completion_s": 109.9,
+   "evals": 74,
+   "inner_iters": 1,
+   "inner_foc": 2.87290998707233e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 81467,
+    "ccgt": 30387,
+    "ct": 14157,
+    "coal": 0,
+    "solar": 38053,
+    "wind": 26391,
+    "storage4": 3964,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 493555.0,
+    "ccgt": 167709.0,
+    "ct": 152018.0,
+    "coal": 475825.0,
+    "solar": 89530.0,
+    "wind": 115418.0,
+    "storage4": 210959.0,
+    "storage8": 383415.0
+   },
+   "rho_star": {
+    "nuclear": -2249.0,
+    "ccgt": -2219.0,
+    "ct": -2223.0,
+    "coal": -324569.0,
+    "solar": -412.0,
+    "wind": -22.0,
+    "storage4": -1991.0,
+    "storage8": -102662.0
+   }
+  },
+  {
+   "outer": 32,
+   "resid": 0.024377823745601795,
+   "secs": 119.5,
+   "completion_s": 119.5,
+   "evals": 74,
+   "inner_iters": 1,
+   "inner_foc": 2.738271368121848e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 81450,
+    "ccgt": 30402,
+    "ct": 14137,
+    "coal": 0,
+    "solar": 38026,
+    "wind": 26480,
+    "storage4": 3960,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 493802.0,
+    "ccgt": 167953.0,
+    "ct": 152263.0,
+    "coal": 475825.0,
+    "solar": 89575.0,
+    "wind": 115420.0,
+    "storage4": 211177.0,
+    "storage8": 383415.0
+   },
+   "rho_star": {
+    "nuclear": -2001.0,
+    "ccgt": -2043.0,
+    "ct": -1979.0,
+    "coal": -324324.0,
+    "solar": -367.0,
+    "wind": -79.0,
+    "storage4": -1772.0,
+    "storage8": -102571.0
+   }
+  },
+  {
+   "outer": 33,
+   "resid": 0.0216989420153134,
+   "secs": 109.0,
+   "completion_s": 108.9,
+   "evals": 74,
+   "inner_iters": 1,
+   "inner_foc": 2.6427933881896996e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 81448,
+    "ccgt": 30408,
+    "ct": 14132,
+    "coal": 0,
+    "solar": 37988,
+    "wind": 26494,
+    "storage4": 3954,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 494022.0,
+    "ccgt": 168177.0,
+    "ct": 152480.0,
+    "coal": 475825.0,
+    "solar": 89615.0,
+    "wind": 115429.0,
+    "storage4": 211372.0,
+    "storage8": 383551.0
+   },
+   "rho_star": {
+    "nuclear": -1781.0,
+    "ccgt": -1819.0,
+    "ct": -1762.0,
+    "coal": -324112.0,
+    "solar": -327.0,
+    "wind": -31.0,
+    "storage4": -1578.0,
+    "storage8": -102355.0
+   }
+  },
+  {
+   "outer": 34,
+   "resid": 0.019314442892754097,
+   "secs": 120.8,
+   "completion_s": 120.7,
+   "evals": 74,
+   "inner_iters": 1,
+   "inner_foc": 5.619159183783207e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 81450,
+    "ccgt": 30409,
+    "ct": 14129,
+    "coal": 0,
+    "solar": 37977,
+    "wind": 26492,
+    "storage4": 3956,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 494218.0,
+    "ccgt": 168377.0,
+    "ct": 152674.0,
+    "coal": 475825.0,
+    "solar": 89651.0,
+    "wind": 115432.0,
+    "storage4": 211545.0,
+    "storage8": 383551.0
+   },
+   "rho_star": {
+    "nuclear": -1461.0,
+    "ccgt": -1619.0,
+    "ct": -1568.0,
+    "coal": -323919.0,
+    "solar": -217.0,
+    "wind": 71.0,
+    "storage4": -1404.0,
+    "storage8": -102186.0
+   }
+  },
+  {
+   "outer": 35,
+   "resid": 0.01719197664079868,
+   "secs": 154.7,
+   "completion_s": 154.7,
+   "evals": 74,
+   "inner_iters": 1,
+   "inner_foc": 1.6189130758743614e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 81455,
+    "ccgt": 30407,
+    "ct": 14129,
+    "coal": 0,
+    "solar": 37959,
+    "wind": 26488,
+    "storage4": 3954,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 494378.0,
+    "ccgt": 168555.0,
+    "ct": 152846.0,
+    "coal": 475825.0,
+    "solar": 89675.0,
+    "wind": 115425.0,
+    "storage4": 211700.0,
+    "storage8": 383551.0
+   },
+   "rho_star": {
+    "nuclear": -1301.0,
+    "ccgt": -1441.0,
+    "ct": -1396.0,
+    "coal": -323746.0,
+    "solar": -193.0,
+    "wind": 157.0,
+    "storage4": -1250.0,
+    "storage8": -102036.0
+   }
+  },
+  {
+   "outer": 36,
+   "resid": 0.015302748438513886,
+   "secs": 154.4,
+   "completion_s": 154.4,
+   "evals": 74,
+   "inner_iters": 1,
+   "inner_foc": 5.635720298453629e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 81458,
+    "ccgt": 30401,
+    "ct": 14129,
+    "coal": 0,
+    "solar": 37946,
+    "wind": 26485,
+    "storage4": 3957,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 494521.0,
+    "ccgt": 168713.0,
+    "ct": 152999.0,
+    "coal": 475825.0,
+    "solar": 89696.0,
+    "wind": 115407.0,
+    "storage4": 211837.0,
+    "storage8": 383551.0
+   },
+   "rho_star": {
+    "nuclear": -1159.0,
+    "ccgt": -1215.0,
+    "ct": -1242.0,
+    "coal": -323593.0,
+    "solar": -172.0,
+    "wind": 253.0,
+    "storage4": -1113.0,
+    "storage8": -101854.0
+   }
+  },
+  {
+   "outer": 37,
+   "resid": 0.013621127730984223,
+   "secs": 122.6,
+   "completion_s": 122.6,
+   "evals": 74,
+   "inner_iters": 1,
+   "inner_foc": 5.528361717887372e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 81460,
+    "ccgt": 30400,
+    "ct": 14123,
+    "coal": 0,
+    "solar": 37946,
+    "wind": 26485,
+    "storage4": 3963,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 494649.0,
+    "ccgt": 168847.0,
+    "ct": 153136.0,
+    "coal": 475825.0,
+    "solar": 89715.0,
+    "wind": 115380.0,
+    "storage4": 211959.0,
+    "storage8": 383502.0
+   },
+   "rho_star": {
+    "nuclear": -1032.0,
+    "ccgt": -1081.0,
+    "ct": -1106.0,
+    "coal": -323462.0,
+    "solar": -153.0,
+    "wind": 341.0,
+    "storage4": -990.0,
+    "storage8": -101738.0
+   }
+  },
+  {
+   "outer": 38,
+   "resid": 0.007754079030049166,
+   "secs": 131.0,
+   "completion_s": 131.0,
+   "evals": 74,
+   "inner_iters": 1,
+   "inner_foc": 2.6482525455111186e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 81450,
+    "ccgt": 30404,
+    "ct": 14126,
+    "coal": 0,
+    "solar": 37972,
+    "wind": 26507,
+    "storage4": 3960,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 494762.0,
+    "ccgt": 168966.0,
+    "ct": 153257.0,
+    "coal": 475825.0,
+    "solar": 89732.0,
+    "wind": 115342.0,
+    "storage4": 212068.0,
+    "storage8": 383502.0
+   },
+   "rho_star": {
+    "nuclear": -917.0,
+    "ccgt": 584.0,
+    "ct": 629.0,
+    "coal": -321771.0,
+    "solar": -136.0,
+    "wind": 300.0,
+    "storage4": 732.0,
+    "storage8": -100419.0
+   }
+  },
+  {
+   "outer": 39,
+   "resid": 0.021247191331966907,
+   "secs": 146.4,
+   "completion_s": 143.9,
+   "evals": 77,
+   "inner_iters": 4,
+   "inner_foc": 2.3454199391516275e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 81440,
+    "ccgt": 30411,
+    "ct": 14127,
+    "coal": 0,
+    "solar": 37993,
+    "wind": 26522,
+    "storage4": 3957,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 494863.0,
+    "ccgt": 168902.0,
+    "ct": 153188.0,
+    "coal": 474255.0,
+    "solar": 89747.0,
+    "wind": 115309.0,
+    "storage4": 211988.0,
+    "storage8": 382300.0
+   },
+   "rho_star": {
+    "nuclear": 315.0,
+    "ccgt": 1684.0,
+    "ct": 1725.0,
+    "coal": -320675.0,
+    "solar": 4.0,
+    "wind": 292.0,
+    "storage4": 1816.0,
+    "storage8": -101291.0
+   }
+  },
+  {
+   "outer": 40,
+   "resid": 0.012897401667475647,
+   "secs": 160.2,
+   "completion_s": 160.2,
+   "evals": 77,
+   "inner_iters": 1,
+   "inner_foc": 1.2892888685179138e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 81442,
+    "ccgt": 30410,
+    "ct": 14124,
+    "coal": 0,
+    "solar": 37987,
+    "wind": 26518,
+    "storage4": 3959,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 494812.0,
+    "ccgt": 168934.0,
+    "ct": 153223.0,
+    "coal": 475040.0,
+    "solar": 89739.0,
+    "wind": 115326.0,
+    "storage4": 212028.0,
+    "storage8": 382901.0
+   },
+   "rho_star": {
+    "nuclear": -485.0,
+    "ccgt": 1004.0,
+    "ct": 1047.0,
+    "coal": -321353.0,
+    "solar": -119.0,
+    "wind": 296.0,
+    "storage4": 1144.0,
+    "storage8": -100755.0
+   }
+  },
+  {
+   "outer": 41,
+   "resid": 0.00900185157824357,
+   "secs": 96.4,
+   "completion_s": 96.4,
+   "evals": 77,
+   "inner_iters": 1,
+   "inner_foc": 5.556223873408618e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 81445,
+    "ccgt": 30406,
+    "ct": 14125,
+    "coal": 0,
+    "solar": 37978,
+    "wind": 26511,
+    "storage4": 3961,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 494787.0,
+    "ccgt": 168950.0,
+    "ct": 153240.0,
+    "coal": 475432.0,
+    "solar": 89735.0,
+    "wind": 115334.0,
+    "storage4": 212048.0,
+    "storage8": 383202.0
+   },
+   "rho_star": {
+    "nuclear": -734.0,
+    "ccgt": 686.0,
+    "ct": 731.0,
+    "coal": -321669.0,
+    "solar": -120.0,
+    "wind": 293.0,
+    "storage4": 831.0,
+    "storage8": -100554.0
+   }
+  },
+  {
+   "outer": 42,
+   "resid": 0.022116209617953922,
+   "secs": 96.8,
+   "completion_s": 96.7,
+   "evals": 77,
+   "inner_iters": 1,
+   "inner_foc": 5.511798385159269e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 81438,
+    "ccgt": 30409,
+    "ct": 14129,
+    "coal": 0,
+    "solar": 37998,
+    "wind": 26526,
+    "storage4": 3957,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 494868.0,
+    "ccgt": 168874.0,
+    "ct": 153160.0,
+    "coal": 474136.0,
+    "solar": 89749.0,
+    "wind": 115302.0,
+    "storage4": 211957.0,
+    "storage8": 382413.0
+   },
+   "rho_star": {
+    "nuclear": 427.0,
+    "ccgt": 1756.0,
+    "ct": 1795.0,
+    "coal": -320605.0,
+    "solar": 27.0,
+    "wind": 282.0,
+    "storage4": 1884.0,
+    "storage8": -101392.0
+   }
+  },
+  {
+   "outer": 43,
+   "resid": 0.013055029573151165,
+   "secs": 176.3,
+   "completion_s": 176.3,
+   "evals": 77,
+   "inner_iters": 1,
+   "inner_foc": 5.660608085491384e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 81442,
+    "ccgt": 30408,
+    "ct": 14126,
+    "coal": 0,
+    "solar": 37987,
+    "wind": 26518,
+    "storage4": 3959,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 494815.0,
+    "ccgt": 168920.0,
+    "ct": 153209.0,
+    "coal": 474980.0,
+    "solar": 89740.0,
+    "wind": 115322.0,
+    "storage4": 212013.0,
+    "storage8": 382958.0
+   },
+   "rho_star": {
+    "nuclear": -307.0,
+    "ccgt": 1017.0,
+    "ct": 1060.0,
+    "coal": -321340.0,
+    "solar": -90.0,
+    "wind": 293.0,
+    "storage4": 1156.0,
+    "storage8": -100884.0
+   }
+  },
+  {
+   "outer": 44,
+   "resid": 0.009592582711931585,
+   "secs": 151.7,
+   "completion_s": 151.7,
+   "evals": 77,
+   "inner_iters": 1,
+   "inner_foc": 5.423274798904627e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 81445,
+    "ccgt": 30406,
+    "ct": 14125,
+    "coal": 0,
+    "solar": 37978,
+    "wind": 26511,
+    "storage4": 3961,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 494788.0,
+    "ccgt": 168943.0,
+    "ct": 153233.0,
+    "coal": 475403.0,
+    "solar": 89736.0,
+    "wind": 115332.0,
+    "storage4": 212040.0,
+    "storage8": 383230.0
+   },
+   "rho_star": {
+    "nuclear": -685.0,
+    "ccgt": 734.0,
+    "ct": 779.0,
+    "coal": -321622.0,
+    "solar": -123.0,
+    "wind": 291.0,
+    "storage4": 878.0,
+    "storage8": -100607.0
+   }
+  },
+  {
+   "outer": 45,
+   "resid": 0.021307629798347435,
+   "secs": 150.6,
+   "completion_s": 150.5,
+   "evals": 77,
+   "inner_iters": 1,
+   "inner_foc": 2.6535895404930233e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 81439,
+    "ccgt": 30411,
+    "ct": 14127,
+    "coal": 0,
+    "solar": 37995,
+    "wind": 26524,
+    "storage4": 3958,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 494864.0,
+    "ccgt": 168862.0,
+    "ct": 153147.0,
+    "coal": 474081.0,
+    "solar": 89749.0,
+    "wind": 115300.0,
+    "storage4": 211944.0,
+    "storage8": 382456.0
+   },
+   "rho_star": {
+    "nuclear": 423.0,
+    "ccgt": 1690.0,
+    "ct": 1730.0,
+    "coal": -320671.0,
+    "solar": 27.0,
+    "wind": 286.0,
+    "storage4": 1818.0,
+    "storage8": -101400.0
+   }
+  },
+  {
+   "outer": 46,
+   "resid": 0.01289992594122484,
+   "secs": 120.6,
+   "completion_s": 120.6,
+   "evals": 77,
+   "inner_iters": 1,
+   "inner_foc": 2.551519120042424e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 81442,
+    "ccgt": 30408,
+    "ct": 14126,
+    "coal": 0,
+    "solar": 37987,
+    "wind": 26518,
+    "storage4": 3959,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 494813.0,
+    "ccgt": 168914.0,
+    "ct": 153202.0,
+    "coal": 474953.0,
+    "solar": 89741.0,
+    "wind": 115321.0,
+    "storage4": 212006.0,
+    "storage8": 382979.0
+   },
+   "rho_star": {
+    "nuclear": -284.0,
+    "ccgt": 1004.0,
+    "ct": 1047.0,
+    "coal": -321353.0,
+    "solar": -85.0,
+    "wind": 292.0,
+    "storage4": 1143.0,
+    "storage8": -100907.0
+   }
+  },
+  {
+   "outer": 47,
+   "resid": 0.009511289084903072,
+   "secs": 158.0,
+   "completion_s": 158.0,
+   "evals": 77,
+   "inner_iters": 1,
+   "inner_foc": 5.566809050334137e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 81445,
+    "ccgt": 30406,
+    "ct": 14125,
+    "coal": 0,
+    "solar": 37978,
+    "wind": 26511,
+    "storage4": 3961,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 494787.0,
+    "ccgt": 168940.0,
+    "ct": 153230.0,
+    "coal": 475389.0,
+    "solar": 89736.0,
+    "wind": 115332.0,
+    "storage4": 212037.0,
+    "storage8": 383241.0
+   },
+   "rho_star": {
+    "nuclear": -672.0,
+    "ccgt": 728.0,
+    "ct": 772.0,
+    "coal": -321628.0,
+    "solar": -121.0,
+    "wind": 291.0,
+    "storage4": 871.0,
+    "storage8": -100619.0
+   }
+  },
+  {
+   "outer": 48,
+   "resid": 0.021146691083022497,
+   "secs": 118.7,
+   "completion_s": 118.7,
+   "evals": 77,
+   "inner_iters": 1,
+   "inner_foc": 5.487169500412027e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 81439,
+    "ccgt": 30411,
+    "ct": 14127,
+    "coal": 0,
+    "solar": 37995,
+    "wind": 26524,
+    "storage4": 3958,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 494861.0,
+    "ccgt": 168860.0,
+    "ct": 153145.0,
+    "coal": 474085.0,
+    "solar": 89749.0,
+    "wind": 115300.0,
+    "storage4": 211941.0,
+    "storage8": 382464.0
+   },
+   "rho_star": {
+    "nuclear": 420.0,
+    "ccgt": 1677.0,
+    "ct": 1717.0,
+    "coal": -320684.0,
+    "solar": 27.0,
+    "wind": 287.0,
+    "storage4": 1805.0,
+    "storage8": -101402.0
+   }
+  },
+  {
+   "outer": 49,
+   "resid": 0.01281614640755444,
+   "secs": 168.0,
+   "completion_s": 167.9,
+   "evals": 77,
+   "inner_iters": 1,
+   "inner_foc": 5.572418150611287e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 81442,
+    "ccgt": 30408,
+    "ct": 14126,
+    "coal": 0,
+    "solar": 37987,
+    "wind": 26518,
+    "storage4": 3959,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 494812.0,
+    "ccgt": 168913.0,
+    "ct": 153201.0,
+    "coal": 474955.0,
+    "solar": 89741.0,
+    "wind": 115321.0,
+    "storage4": 212005.0,
+    "storage8": 382983.0
+   },
+   "rho_star": {
+    "nuclear": -287.0,
+    "ccgt": 998.0,
+    "ct": 1040.0,
+    "coal": -321360.0,
+    "solar": -86.0,
+    "wind": 292.0,
+    "storage4": 1136.0,
+    "storage8": -100906.0
+   }
+  },
+  {
+   "outer": 50,
+   "resid": 0.009449588101857738,
+   "secs": 151.8,
+   "completion_s": 151.8,
+   "evals": 77,
+   "inner_iters": 1,
+   "inner_foc": 5.533875967450034e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 81445,
+    "ccgt": 30406,
+    "ct": 14125,
+    "coal": 0,
+    "solar": 37978,
+    "wind": 26511,
+    "storage4": 3961,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 494787.0,
+    "ccgt": 168939.0,
+    "ct": 153229.0,
+    "coal": 475390.0,
+    "solar": 89736.0,
+    "wind": 115331.0,
+    "storage4": 212037.0,
+    "storage8": 383243.0
+   },
+   "rho_star": {
+    "nuclear": -673.0,
+    "ccgt": 723.0,
+    "ct": 767.0,
+    "coal": -321633.0,
+    "solar": -120.0,
+    "wind": 291.0,
+    "storage4": 866.0,
+    "storage8": -100619.0
+   }
+  },
+  {
+   "outer": 51,
+   "resid": 0.021125026545400608,
+   "secs": 115.1,
+   "completion_s": 115.1,
+   "evals": 77,
+   "inner_iters": 1,
+   "inner_foc": 2.6924213354876324e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 81439,
+    "ccgt": 30411,
+    "ct": 14127,
+    "coal": 0,
+    "solar": 37995,
+    "wind": 26524,
+    "storage4": 3958,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 494861.0,
+    "ccgt": 168860.0,
+    "ct": 153145.0,
+    "coal": 474089.0,
+    "solar": 89749.0,
+    "wind": 115299.0,
+    "storage4": 211941.0,
+    "storage8": 382464.0
+   },
+   "rho_star": {
+    "nuclear": 420.0,
+    "ccgt": 1675.0,
+    "ct": 1715.0,
+    "coal": -320685.0,
+    "solar": 27.0,
+    "wind": 286.0,
+    "storage4": 1803.0,
+    "storage8": -101403.0
+   }
+  },
+  {
+   "outer": 52,
+   "resid": 0.012802965415125623,
+   "secs": 101.5,
+   "completion_s": 101.4,
+   "evals": 77,
+   "inner_iters": 1,
+   "inner_foc": 2.871496850662624e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 81442,
+    "ccgt": 30408,
+    "ct": 14126,
+    "coal": 0,
+    "solar": 37987,
+    "wind": 26518,
+    "storage4": 3959,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 494811.0,
+    "ccgt": 168913.0,
+    "ct": 153201.0,
+    "coal": 474957.0,
+    "solar": 89741.0,
+    "wind": 115321.0,
+    "storage4": 212005.0,
+    "storage8": 382983.0
+   },
+   "rho_star": {
+    "nuclear": -290.0,
+    "ccgt": 997.0,
+    "ct": 1039.0,
+    "coal": -321361.0,
+    "solar": -86.0,
+    "wind": 292.0,
+    "storage4": 1135.0,
+    "storage8": -100905.0
+   }
+  },
+  {
+   "outer": 53,
+   "resid": 0.009438707207194074,
+   "secs": 156.5,
+   "completion_s": 156.4,
+   "evals": 77,
+   "inner_iters": 1,
+   "inner_foc": 5.533877569634013e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 81445,
+    "ccgt": 30406,
+    "ct": 14125,
+    "coal": 0,
+    "solar": 37978,
+    "wind": 26511,
+    "storage4": 3961,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 494787.0,
+    "ccgt": 168939.0,
+    "ct": 153229.0,
+    "coal": 475391.0,
+    "solar": 89736.0,
+    "wind": 115331.0,
+    "storage4": 212036.0,
+    "storage8": 383243.0
+   },
+   "rho_star": {
+    "nuclear": -674.0,
+    "ccgt": 722.0,
+    "ct": 766.0,
+    "coal": -321634.0,
+    "solar": -120.0,
+    "wind": 291.0,
+    "storage4": 865.0,
+    "storage8": -100618.0
+   }
+  },
+  {
+   "outer": 54,
+   "resid": 0.02112951721274148,
+   "secs": 111.1,
+   "completion_s": 111.1,
+   "evals": 77,
+   "inner_iters": 1,
+   "inner_foc": 2.8171034330628426e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 81439,
+    "ccgt": 30411,
+    "ct": 14127,
+    "coal": 0,
+    "solar": 37995,
+    "wind": 26524,
+    "storage4": 3958,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 494861.0,
+    "ccgt": 168860.0,
+    "ct": 153145.0,
+    "coal": 474090.0,
+    "solar": 89749.0,
+    "wind": 115299.0,
+    "storage4": 211941.0,
+    "storage8": 382464.0
+   },
+   "rho_star": {
+    "nuclear": 420.0,
+    "ccgt": 1676.0,
+    "ct": 1715.0,
+    "coal": -320685.0,
+    "solar": 27.0,
+    "wind": 286.0,
+    "storage4": 1804.0,
+    "storage8": -101402.0
+   }
+  },
+  {
+   "outer": 55,
+   "resid": 0.012804562015039508,
+   "secs": 124.5,
+   "completion_s": 124.5,
+   "evals": 77,
+   "inner_iters": 1,
+   "inner_foc": 2.660928393498274e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 81442,
+    "ccgt": 30408,
+    "ct": 14126,
+    "coal": 0,
+    "solar": 37987,
+    "wind": 26518,
+    "storage4": 3959,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 494811.0,
+    "ccgt": 168913.0,
+    "ct": 153201.0,
+    "coal": 474957.0,
+    "solar": 89741.0,
+    "wind": 115321.0,
+    "storage4": 212005.0,
+    "storage8": 382983.0
+   },
+   "rho_star": {
+    "nuclear": -290.0,
+    "ccgt": 997.0,
+    "ct": 1039.0,
+    "coal": -321361.0,
+    "solar": -86.0,
+    "wind": 292.0,
+    "storage4": 1135.0,
+    "storage8": -100905.0
+   }
+  },
+  {
+   "outer": 56,
+   "resid": 0.009439706025048376,
+   "secs": 190.2,
+   "completion_s": 190.2,
+   "evals": 77,
+   "inner_iters": 1,
+   "inner_foc": 5.623285599401576e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 81445,
+    "ccgt": 30406,
+    "ct": 14125,
+    "coal": 0,
+    "solar": 37978,
+    "wind": 26511,
+    "storage4": 3961,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 494787.0,
+    "ccgt": 168939.0,
+    "ct": 153229.0,
+    "coal": 475391.0,
+    "solar": 89736.0,
+    "wind": 115331.0,
+    "storage4": 212037.0,
+    "storage8": 383243.0
+   },
+   "rho_star": {
+    "nuclear": -674.0,
+    "ccgt": 722.0,
+    "ct": 766.0,
+    "coal": -321634.0,
+    "solar": -120.0,
+    "wind": 291.0,
+    "storage4": 865.0,
+    "storage8": -100618.0
+   }
+  },
+  {
+   "outer": 57,
+   "resid": 0.02113195750051599,
+   "secs": 97.0,
+   "completion_s": 97.0,
+   "evals": 77,
+   "inner_iters": 1,
+   "inner_foc": 2.874739309065367e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 81439,
+    "ccgt": 30411,
+    "ct": 14127,
+    "coal": 0,
+    "solar": 37995,
+    "wind": 26524,
+    "storage4": 3958,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 494861.0,
+    "ccgt": 168860.0,
+    "ct": 153145.0,
+    "coal": 474090.0,
+    "solar": 89749.0,
+    "wind": 115299.0,
+    "storage4": 211941.0,
+    "storage8": 382463.0
+   },
+   "rho_star": {
+    "nuclear": 420.0,
+    "ccgt": 1676.0,
+    "ct": 1715.0,
+    "coal": -320685.0,
+    "solar": 27.0,
+    "wind": 286.0,
+    "storage4": 1804.0,
+    "storage8": -101402.0
+   }
+  },
+  {
+   "outer": 58,
+   "resid": 0.01280570642892851,
+   "secs": 115.1,
+   "completion_s": 115.1,
+   "evals": 77,
+   "inner_iters": 1,
+   "inner_foc": 2.6421065909698666e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 81442,
+    "ccgt": 30408,
+    "ct": 14126,
+    "coal": 0,
+    "solar": 37987,
+    "wind": 26518,
+    "storage4": 3959,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 494811.0,
+    "ccgt": 168913.0,
+    "ct": 153201.0,
+    "coal": 474957.0,
+    "solar": 89741.0,
+    "wind": 115321.0,
+    "storage4": 212005.0,
+    "storage8": 382983.0
+   },
+   "rho_star": {
+    "nuclear": -290.0,
+    "ccgt": 997.0,
+    "ct": 1040.0,
+    "coal": -321361.0,
+    "solar": -86.0,
+    "wind": 292.0,
+    "storage4": 1135.0,
+    "storage8": -100905.0
+   }
+  },
+  {
+   "outer": 59,
+   "resid": 0.009440601965713431,
+   "secs": 132.9,
+   "completion_s": 132.9,
+   "evals": 77,
+   "inner_iters": 1,
+   "inner_foc": 5.45858682921391e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 81445,
+    "ccgt": 30406,
+    "ct": 14125,
+    "coal": 0,
+    "solar": 37978,
+    "wind": 26511,
+    "storage4": 3961,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 494787.0,
+    "ccgt": 168939.0,
+    "ct": 153229.0,
+    "coal": 475391.0,
+    "solar": 89736.0,
+    "wind": 115331.0,
+    "storage4": 212037.0,
+    "storage8": 383243.0
+   },
+   "rho_star": {
+    "nuclear": -674.0,
+    "ccgt": 722.0,
+    "ct": 766.0,
+    "coal": -321634.0,
+    "solar": -120.0,
+    "wind": 291.0,
+    "storage4": 866.0,
+    "storage8": -100618.0
+   }
+  },
+  {
+   "outer": 60,
+   "resid": 0.021132280920632848,
+   "secs": 126.5,
+   "completion_s": 126.5,
+   "evals": 77,
+   "inner_iters": 1,
+   "inner_foc": 5.511877382855922e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 81439,
+    "ccgt": 30411,
+    "ct": 14127,
+    "coal": 0,
+    "solar": 37995,
+    "wind": 26524,
+    "storage4": 3958,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 494861.0,
+    "ccgt": 168860.0,
+    "ct": 153145.0,
+    "coal": 474090.0,
+    "solar": 89749.0,
+    "wind": 115299.0,
+    "storage4": 211941.0,
+    "storage8": 382463.0
+   },
+   "rho_star": {
+    "nuclear": 420.0,
+    "ccgt": 1676.0,
+    "ct": 1716.0,
+    "coal": -320685.0,
+    "solar": 27.0,
+    "wind": 286.0,
+    "storage4": 1804.0,
+    "storage8": -101402.0
+   }
+  }
+ ],
+ "capacity_iterations": 1,
+ "foc": {
+  "nuclear": 2.6482525455111186e-13,
+  "ccgt": 7.40661983422072e-15,
+  "ct": 0.0,
+  "coal": -0.6795370001995353,
+  "solar": -9.38972032969809e-14,
+  "wind": -1.3625620117729096e-14,
+  "storage4": -9.318464271565019e-14,
+  "storage8": -0.26498296991351644
+ },
+ "n_evaluations": 74,
+ "params": {
+  "r": 0.025,
+  "voll": 10000.0,
+  "tau_scc": 280.0,
+  "gamma": 0.0,
+  "storage_eff_oneway": 0.9219544457292888,
+  "p_ref": 50.73,
+  "flex_price_share": 0.03,
+  "reg_price_share": 0.006,
+  "flex_wind_coef": 0.189,
+  "flex_solar_coef": 0.076,
+  "reg_load_coef": 0.01,
+  "reg_wind_coef": 0.005,
+  "reg_solar_coef": 0.003,
+  "solar_capacity_basis": "AC",
+  "dc_ac_ratio": 1.34,
+  "daylight_rule": "solar_threshold",
+  "daylight_theta_threshold": 0.01,
+  "daylight_fixed_hours": [
+   6,
+   19
+  ],
+  "q_bar_rule": "fixed",
+  "q_bar_coverage": 1.0,
+  "q_bar_mw": 112108.1003,
+  "markdown_mode": "regulation",
+  "a_wind_appendix": 0.0015,
+  "a_solar_appendix": 0.0018,
+  "markdown_solar_cf": 0.25,
+  "markdown_daylight_share": 0.5,
+  "curtailment_hour_threshold_mw": 1.0,
+  "welfare_tau_always_scc": true,
+  "techs": [
+   {
+    "name": "nuclear",
+    "kind": "thermal",
+    "occ_per_kw": 6268,
+    "fom_per_kw_yr": 191,
+    "life_yr": 60,
+    "c_var": 8.71838,
+    "e_rate": 0.0,
+    "duration_h": 0.0,
+    "vre_key": ""
+   },
+   {
+    "name": "ccgt",
+    "kind": "thermal",
+    "occ_per_kw": 1288,
+    "fom_per_kw_yr": 34,
+    "life_yr": 30,
+    "c_var": 31.217279999999995,
+    "e_rate": 0.33332075368997827,
+    "duration_h": 0.0,
+    "vre_key": ""
+   },
+   {
+    "name": "ct",
+    "kind": "thermal",
+    "occ_per_kw": 1134,
+    "fom_per_kw_yr": 27,
+    "life_yr": 30,
+    "c_var": 53.035560000000004,
+    "e_rate": 0.5244999138173473,
+    "duration_h": 0.0,
+    "vre_key": ""
+   },
+   {
+    "name": "coal",
+    "kind": "thermal",
+    "occ_per_kw": 3337,
+    "fom_per_kw_yr": 91,
+    "life_yr": 30,
+    "c_var": 30.770300000000002,
+    "e_rate": 0.779058068964266,
+    "duration_h": 0.0,
+    "vre_key": ""
+   },
+   {
+    "name": "solar",
+    "kind": "vre",
+    "occ_per_kw": 1138,
+    "fom_per_kw_yr": 20,
+    "life_yr": 30,
+    "c_var": 0.0,
+    "e_rate": 0.0,
+    "duration_h": 0.0,
+    "vre_key": "solar"
+   },
+   {
+    "name": "wind",
+    "kind": "vre",
+    "occ_per_kw": 1339,
+    "fom_per_kw_yr": 32,
+    "life_yr": 30,
+    "c_var": 0.0,
+    "e_rate": 0.0,
+    "duration_h": 0.0,
+    "vre_key": "wind"
+   },
+   {
+    "name": "storage4",
+    "kind": "storage",
+    "occ_per_kw": 1417,
+    "fom_per_kw_yr": 35,
+    "life_yr": 15,
+    "c_var": 0.0,
+    "e_rate": 0.0,
+    "duration_h": 4.0,
+    "vre_key": ""
+   },
+   {
+    "name": "storage8",
+    "kind": "storage",
+    "occ_per_kw": 2488,
+    "fom_per_kw_yr": 62,
+    "life_yr": 15,
+    "c_var": 0.0,
+    "e_rate": 0.0,
+    "duration_h": 8.0,
+    "vre_key": ""
+   }
+  ]
+ },
+ "welfare": {
+  "C_y": [
+   51220537384.91605,
+   53882536354.59059,
+   52052251647.73586,
+   50701096560.812164,
+   52131688300.40015,
+   52239188534.87905,
+   50493966278.03253,
+   53353007623.57307,
+   56846545480.333755
+  ],
+  "C_mean": 52546757573.91924,
+  "C_max": 56846545480.333755,
+  "C_risk_adjusted": 103708648506.21964,
+  "tau_welfare": 280.0,
+  "components_mean": {
+   "variable_om_fuel": 6537086380.541075,
+   "carbon_at_tau_welfare": 3336235287.856106,
+   "lost_load": 547052088.9170566,
+   "capex_annualized": 42085498079.038,
+   "reliability_psi": 40885737.56700669
+  },
+  "emissions_y": [
+   9724458.679635253,
+   14787168.215270128,
+   11576528.267380603,
+   9030570.674468279,
+   11556451.77808224,
+   12499646.942271983,
+   7754781.009767327,
+   12612085.954273751,
+   17694442.73136812
+  ],
+  "lost_load_mwh_y": [
+   7731.892450772371,
+   63540.98426835623,
+   20234.333046810963,
+   1319.4915119349316,
+   30699.599053969898,
+   0.0,
+   8438.62828855819,
+   103556.72869123665,
+   256825.22271371167
+  ],
+  "psi_load_mean": 2400047.922141878,
+  "energy_share": {
+   "nuclear": 0.7879345614510334,
+   "ccgt": 0.04302292981958227,
+   "ct": 0.0014692499282603635,
+   "coal": 0.0,
+   "solar": 0.0757215288288399,
+   "wind": 0.09252858798815385,
+   "storage4": -0.00074623651172734,
+   "storage8": 0.0,
+   "lost_load": 6.93784958576883e-05
+  },
+  "curtailment_share": {
+   "solar": 0.0,
+   "wind": 0.0
+  },
+  "curtailment_mwh_y": {
+   "solar": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ],
+   "wind": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "curtailment_hours_y": {
+   "solar": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "wind": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  "curtailment_hours_any_y": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0
+  ]
+ },
+ "runtime_s": 8209.815867424011
+}

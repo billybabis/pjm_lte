@@ -16,6 +16,9 @@ on:
       workers:
         description: "Parallel yearly-dispatch processes inside each job (runner has 4 vCPU)"
         default: "3"
+      tau_scc:
+        description: "Carbon price $/tCO2 (priced into P2/R5/R6; values emissions in every regime's welfare)"
+        default: "280"
       params:
         description: "Extra --param overrides, space separated, e.g. voll=20000 markdown_mode=full"
         default: ""
@@ -39,6 +42,7 @@ env:
   GAMMA: ${{ github.event.inputs.gamma || '0.3' }}
   WORKERS: ${{ github.event.inputs.workers || '3' }}
   EXTRA_PARAMS: ${{ github.event.inputs.params || '' }}
+  TAU_SCC: ${{ github.event.inputs.tau_scc || '280' }}
 
 jobs:
   # ---------------------------------------------------------------- fan-out keys
@@ -115,13 +119,22 @@ jobs:
         env:
           REGIME: ${{ matrix.regime }}
         run: |
+          # The repo has files committed under results/, and this job uploads the whole directory;
+          # without this they ride along in every artifact as stale results.
+          rm -rf results
+          # tau_scc is just a --param, given its own prefilled input. It enters the agents'
+          # costs only in the carbon-priced regimes (P2, R5, R6), but it also values emissions
+          # in EVERY regime's welfare metric (welfare_tau_always_scc), which is what makes the
+          # regimes comparable - so it is passed to all of them, not only the priced ones.
+          PARAMS="$EXTRA_PARAMS"
+          if [ -n "$TAU_SCC" ]; then PARAMS="$PARAMS tau_scc=$TAU_SCC"; fi
           python -m eq_model run \
             --panel panel.npz \
             --regimes "$REGIME" \
             --gamma "$GAMMA" \
             --workers "$WORKERS" \
             --out "results/gamma$GAMMA" \
-            $(for p in $EXTRA_PARAMS; do printf -- '--param %s ' "$p"; done)
+            $(for p in $PARAMS; do printf -- '--param %s ' "$p"; done)
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -155,13 +168,22 @@ jobs:
           SWEEP_REGIME: ${{ github.event.inputs.sweep_regime || 'R2' }}
           GAMMA_VALUE: ${{ matrix.gamma }}
         run: |
+          # The repo has files committed under results/, and this job uploads the whole directory;
+          # without this they ride along in every artifact as stale results.
+          rm -rf results
+          # tau_scc is just a --param, given its own prefilled input. It enters the agents'
+          # costs only in the carbon-priced regimes (P2, R5, R6), but it also values emissions
+          # in EVERY regime's welfare metric (welfare_tau_always_scc), which is what makes the
+          # regimes comparable - so it is passed to all of them, not only the priced ones.
+          PARAMS="$EXTRA_PARAMS"
+          if [ -n "$TAU_SCC" ]; then PARAMS="$PARAMS tau_scc=$TAU_SCC"; fi
           python -m eq_model sweep \
             --panel panel.npz \
             --regime "$SWEEP_REGIME" \
             --gammas "$GAMMA_VALUE" \
             --workers "$WORKERS" \
             --out "results/sweep" \
-            $(for p in $EXTRA_PARAMS; do printf -- '--param %s ' "$p"; done)
+            $(for p in $PARAMS; do printf -- '--param %s ' "$p"; done)
       - uses: actions/upload-artifact@v4
         if: always()
         with:

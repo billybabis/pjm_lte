@@ -43,6 +43,8 @@ vintage, run `check-load` and `build-panel` first and read the diagnostics they 
 | `tests/test_model.py` | pytest suite |
 | `.github/workflows/run-model.yml` | one CI job per regime, results merged by `combine` |
 | `docs/github-actions.md` | how to dispatch a run, collect artifacts, and build the multi-γ figure |
+| `scripts/fetch_run.py` | download the latest CI run into `results/raw/<scenario>/g<γ>/`, check it, plot it |
+| `scripts/check_results.py` | verify a results tree: every regime present, every run converged |
 
 ## 2. Data pipeline
 
@@ -87,14 +89,14 @@ What the loaders do, and what to check in their output:
 ## 3. Running the model
 
 ```
-python -m eq_model run   --panel data/panel.npz --regimes P1,P2,R2,R3,R4,R5,R6 --gamma 0.3 --out results/g0.3
-python -m eq_model sweep --panel data/panel.npz --regime R2 --gammas 0,0.1,0.25,0.5,1 --out results/sweep
+python -m eq_model run   --panel data/panel.npz --regimes P1,P2,R2,R3,R4,R5,R6 --gamma 0.3 --out results/raw/default/g0.3
+python -m eq_model sweep --panel data/panel.npz --regime R2 --gammas 0,0.1,0.25,0.5,1 --out results/raw/sweep
 python -m eq_model run   --panel data/panel.npz --years 2017-2020,2022-2025 ...   # leave-one-year-out
 python -m eq_model run   ... --param voll=20000 --param q_bar_rule=peak_load --param markdown_mode=full
 python -m eq_model run   ... --workers 4                                          # parallel yearly dispatch
 python -m eq_model run   ... --jobs 4                                             # parallel regimes
 python -m eq_model combine results/ --out results/summary.csv                     # stitch split runs
-python -m eq_model plot results/ --gammas 0,0.3,1 --out figs/capacity.pdf         # paper figure
+python -m eq_model plot results/raw/SCEN --kind all --out results/figs/SCEN/fig.png  # figures
 ```
 
 Outputs per regime: `result_<R>.json` (K, χ, p̂, effective costs, risk premia, implied
@@ -124,7 +126,7 @@ There are two independent axes, and they multiply:
 ### Figures
 
 ```
-python -m eq_model plot results/ --kind all --gammas 0,0.3,0.6,1 --out figs/fig.pdf
+python -m eq_model plot results/raw/default --kind all --gammas 0,0.3,0.6,1 --out results/figs/default/fig.png
 ```
 
 `--kind` selects the figure: `capacity`, `energy`, `contract`, `both` (capacity + energy) or
@@ -143,7 +145,7 @@ python -m eq_model plot results/ --kind all --gammas 0,0.3,0.6,1 --out figs/fig.
 
 All three share the γ-panel layout: Technology colours are fixed in
 `plots.py::TECH_COLORS` (Okabe–Ito, colour-blind safe) so a technology keeps its colour across
-every figure. Output format follows the extension — `.pdf` for LaTeX, `.png`/`.svg` otherwise —
+every figure. Output format follows the extension — `.png` by default, `.pdf` for LaTeX —
 and `--unit MW`, `--panel-width`, `--height`, `--dpi` control the rest.
 
 The planner regimes P1 and P2 are risk-neutral by construction and solve identically at every γ.
@@ -157,8 +159,8 @@ A scenario is a set of `--param` overrides. Give each its own output directory a
 and `combine` at one directory at a time:
 
 ```
-python -m eq_model run ... --param voll=20000 --out results/high_voll/g0.3
-python -m eq_model plot results/high_voll --kind both --gammas 0,0.3,0.6,1 --out figs/high_voll.pdf
+python -m eq_model run ... --param voll=20000 --out results/raw/high_voll/g0.3
+python -m eq_model plot results/raw/high_voll --kind all --gammas 0,0.3,0.6,1 --out results/figs/high_voll/fig.png
 ```
 
 Results are keyed by `(regime, gamma_requested)`, which does not include the scenario, so two

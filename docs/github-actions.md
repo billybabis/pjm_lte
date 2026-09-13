@@ -20,7 +20,8 @@ them before clicking Run (e.g. type `0.6` into `gamma`).
 | `regimes` | `P1,P2,R2,R3,R4,R5,R6` | one matrix job per entry |
 | `gamma` | `0.3` | risk aversion for this dispatch |
 | `workers` | `3` | parallel yearly-dispatch processes inside each job (runner has 4 vCPU) |
-| `params` | *(empty)* | scenario overrides, space separated: `voll=20000 markdown_mode=full` |
+| `tau_scc` | `280` | carbon price $/tCO2 (2025$) |
+| `params` | *(empty)* | any other overrides, space separated: `voll=20000 markdown_mode=full` |
 | `sweep_gammas` | *(empty)* | if set, also sweeps one regime across these γ; leave empty to skip |
 | `sweep_regime` | `R2` | which regime the sweep uses |
 
@@ -59,32 +60,62 @@ The merged table is also rendered on the run's summary page, so a quick look nee
 
 Retention is a real deadline: download anything you intend to cite.
 
-## 4. Build the multi-γ figure
+## 4. Collect a run and build its figures
 
-Artifact names repeat across dispatches, so **download each run into its own directory** or the
-later ones overwrite the earlier:
+`scripts/fetch_run.py` does the whole download-check-plot step. Run it once per dispatch:
 
 ```
-gh run list --workflow=run-model.yml
-gh run download <id-for-0>   -D results/g0
-gh run download <id-for-0.3> -D results/g0.3
-gh run download <id-for-0.6> -D results/g0.6
-gh run download <id-for-1>   -D results/g1
-
-python -m eq_model plot results/ --kind both --gammas 0,0.3,0.6,1 \
-    --panel-width 4.5 --out figs/fig.png
+python scripts/fetch_run.py --scenario default
 ```
 
-That writes `figs/fig_capacity.png` and `figs/fig_energy.png` (use `.pdf` for LaTeX). The
-single-γ figure inside each `summary` artifact is not the same thing — the multi-panel version
-only comes from this step.
+It takes the most recent completed run, downloads it, reads the γ from the results themselves,
+and files everything as:
+
+```
+results/raw/default/g0.3/      <- the artifacts
+results/figs/default/g0.3_capacity.png
+results/figs/default/g0.3_energy.png
+results/figs/default/g0.3_contract.png
+```
+
+Only the **scenario** name is yours to choose; the `g<gamma>` level is derived. Artifact names
+repeat across dispatches, which is exactly why each run needs its own directory — the script
+handles that for you.
+
+Figures are PNG by default, which is what you want for looking at them. Pass `--format pdf`
+(or use a `.pdf` extension on `--out` for the plot command) for the vector version to drop
+into LaTeX.
+
+It refuses to build figures from a run with a missing or non-converged regime (`--force-figures`
+overrides). `--run-id <id>` fetches a specific run, `--no-figures` downloads and checks only.
+
+Once every γ is collected, the multi-panel figure comes from one command:
+
+```
+python -m eq_model plot results/raw/default --kind all --gammas 0,0.3,0.6,1     --panel-width 4.5 --out results/figs/default/all.png
+```
+
+That writes `all_capacity.png`, `all_energy.png` and `all_contract.png` under
+`results/figs/default/`. The single-γ figure inside each `summary` artifact is not the same
+thing — the multi-panel version only comes from this step.
 
 `--panel-width 4.5` because seven regimes per panel is cramped at the 3.4-inch default.
 
+To do it by hand instead (no `gh`), download the artifacts from the run page and unzip them under
+`results/raw/<scenario>/g<gamma>/`, then run `python scripts/check_results.py` on that directory
+before plotting.
+
+`tau_scc` enters the agents' own costs only in the carbon-priced regimes (P2, R5, R6). It also
+values emissions in *every* regime's welfare metric — that is deliberate, and is what makes P1 and
+P2 comparable — so editing it moves the welfare numbers for all seven regimes, not just three.
+
+Changing `tau_scc` (or anything in `params`) makes it a different **scenario** — give it its own
+scenario name when you fetch it, or results at the same (regime, gamma) will collide. See below.
+
 ## Scenarios
 
-A scenario is a set of `params` overrides. Give each its own directory tree and run `plot` once per
-scenario — results are keyed by `(regime, γ)`, which does not include the scenario, so two of them
+A scenario is a set of `params` overrides. Give each its own name under `results/raw/` and run
+`plot` once per scenario — results are keyed by `(regime, γ)`, which does not include the scenario, so two of them
 cannot share one figure. A command pointed at a directory spanning two scenarios is refused, naming
 both files and the first differing field. Every `result_<R>.json` records the full parameter set it
 was produced with.

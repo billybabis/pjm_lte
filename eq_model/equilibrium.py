@@ -143,7 +143,11 @@ class CapacityProblem:
             self._system = SystemLP(self.panel, self.params, self.tau, include_psi=False, name=f"system_tau{self.tau:g}")
         sysm = self._system
         idx = [sysm.col_K[z] for z in self.names]
-        # 1) fixed-K solve (a dispatch; warm from whatever basis the model holds)
+        # 1) fixed-K solve (a dispatch; warm from whatever basis the model holds).  The solution is
+        # discarded - this exists to move the basis to a good starting point for step 2.  Skipping
+        # it after the first completion was tried and is 3-18% SLOWER: fixed-K is a much easier
+        # subproblem than the box, and reaching the box optimum through it beats going there
+        # directly from the previous box basis.  (Results are identical either way, ~1e-16.)
         sysm.model.set_costs(idx, [cost_K[z] for z in self.names])
         Kc = {z: float(K[z]) for z in self.names}
         sysm.model.set_bounds(idx, [Kc[z] for z in self.names], [Kc[z] for z in self.names])
@@ -413,8 +417,14 @@ def solve_regime(panel: HourlyPanel, params: ModelParams, regime: Regime, gamma:
     cr = fwd = ev = None
     I_solved = I_eff.copy()
     x_prev = None; F_prev = None
-    slope_max = 2.0 * (1.0 + gamma * panel.Y) + 1.0
-    slope = np.full(len(names), 1.0 + gamma * panel.Y)      # conservative default (worst case within a vertex)
+    # d(rho*)/d(I_eff) for a technology: rho(pi) = mean_y pi_y + gamma * min_y pi_y, and a unit
+    # rise in I_eff lowers every year's pi by one, so the derivative is -(1 + gamma).  It does NOT
+    # scale with the number of years: the mean already averages over them.  Using 1 + gamma*Y here
+    # made every step (1+gamma*Y)/(1+gamma) times too short, so the residual fell by a fixed factor
+    # 1 - 1/(1+gamma*Y) per iteration - 0.90 at gamma=1, needing ~66 iterations and blowing past
+    # max_outer.  Measured slopes are ~1.0-1.4 against the 3.7-10 this used to assume.
+    slope_max = 2.0 * (1.0 + gamma * panel.Y) + 1.0         # generous ceiling for secant estimates
+    slope = np.full(len(names), 1.0 + gamma)
     max_step_frac = 0.25
     best = None                                             # (x, resid) of the best iterate so far
     best_state = None
@@ -450,6 +460,15 @@ def solve_regime(panel: HourlyPanel, params: ModelParams, regime: Regime, gamma:
         if resid <= tol and cr.foc_residual <= 3 * tol:
             converged = True
             break
+        # A residual that keeps revisiting values it has already hit, with the step limit
+        # already tiny, is a stalled search: further iterations cannot improve on ``best``.
+        if len(outer_hist) >= 8 and max_step_frac <= 1e-4:
+            recent = [round(h["resid"], 10) for h in outer_hist[-8:]]
+            if len(set(recent)) <= 3 and best is not None and resid >= best[1]:
+                log.warning("[%s gamma=%.3g] search stalled at resid=%.2e after %d iterations "
+                            "(step limit exhausted); reporting the best iterate",
+                            regime.name, gamma, best[1], len(outer_hist))
+                break
         # ---- update of the effective costs ----
         F = rs.copy()                                   # driven to 0 (active) / <= 0 (inactive)
         x = I_eff.copy()
@@ -462,8 +481,12 @@ def solve_regime(panel: HourlyPanel, params: ModelParams, regime: Regime, gamma:
             est = np.where(meaningful, dF / np.where(meaningful, dx, 1.0), slope)
             slope = np.where(meaningful & active, np.clip(est, 0.7, slope_max), slope)
         if best is not None and resid > 1.3 * best[1]:
-            # got worse: bisect back towards the best iterate and shrink the step limit
-            max_step_frac = max(0.02, 0.5 * max_step_frac)
+            # Got worse: bisect back towards the best iterate and shrink the step limit.
+            # The floor must be small enough that this can always damp further.  With a floor
+            # of 0.02 the limit stopped shrinking after four corrections, so the same overshoot
+            # repeated forever and the residual ran round a fixed cycle (seen in R6 at high
+            # gamma: a period-3/5 loop bottoming out ~1e-2, never reaching tol).
+            max_step_frac = max(1e-5, 0.5 * max_step_frac)
             x_new = best[0] + 0.5 * (x - best[0])
             x_prev, F_prev = x, F
             I_eff = np.clip(x_new, 0.2 * I_arr, 6.0 * I_arr)

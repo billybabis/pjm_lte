@@ -139,7 +139,7 @@ def _panel_rows(df: pd.DataFrame, gcol: str, g: float, bar_order: List[str]) -> 
 
 
 def energy_panels(df: pd.DataFrame, gammas: Optional[Sequence[float]] = None,
-                  regimes: Optional[Sequence[str]] = None, out: str = "energy.pdf",
+                  regimes: Optional[Sequence[str]] = None, out: str = "energy.png",
                   title: Optional[str] = None, panel_width: float = 3.4, height: float = 4.0,
                   dpi: int = 300, show_curtailment: bool = True):
     """Share of load served, stacked by technology, one panel per gamma.
@@ -214,7 +214,7 @@ def energy_panels(df: pd.DataFrame, gammas: Optional[Sequence[float]] = None,
 
 
 def contract_panels(df: pd.DataFrame, gammas: Optional[Sequence[float]] = None,
-                    regimes: Optional[Sequence[str]] = None, out: str = "contracts.pdf",
+                    regimes: Optional[Sequence[str]] = None, out: str = "contracts.png",
                     title: Optional[str] = None, capacity_unit: str = "GW",
                     panel_width: float = 3.4, height: float = 4.0, dpi: int = 300,
                     show_price: bool = True, show_empty: bool = False):
@@ -315,7 +315,7 @@ def contract_panels(df: pd.DataFrame, gammas: Optional[Sequence[float]] = None,
 
 
 def capacity_panels(df: pd.DataFrame, gammas: Optional[Sequence[float]] = None,
-                    regimes: Optional[Sequence[str]] = None, out: str = "capacity.pdf",
+                    regimes: Optional[Sequence[str]] = None, out: str = "capacity.png",
                     title: Optional[str] = None, capacity_unit: str = "GW",
                     panel_width: float = 3.4, height: float = 4.0, dpi: int = 300,
                     show_curtailment: bool = True):

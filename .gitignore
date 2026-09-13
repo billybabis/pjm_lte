@@ -3,6 +3,6 @@ __pycache__/
 .pytest_cache/
 *.egg-info/
 .venv/
-
+results/raw/**/panel/
 # private working notes, not for the public repo
 NOTES.md

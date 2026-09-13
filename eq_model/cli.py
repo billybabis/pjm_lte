@@ -494,8 +494,9 @@ def main(argv=None):
     s = sub.add_parser("plot", help="stacked capacity and/or energy-share bars by regime, "
                                     "one panel per gamma, with curtailment on a secondary axis")
     s.add_argument("dirs", nargs="+", help="directories to scan recursively for row_*.json")
-    s.add_argument("--out", default="capacity.pdf", help="output figure (.pdf/.png/.svg); with "
-                                                       "--kind both the kind is appended to the stem")
+    s.add_argument("--out", default="capacity.png", help="output figure; the extension picks the "
+                                                       "format (.png/.pdf/.svg). With more than one "
+                                                       "--kind the kind is appended to the stem")
     s.add_argument("--kind", default="capacity",
                    choices=["capacity", "energy", "contract", "both", "all"],
                    help="capacity: installed MW stacked by technology, curtailment hours overlaid; "
