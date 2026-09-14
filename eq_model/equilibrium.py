@@ -366,7 +366,7 @@ def default_start(panel: HourlyPanel, params: ModelParams) -> Dict[str, float]:
 
 def solve_regime(panel: HourlyPanel, params: ModelParams, regime: Regime, gamma: Optional[float] = None,
                  cap: Optional[CapacityProblem] = None, K0: Optional[Dict[str, float]] = None,
-                 tol: float = 1e-3, max_outer: int = 60, verbose: bool = True) -> RegimeResult:
+                 tol: float = 1e-2, max_outer: int = 60, verbose: bool = True) -> RegimeResult:
     """Solve one regime.  ``cap`` (a CapacityProblem for the same panel and tau) can be passed
     to share its cut pool across regimes/gammas.
 

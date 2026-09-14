@@ -473,7 +473,11 @@ def main(argv=None):
         s.add_argument("--panel", required=True); s.add_argument("--years")
         s.add_argument("--hours", type=int, help="TEST ONLY: keep the first N hours of each year")
         s.add_argument("--out", required=True); s.add_argument("--param", action="append")
-        s.add_argument("--tol", type=float, default=1e-3); s.add_argument("--max-outer", type=int, default=60)
+        s.add_argument("--tol", type=float, default=1e-2,
+                       help="zero-profit convergence target as a fraction of annual capital cost "
+                            "(0.01 = 1%%); at high gamma the capacity optimum sits at an LP vertex "
+                            "and the residual cannot be driven much below ~0.3%%")
+        s.add_argument("--max-outer", type=int, default=60)
         s.add_argument("--workers", type=int, default=1, help="parallel processes for the yearly dispatch LPs (<= number of years)")
         s.add_argument("--jobs", type=int, default=1,
                        help="parallel processes over regimes (run) / gammas (sweep); each holds ~3 GB at full size")

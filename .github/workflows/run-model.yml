@@ -16,6 +16,9 @@ on:
       workers:
         description: "Parallel yearly-dispatch processes inside each job (runner has 4 vCPU)"
         default: "3"
+      tol:
+        description: "Zero-profit convergence target as a fraction of annual capital cost (0.01 = 1%)"
+        default: "0.01"
       tau_scc:
         description: "Carbon price $/tCO2 (priced into P2/R5/R6; values emissions in every regime's welfare)"
         default: "280"
@@ -43,6 +46,7 @@ env:
   WORKERS: ${{ github.event.inputs.workers || '3' }}
   EXTRA_PARAMS: ${{ github.event.inputs.params || '' }}
   TAU_SCC: ${{ github.event.inputs.tau_scc || '280' }}
+  TOL: ${{ github.event.inputs.tol || '0.01' }}
 
 jobs:
   # ---------------------------------------------------------------- fan-out keys
@@ -133,6 +137,7 @@ jobs:
             --regimes "$REGIME" \
             --gamma "$GAMMA" \
             --workers "$WORKERS" \
+            --tol "$TOL" \
             --out "results/gamma$GAMMA" \
             $(for p in $PARAMS; do printf -- '--param %s ' "$p"; done)
       - uses: actions/upload-artifact@v4
@@ -182,6 +187,7 @@ jobs:
             --regime "$SWEEP_REGIME" \
             --gammas "$GAMMA_VALUE" \
             --workers "$WORKERS" \
+            --tol "$TOL" \
             --out "results/sweep" \
             $(for p in $PARAMS; do printf -- '--param %s ' "$p"; done)
       - uses: actions/upload-artifact@v4
