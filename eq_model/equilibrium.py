@@ -44,6 +44,11 @@ log = logging.getLogger("eq_model")
 
 _K_SCALE = 1e3     # master works in GW
 _C_SCALE = 1e6     # ... and $M
+# Smallest step on an effective cost, as a fraction of I_z.  Too large (0.02) and a secant
+# overshoot can repeat forever; too small (1e-5, ~$1/MW-yr for a CT) and steps cannot move
+# capacity off an LP plateau, so the solver freezes while prices drift (R6, gamma=0.9, tau=100
+# stalled at a 2.4% residual on ~$1 steps).  1e-3 converged that cell and left tau=280 identical.
+_MIN_STEP_FRAC = 1e-3
 
 
 @dataclass
@@ -462,7 +467,7 @@ def solve_regime(panel: HourlyPanel, params: ModelParams, regime: Regime, gamma:
             break
         # A residual that keeps revisiting values it has already hit, with the step limit
         # already tiny, is a stalled search: further iterations cannot improve on ``best``.
-        if len(outer_hist) >= 8 and max_step_frac <= 1e-4:
+        if len(outer_hist) >= 8 and max_step_frac <= _MIN_STEP_FRAC:
             recent = [round(h["resid"], 10) for h in outer_hist[-8:]]
             if len(set(recent)) <= 3 and best is not None and resid >= best[1]:
                 log.warning("[%s gamma=%.3g] search stalled at resid=%.2e after %d iterations "
@@ -486,7 +491,7 @@ def solve_regime(panel: HourlyPanel, params: ModelParams, regime: Regime, gamma:
             # of 0.02 the limit stopped shrinking after four corrections, so the same overshoot
             # repeated forever and the residual ran round a fixed cycle (seen in R6 at high
             # gamma: a period-3/5 loop bottoming out ~1e-2, never reaching tol).
-            max_step_frac = max(1e-5, 0.5 * max_step_frac)
+            max_step_frac = max(_MIN_STEP_FRAC, 0.5 * max_step_frac)
             x_new = best[0] + 0.5 * (x - best[0])
             x_prev, F_prev = x, F
             I_eff = np.clip(x_new, 0.2 * I_arr, 6.0 * I_arr)
