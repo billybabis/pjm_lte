@@ -239,3 +239,45 @@ def test_first_best_planner_has_lowest_risk_neutral_welfare_cost(panel3):
         r = solve_regime(panel3, P, reg, cap=caps[tau], verbose=False)
         costs[name] = evaluate_welfare(panel3, P, r).C_mean
     assert costs["P2"] <= min(costs.values()) * (1 + 1e-6)
+
+# ----------------------------------------------------------------------------- capital-scaled gamma
+def test_gamma_by_tech():
+    P = ModelParams()
+    assert set(P.gamma_by_tech(0.3).values()) == {0.3}                  # default: uniform
+    Pc = ModelParams(gamma=0.3, gamma_scaling="capital")
+    g = Pc.gamma_by_tech()
+    assert g == Pc.gamma_by_tech(0.3)
+    assert abs(g["ccgt"] - 0.3) < 1e-12                                  # reference keeps gamma
+    assert 3.2 < g["nuclear"] / g["ccgt"] < 3.4                          # capital recovery ratio
+    assert g["ct"] < g["ccgt"] < g["nuclear"]
+    with pytest.raises(ValueError):
+        ModelParams(gamma_scaling="bogus").gamma_by_tech(0.3)
+
+
+def test_forward_market_uniform_dict_equals_scalar():
+    Lambda = 7000.0
+    m = {"a": np.array([9e4, 8e4, 12e4, 7e4]), "b": np.array([6e4, 9e4, 5e4, 8e4]), "c": np.array([10e4] * 4)}
+    I = {"a": 9e4, "b": 7e4, "c": 10e4}; K = {"a": 30000.0, "b": 20000.0, "c": 5000.0}
+    Pbar = np.array([40.0, 35.0, 50.0, 30.0]) * Lambda
+    for contracts in (True, False):
+        a = forward_market(m, I, K, Pbar, Lambda, gamma=0.5, q_bar=30000.0, markdown={}, contracts=contracts)
+        b = forward_market(m, I, K, Pbar, Lambda, gamma={z: 0.5 for z in m}, q_bar=30000.0,
+                           markdown={}, contracts=contracts)
+        assert a.chi == b.chi and a.rho_star == b.rho_star
+        assert (np.isnan(a.p_hat) and np.isnan(b.p_hat)) or a.p_hat == b.p_hat
+
+
+@pytest.mark.parametrize("regime", ["R2", "R3"])
+def test_market_equilibrium_capital_scaled_gamma(panel3, regime):
+    P = ModelParams(gamma=0.4, gamma_scaling="capital")
+    r = solve_regime(panel3, P, REGIMES[regime], verbose=False, tol=1e-3)
+    assert r.converged, r.outer_history[-1]
+    assert r.gamma_by_tech == P.gamma_by_tech(0.4)
+    for z, K in r.K.items():
+        if K > 1.0:
+            assert abs(r.rho_star[z]) <= 1e-3 * r.I[z], (z, r.rho_star[z])         # active: zero profit
+        else:
+            assert r.rho_star[z] <= 1e-3 * r.I[z], (z, r.rho_star[z])              # inactive: no entry
+    u = solve_regime(panel3, ModelParams(gamma=0.4), REGIMES[regime], verbose=False, tol=1e-3)
+    if r.K["nuclear"] > 1.0 and u.K["nuclear"] > 1.0:
+        assert r.risk_premium["nuclear"] >= u.risk_premium["nuclear"]

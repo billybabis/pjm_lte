@@ -134,6 +134,10 @@ def summary_row(w: Welfare, res: RegimeResult, params: ModelParams) -> dict:
         row[f"premium_pct_{z}"] = 100 * res.risk_premium[z] / res.I[z] if res.K[z] > 1.0 else float("nan")
     for z in params.tech_names:
         row[f"chi_{z}"] = res.forward.chi[z] if res.forward else 0.0
+    if params.gamma_scaling != "none":
+        # only when active, so default-scenario rows keep exactly their existing keys
+        for z in params.tech_names:
+            row[f"gamma_{z}"] = res.gamma_by_tech.get(z, float("nan"))
     for k, v in w.components_mean.items():
         row[f"cost_{k}_$bn"] = v / 1e9
     return row

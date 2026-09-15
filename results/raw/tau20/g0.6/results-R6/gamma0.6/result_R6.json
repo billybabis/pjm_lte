@@ -1,0 +1,750 @@
+{
+ "regime": {
+  "name": "R6",
+  "description": "Carbon price only, merchant",
+  "planner": false,
+  "reliability": "socialized",
+  "contracts": false,
+  "carbon_priced": true
+ },
+ "gamma": 0.6,
+ "tau": 20.0,
+ "K": {
+  "nuclear": -0.0,
+  "ccgt": 93438.7586120685,
+  "ct": 31724.80141798598,
+  "coal": -0.0,
+  "solar": 29834.48040913404,
+  "wind": 107761.2275999061,
+  "storage4": -0.0,
+  "storage8": -0.0
+ },
+ "I": {
+  "nuclear": 393791.0855015716,
+  "ccgt": 95537.60126819545,
+  "ct": 81179.84459482426,
+  "coal": 250433.9871366213,
+  "solar": 74370.95515776894,
+  "wind": 95974.26094574045,
+  "storage4": 149446.06822502337,
+  "storage8": 262946.94265621604
+ },
+ "psi_coef": {
+  "nuclear": 0.0,
+  "ccgt": 0.0,
+  "ct": 0.0,
+  "coal": 0.0,
+  "solar": 521.1404629799999,
+  "wind": 795.8959891164009,
+  "storage4": 0.0,
+  "storage8": 0.0
+ },
+ "cost_K_effective": {
+  "nuclear": 470169.9837136081,
+  "ccgt": 138080.38636734115,
+  "ct": 122649.67458043416,
+  "coal": 389497.8300193355,
+  "solar": 86450.58566855031,
+  "wind": 101344.21695343999,
+  "storage4": 225163.48513948522,
+  "storage8": 403295.00274771184
+ },
+ "risk_premium": {
+  "nuclear": 76378.89821203653,
+  "ccgt": 42542.78509914571,
+  "ct": 41469.829985609904,
+  "coal": 139063.8428827142,
+  "solar": 12079.630510781368,
+  "wind": 5369.95600769954,
+  "storage4": 75717.41691446185,
+  "storage8": 140348.0600914958
+ },
+ "implied_discount_rate": {
+  "nuclear": null,
+  "ccgt": 0.0702732900550454,
+  "ct": 0.07460655071254249,
+  "coal": null,
+  "solar": 0.040798996884136185,
+  "wind": 0.031161249814619853,
+  "storage4": null,
+  "storage8": null
+ },
+ "rho_star": {
+  "nuclear": -87412.2218692255,
+  "ccgt": -345.7466028057024,
+  "ct": -681.2280881240222,
+  "coal": -255876.98372216802,
+  "solar": 90.02724076808227,
+  "wind": 1.4499949066421323,
+  "storage4": -107813.09413034107,
+  "storage8": -262748.19799544895
+ },
+ "q_bar": 0.0,
+ "Lambda": 7813.949610228729,
+ "Pbar_by_year": [
+  396792.9857619457,
+  396650.8461468328,
+  346793.499454675,
+  308091.80800439697,
+  405312.07530580636,
+  305753.18220186624,
+  313350.24739867786,
+  571750.7775098106,
+  720724.0163133064
+ ],
+ "forward": {
+  "p_hat": NaN,
+  "chi": {
+   "nuclear": 0.0,
+   "ccgt": 0.0,
+   "ct": 0.0,
+   "coal": 0.0,
+   "solar": 0.0,
+   "wind": 0.0,
+   "storage4": 0.0,
+   "storage8": 0.0
+  },
+  "Q": {
+   "nuclear": 0.0,
+   "ccgt": 0.0,
+   "ct": 0.0,
+   "coal": 0.0,
+   "solar": 0.0,
+   "wind": 0.0,
+   "storage4": 0.0,
+   "storage8": 0.0
+  },
+  "chi_interval": {
+   "nuclear": [
+    0.0,
+    0.0
+   ],
+   "ccgt": [
+    0.0,
+    0.0
+   ],
+   "ct": [
+    0.0,
+    0.0
+   ],
+   "coal": [
+    0.0,
+    0.0
+   ],
+   "solar": [
+    0.0,
+    0.0
+   ],
+   "wind": [
+    0.0,
+    0.0
+   ],
+   "storage4": [
+    0.0,
+    0.0
+   ],
+   "storage8": [
+    0.0,
+    0.0
+   ]
+  },
+  "rho_star": {
+   "nuclear": -87412.2218692255,
+   "ccgt": -345.7466028057024,
+   "ct": -681.2280881240222,
+   "coal": -255876.98372216802,
+   "solar": 90.02724076808227,
+   "wind": 1.4499949066421323,
+   "storage4": -107813.09413034107,
+   "storage8": -262748.19799544895
+  },
+  "supply": 0.0,
+  "q_bar": 0.0,
+  "rationed": false,
+  "notes": []
+ },
+ "markdown": {
+  "solar": 0.0,
+  "wind": 0.0
+ },
+ "converged": true,
+ "outer_history": [
+  {
+   "outer": 1,
+   "resid": 0.6000000000000005,
+   "secs": 72.5,
+   "completion_s": 49.3,
+   "evals": 19,
+   "inner_iters": 19,
+   "inner_foc": 7.85951097595432e-14,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 0,
+    "ccgt": 93966,
+    "ct": 32572,
+    "coal": 0,
+    "solar": 29913,
+    "wind": 112028,
+    "storage4": 0,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 393791.0,
+    "ccgt": 95538.0,
+    "ct": 81180.0,
+    "coal": 250434.0,
+    "solar": 74371.0,
+    "wind": 95974.0,
+    "storage4": 149446.0,
+    "storage8": 262947.0
+   },
+   "rho_star": {
+    "nuclear": -145720.0,
+    "ccgt": -49261.0,
+    "ct": -48708.0,
+    "coal": -304499.0,
+    "solar": -12793.0,
+    "wind": -7964.0,
+    "storage4": -143276.0,
+    "storage8": -304590.0
+   }
+  },
+  {
+   "outer": 2,
+   "resid": 0.35000000000000175,
+   "secs": 205.2,
+   "completion_s": 200.0,
+   "evals": 26,
+   "inner_iters": 8,
+   "inner_foc": 1.6706030307028488e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 0,
+    "ccgt": 91380,
+    "ct": 34696,
+    "coal": 0,
+    "solar": 29663,
+    "wind": 106709,
+    "storage4": 0,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 482325.0,
+    "ccgt": 119422.0,
+    "ct": 101475.0,
+    "coal": 395295.0,
+    "solar": 82367.0,
+    "wind": 100952.0,
+    "storage4": 228850.0,
+    "storage8": 405436.0
+   },
+   "rho_star": {
+    "nuclear": -113655.0,
+    "ccgt": -23684.0,
+    "ct": -28413.0,
+    "coal": -280667.0,
+    "solar": -3592.0,
+    "wind": -379.0,
+    "storage4": -128452.0,
+    "storage8": -286762.0
+   }
+  },
+  {
+   "outer": 3,
+   "resid": 0.09020666778147822,
+   "secs": 157.4,
+   "completion_s": 152.0,
+   "evals": 33,
+   "inner_iters": 8,
+   "inner_foc": 1.591531993327905e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 0,
+    "ccgt": 89570,
+    "ct": 35470,
+    "coal": 0,
+    "solar": 30328,
+    "wind": 108464,
+    "storage4": 0,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 477833.0,
+    "ccgt": 141539.0,
+    "ct": 121770.0,
+    "coal": 394161.0,
+    "solar": 85488.0,
+    "wind": 101201.0,
+    "storage4": 229425.0,
+    "storage8": 406174.0
+   },
+   "rho_star": {
+    "nuclear": -80959.0,
+    "ccgt": 8618.0,
+    "ct": 3806.0,
+    "coal": -248392.0,
+    "solar": -161.0,
+    "wind": -422.0,
+    "storage4": -100051.0,
+    "storage8": -256751.0
+   }
+  },
+  {
+   "outer": 4,
+   "resid": 0.0560903870555378,
+   "secs": 175.0,
+   "completion_s": 171.4,
+   "evals": 38,
+   "inner_iters": 6,
+   "inner_foc": 1.3732457984213782e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 0,
+    "ccgt": 92817,
+    "ct": 32533,
+    "coal": 0,
+    "solar": 29838,
+    "wind": 106921,
+    "storage4": 0,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 465937.0,
+    "ccgt": 135638.0,
+    "ct": 119372.0,
+    "coal": 383402.0,
+    "solar": 85635.0,
+    "wind": 101803.0,
+    "storage4": 220063.0,
+    "storage8": 398166.0
+   },
+   "rho_star": {
+    "nuclear": -88870.0,
+    "ccgt": -2737.0,
+    "ct": -4553.0,
+    "coal": -258757.0,
+    "solar": -543.0,
+    "wind": 828.0,
+    "storage4": -110804.0,
+    "storage8": -266477.0
+   }
+  },
+  {
+   "outer": 5,
+   "resid": 0.04000438648062502,
+   "secs": 120.6,
+   "completion_s": 119.2,
+   "evals": 40,
+   "inner_iters": 3,
+   "inner_foc": 1.3759838141694393e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 0,
+    "ccgt": 92653,
+    "ct": 32579,
+    "coal": 0,
+    "solar": 29743,
+    "wind": 107651,
+    "storage4": 0,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 469095.0,
+    "ccgt": 137060.0,
+    "ct": 120678.0,
+    "coal": 389024.0,
+    "solar": 86410.0,
+    "wind": 101404.0,
+    "storage4": 225059.0,
+    "storage8": 403146.0
+   },
+   "rho_star": {
+    "nuclear": -88175.0,
+    "ccgt": -1253.0,
+    "ct": -3248.0,
+    "coal": -257332.0,
+    "solar": 174.0,
+    "wind": 170.0,
+    "storage4": -109934.0,
+    "storage8": -264570.0
+   }
+  },
+  {
+   "outer": 6,
+   "resid": 0.07344045427520209,
+   "secs": 201.6,
+   "completion_s": 198.6,
+   "evals": 44,
+   "inner_iters": 5,
+   "inner_foc": 1.1619521598590302e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 0,
+    "ccgt": 94477,
+    "ct": 30683,
+    "coal": 0,
+    "solar": 29845,
+    "wind": 107685,
+    "storage4": 0,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 469362.0,
+    "ccgt": 138261.0,
+    "ct": 123926.0,
+    "coal": 388983.0,
+    "solar": 86222.0,
+    "wind": 101301.0,
+    "storage4": 224885.0,
+    "storage8": 402875.0
+   },
+   "rho_star": {
+    "nuclear": -85752.0,
+    "ccgt": 2818.0,
+    "ct": 5962.0,
+    "coal": -251565.0,
+    "solar": 70.0,
+    "wind": -88.0,
+    "storage4": -103396.0,
+    "storage8": -259243.0
+   }
+  },
+  {
+   "outer": 7,
+   "resid": 0.0200021932403126,
+   "secs": 122.6,
+   "completion_s": 121.9,
+   "evals": 45,
+   "inner_iters": 2,
+   "inner_foc": 1.1754777249442067e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 0,
+    "ccgt": 93510,
+    "ct": 31683,
+    "coal": 0,
+    "solar": 29796,
+    "wind": 107708,
+    "storage4": 0,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 469229.0,
+    "ccgt": 137661.0,
+    "ct": 122302.0,
+    "coal": 389003.0,
+    "solar": 86316.0,
+    "wind": 101352.0,
+    "storage4": 224972.0,
+    "storage8": 403011.0
+   },
+   "rho_star": {
+    "nuclear": -88451.0,
+    "ccgt": -1422.0,
+    "ct": -1624.0,
+    "coal": -256909.0,
+    "solar": -94.0,
+    "wind": 17.0,
+    "storage4": -108820.0,
+    "storage8": -263772.0
+   }
+  },
+  {
+   "outer": 8,
+   "resid": 0.008391591429179146,
+   "secs": 109.0,
+   "completion_s": 109.0,
+   "evals": 45,
+   "inner_iters": 1,
+   "inner_foc": 1.2646472633401042e-13,
+   "p_hat": NaN,
+   "K": {
+    "nuclear": 0,
+    "ccgt": 93439,
+    "ct": 31725,
+    "coal": 0,
+    "solar": 29834,
+    "wind": 107761,
+    "storage4": 0,
+    "storage8": 0
+   },
+   "I_eff": {
+    "nuclear": 470170.0,
+    "ccgt": 138080.0,
+    "ct": 122650.0,
+    "coal": 389498.0,
+    "solar": 86451.0,
+    "wind": 101344.0,
+    "storage4": 225163.0,
+    "storage8": 403295.0
+   },
+   "rho_star": {
+    "nuclear": -87412.0,
+    "ccgt": -346.0,
+    "ct": -681.0,
+    "coal": -255877.0,
+    "solar": 90.0,
+    "wind": 1.0,
+    "storage4": -107813.0,
+    "storage8": -262748.0
+   }
+  }
+ ],
+ "capacity_iterations": 1,
+ "foc": {
+  "nuclear": -0.1873125240012832,
+  "ccgt": -1.2646472633401042e-13,
+  "ct": -1.1864617886795652e-15,
+  "coal": -0.658574055624684,
+  "solar": 1.1311533586313188e-13,
+  "wind": -6.46150520436066e-15,
+  "storage4": -0.48156478785889495,
+  "storage8": -0.6530353910301901
+ },
+ "n_evaluations": 45,
+ "params": {
+  "r": 0.025,
+  "voll": 10000.0,
+  "tau_scc": 20.0,
+  "gamma": 0.0,
+  "storage_eff_oneway": 0.9219544457292888,
+  "p_ref": 50.73,
+  "flex_price_share": 0.03,
+  "reg_price_share": 0.006,
+  "flex_wind_coef": 0.189,
+  "flex_solar_coef": 0.076,
+  "reg_load_coef": 0.01,
+  "reg_wind_coef": 0.005,
+  "reg_solar_coef": 0.003,
+  "solar_capacity_basis": "AC",
+  "dc_ac_ratio": 1.34,
+  "daylight_rule": "solar_threshold",
+  "daylight_theta_threshold": 0.01,
+  "daylight_fixed_hours": [
+   6,
+   19
+  ],
+  "q_bar_rule": "fixed",
+  "q_bar_coverage": 1.0,
+  "q_bar_mw": 112108.1003,
+  "markdown_mode": "regulation",
+  "a_wind_appendix": 0.0015,
+  "a_solar_appendix": 0.0018,
+  "markdown_solar_cf": 0.25,
+  "markdown_daylight_share": 0.5,
+  "curtailment_hour_threshold_mw": 1.0,
+  "welfare_tau_always_scc": true,
+  "techs": [
+   {
+    "name": "nuclear",
+    "kind": "thermal",
+    "occ_per_kw": 6268,
+    "fom_per_kw_yr": 191,
+    "life_yr": 60,
+    "c_var": 8.71838,
+    "e_rate": 0.0,
+    "duration_h": 0.0,
+    "vre_key": ""
+   },
+   {
+    "name": "ccgt",
+    "kind": "thermal",
+    "occ_per_kw": 1288,
+    "fom_per_kw_yr": 34,
+    "life_yr": 30,
+    "c_var": 31.217279999999995,
+    "e_rate": 0.33332075368997827,
+    "duration_h": 0.0,
+    "vre_key": ""
+   },
+   {
+    "name": "ct",
+    "kind": "thermal",
+    "occ_per_kw": 1134,
+    "fom_per_kw_yr": 27,
+    "life_yr": 30,
+    "c_var": 53.035560000000004,
+    "e_rate": 0.5244999138173473,
+    "duration_h": 0.0,
+    "vre_key": ""
+   },
+   {
+    "name": "coal",
+    "kind": "thermal",
+    "occ_per_kw": 3337,
+    "fom_per_kw_yr": 91,
+    "life_yr": 30,
+    "c_var": 30.770300000000002,
+    "e_rate": 0.779058068964266,
+    "duration_h": 0.0,
+    "vre_key": ""
+   },
+   {
+    "name": "solar",
+    "kind": "vre",
+    "occ_per_kw": 1138,
+    "fom_per_kw_yr": 20,
+    "life_yr": 30,
+    "c_var": 0.0,
+    "e_rate": 0.0,
+    "duration_h": 0.0,
+    "vre_key": "solar"
+   },
+   {
+    "name": "wind",
+    "kind": "vre",
+    "occ_per_kw": 1339,
+    "fom_per_kw_yr": 32,
+    "life_yr": 30,
+    "c_var": 0.0,
+    "e_rate": 0.0,
+    "duration_h": 0.0,
+    "vre_key": "wind"
+   },
+   {
+    "name": "storage4",
+    "kind": "storage",
+    "occ_per_kw": 1417,
+    "fom_per_kw_yr": 35,
+    "life_yr": 15,
+    "c_var": 0.0,
+    "e_rate": 0.0,
+    "duration_h": 4.0,
+    "vre_key": ""
+   },
+   {
+    "name": "storage8",
+    "kind": "storage",
+    "occ_per_kw": 2488,
+    "fom_per_kw_yr": 62,
+    "life_yr": 15,
+    "c_var": 0.0,
+    "e_rate": 0.0,
+    "duration_h": 8.0,
+    "vre_key": ""
+   }
+  ]
+ },
+ "welfare": {
+  "C_y": [
+   41367642607.66984,
+   43008468417.689865,
+   41426030959.55259,
+   40284648827.573006,
+   41563953891.79623,
+   40529296316.81205,
+   40743011505.22325,
+   42492811023.74091,
+   44598313323.17296
+  ],
+  "C_mean": 41779352985.91452,
+  "C_max": 44598313323.17296,
+  "C_risk_adjusted": 68538340979.8183,
+  "tau_welfare": 20.0,
+  "components_mean": {
+   "variable_om_fuel": 14131966995.076996,
+   "carbon_at_tau_welfare": 3012526008.877291,
+   "lost_load": 470093003.8395424,
+   "capex_annualized": 24063452294.358482,
+   "reliability_psi": 101314683.76220873
+  },
+  "emissions_y": [
+   149383281.81230968,
+   163138592.71597755,
+   149521963.33402392,
+   141573323.72777706,
+   150085783.9476102,
+   143518723.09156764,
+   145124554.54514477,
+   153141097.8096868,
+   160149383.0106834
+  ],
+  "lost_load_mwh_y": [
+   20836.2462425141,
+   27710.99901283742,
+   24085.44202353833,
+   621.383591290316,
+   31658.815245907303,
+   2629.318606899411,
+   7188.6642217520275,
+   89420.11271858495,
+   218932.72179226432
+  ],
+  "psi_load_mean": 2400047.922141878,
+  "energy_share": {
+   "nuclear": 0.0,
+   "ccgt": 0.5603544240955709,
+   "ct": 0.008103399238413097,
+   "coal": 0.0,
+   "solar": 0.05840960572687352,
+   "wind": 0.37307295258436357,
+   "storage4": 0.0,
+   "storage8": 0.0,
+   "lost_load": 5.961835477892651e-05
+  },
+  "curtailment_share": {
+   "solar": 0.01822708029949538,
+   "wind": 0.008212942200145679
+  },
+  "curtailment_mwh_y": {
+   "solar": [
+    593412.1583948887,
+    335519.6497870202,
+    745417.9787973139,
+    1576137.748806226,
+    1158336.1686606,
+    869652.9681392314,
+    717778.7732559255,
+    923332.777133013,
+    775908.2412361421
+   ],
+   "wind": [
+    1527599.3121235091,
+    1212288.5750520187,
+    2867972.5164618543,
+    4964444.896776455,
+    2511445.848786286,
+    2238991.8747751103,
+    2171347.586889863,
+    2346957.098920169,
+    2082983.121188113
+   ]
+  },
+  "curtailment_hours_y": {
+   "solar": [
+    105,
+    88,
+    192,
+    255,
+    184,
+    215,
+    167,
+    197,
+    186
+   ],
+   "wind": [
+    218,
+    173,
+    357,
+    528,
+    310,
+    314,
+    275,
+    310,
+    311
+   ]
+  },
+  "curtailment_hours_any_y": [
+   289,
+   198,
+   429,
+   647,
+   405,
+   410,
+   353,
+   406,
+   399
+  ]
+ },
+ "runtime_s": 1163.9617204666138
+}

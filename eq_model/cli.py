@@ -210,12 +210,17 @@ def _solve_and_write(panel, P: ModelParams, name: str, gamma: float, out: str, c
     with open(os.path.join(out, f"result_{suffix}.json"), "w") as fh:
         json.dump({"regime": dataclasses.asdict(reg), "gamma": res.gamma, "tau": res.tau, "K": res.K, "I": res.I,
                    "psi_coef": res.psi_coef, "cost_K_effective": res.cost_K, "risk_premium": res.risk_premium,
-                   "implied_discount_rate": {z: implied_discount_rate(P.tech(z), res.cost_K[z]) if res.K[z] > 1 else None for z in res.K},
+                   # implied_discount_rate solves against the full-year Tech.annualized_cost, but
+                   # cost_K is prorated by H/8760 on sub-year test panels, which gave negative rates
+                   # there.  The factor is exactly 1.0 at H=8760, so full-size outputs are unchanged.
+                   "implied_discount_rate": {z: implied_discount_rate(P.tech(z), res.cost_K[z] * (8760.0 / panel.H))
+                                             if res.K[z] > 1 else None for z in res.K},
                    "rho_star": res.rho_star, "q_bar": res.q_bar, "Lambda": res.Lambda, "Pbar_by_year": res.Pbar,
                    "forward": dataclasses.asdict(res.forward) if res.forward else None, "markdown": res.markdown,
                    "converged": res.converged, "outer_history": res.outer_history,
                    "capacity_iterations": res.capacity_result.iterations, "foc": res.capacity_result.foc,
                    "n_evaluations": res.capacity_result.n_evaluations,
+                   "gamma_by_tech": res.gamma_by_tech,
                    # Provenance: the full parameter set this result was produced with, so a
                    # results directory is a record rather than an assertion about which
                    # --param flags were typed.

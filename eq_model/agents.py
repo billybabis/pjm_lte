@@ -26,7 +26,7 @@ from __future__ import annotations
 
 import logging
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple, Union
 
 import numpy as np
 
@@ -133,7 +133,7 @@ def _s_vec(p_hat: float, Lambda: float, Pbar: np.ndarray, a: float) -> np.ndarra
 
 
 def forward_market(m: Dict[str, np.ndarray], I: Dict[str, float], K: Dict[str, float], Pbar: np.ndarray,
-                   Lambda: float, gamma: float, q_bar: float, markdown: Dict[str, float],
+                   Lambda: float, gamma: Union[float, Dict[str, float]], q_bar: float, markdown: Dict[str, float],
                    contracts: bool, tol: float = 1e-7) -> ForwardResult:
     """Clear the forward market (eq. forward-clearing) given spot outcomes.
 
@@ -142,8 +142,11 @@ def forward_market(m: Dict[str, np.ndarray], I: Dict[str, float], K: Dict[str, f
     (merchant regimes R2, R6) and p_hat is reported as NaN.
     """
     names = list(m.keys())
+    # gamma may be one value for every agent or {z: gamma_z} (params.gamma_scaling); each agent's
+    # problem is separate, so a per-technology gamma needs nothing beyond using its own value.
+    g = gamma if isinstance(gamma, dict) else {z: gamma for z in names}
     if not contracts or q_bar <= 0:
-        rs = {z: rho(m[z] - I[z], gamma) for z in names}
+        rs = {z: rho(m[z] - I[z], g[z]) for z in names}
         return ForwardResult(p_hat=float("nan"), chi={z: 0.0 for z in names}, Q={z: 0.0 for z in names},
                              chi_interval={z: (0.0, 0.0) for z in names}, rho_star=rs, supply=0.0, q_bar=0.0)
 
@@ -151,7 +154,7 @@ def forward_market(m: Dict[str, np.ndarray], I: Dict[str, float], K: Dict[str, f
         res = {}
         for z in names:
             s = _s_vec(p_hat, Lambda, Pbar, markdown.get(z, 0.0))
-            res[z] = best_chi(m[z] - I[z], s, gamma)
+            res[z] = best_chi(m[z] - I[z], s, g[z])
         return res
 
     def supply_bounds(p_hat: float):
@@ -164,7 +167,7 @@ def forward_market(m: Dict[str, np.ndarray], I: Dict[str, float], K: Dict[str, f
     notes = []
     if total_K <= 0:
         return ForwardResult(float("nan"), {z: 0.0 for z in names}, {z: 0.0 for z in names},
-                             {z: (0.0, 0.0) for z in names}, {z: rho(m[z] - I[z], gamma) for z in names},
+                             {z: (0.0, 0.0) for z in names}, {z: rho(m[z] - I[z], g[z]) for z in names},
                              0.0, q_bar, rationed=True, notes=["no capacity"])
     a_max = max(markdown.get(z, 0.0) for z in names)
     p_lo = float(Pbar.min() / Lambda) - 1.0

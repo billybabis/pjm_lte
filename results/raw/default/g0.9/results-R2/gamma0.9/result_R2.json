@@ -11,11 +11,11 @@
  "tau": 0.0,
  "K": {
   "nuclear": -0.0,
-  "ccgt": 104979.07783268257,
-  "ct": 27759.66352244587,
+  "ccgt": 105035.04506407643,
+  "ct": 27696.27663899827,
   "coal": -0.0,
-  "solar": 20958.303337474525,
-  "wind": 29122.25538116077,
+  "solar": 21064.931709738852,
+  "wind": 28769.323751028194,
   "storage4": -0.0,
   "storage8": -0.0
  },
@@ -40,57 +40,57 @@
   "storage8": 0.0
  },
  "cost_K_effective": {
-  "nuclear": 557940.222340986,
-  "ccgt": 168625.57104494658,
+  "nuclear": 557977.6200138254,
+  "ccgt": 168595.4788227312,
   "ct": 154241.7047301659,
-  "coal": 459419.0727275805,
-  "solar": 97933.78990303734,
-  "wind": 104567.087376969,
-  "storage4": 278938.1665450533,
-  "storage8": 491571.58853562345
+  "coal": 459456.4704004199,
+  "solar": 97304.55604307556,
+  "wind": 104615.92349896602,
+  "storage4": 278911.01148024155,
+  "storage8": 491586.2669490352
  },
  "risk_premium": {
-  "nuclear": 164149.13683941442,
-  "ccgt": 73087.96977675114,
+  "nuclear": 164186.53451225377,
+  "ccgt": 73057.87755453576,
   "ct": 73061.86013534163,
-  "coal": 208985.0855909592,
-  "solar": 23562.834745268396,
-  "wind": 8592.826431228546,
-  "storage4": 129492.09832002994,
-  "storage8": 228624.6458794074
+  "coal": 209022.4832637986,
+  "solar": 22933.600885306616,
+  "wind": 8641.662553225571,
+  "storage4": 129464.94325521818,
+  "storage8": 228639.3242928192
  },
  "implied_discount_rate": {
   "nuclear": null,
-  "ccgt": 0.09823773344794615,
+  "ccgt": 0.09821122246387842,
   "ct": 0.1068715098320048,
   "coal": null,
-  "solar": 0.05457547826206004,
-  "wind": 0.03474092116046981,
+  "solar": 0.05384511136377053,
+  "wind": 0.0347945391049906,
   "storage4": null,
   "storage8": null
  },
  "rho_star": {
-  "nuclear": -192194.38697100204,
-  "ccgt": 15.54147241274768,
-  "ct": 1.4551915228366852e-11,
-  "coal": -286848.0565575964,
-  "solar": -63.40477791140438,
-  "wind": -5.4569682106375694e-12,
-  "storage4": -152453.85456205002,
-  "storage8": -333423.1365462898
+  "nuclear": -192215.10661424123,
+  "ccgt": -5.178170826518908,
+  "ct": 0.0,
+  "coal": -286868.7762008357,
+  "solar": -699.3742501554589,
+  "wind": -3.50263800439825,
+  "storage4": -153474.82723629836,
+  "storage8": -334465.79308129917
  },
  "q_bar": 0.0,
  "Lambda": 7813.949610228729,
  "Pbar_by_year": [
-  303585.2365019908,
-  428880.0007534091,
-  296158.52181320125,
-  265291.9177404536,
-  375665.56478782464,
-  257785.94104792067,
-  289088.92909470806,
-  602773.0157041823,
-  866299.3189797795
+  294649.7753497232,
+  428937.7768085251,
+  296134.6567111509,
+  265208.53412289836,
+  375602.42002669536,
+  257797.3349061655,
+  288453.32741425163,
+  602771.1950042723,
+  874723.0513360905
  ],
  "forward": {
   "p_hat": NaN,
@@ -149,14 +149,14 @@
    ]
   },
   "rho_star": {
-   "nuclear": -192194.38697100204,
-   "ccgt": 15.54147241274768,
-   "ct": 1.4551915228366852e-11,
-   "coal": -286848.0565575964,
-   "solar": -63.40477791140438,
-   "wind": -5.4569682106375694e-12,
-   "storage4": -152453.85456205002,
-   "storage8": -333423.1365462898
+   "nuclear": -192215.10661424123,
+   "ccgt": -5.178170826518908,
+   "ct": 0.0,
+   "coal": -286868.7762008357,
+   "solar": -699.3742501554589,
+   "wind": -3.50263800439825,
+   "storage4": -153474.82723629836,
+   "storage8": -334465.79308129917
   },
   "supply": 0.0,
   "q_bar": 0.0,
@@ -172,8 +172,8 @@
   {
    "outer": 1,
    "resid": 0.8999999999999994,
-   "secs": 193.0,
-   "completion_s": 172.3,
+   "secs": 188.5,
+   "completion_s": 168.6,
    "evals": 18,
    "inner_iters": 18,
    "inner_foc": 1.305349012866832e-13,
@@ -212,8 +212,8 @@
   {
    "outer": 2,
    "resid": 0.6499999999999988,
-   "secs": 287.4,
-   "completion_s": 282.0,
+   "secs": 276.1,
+   "completion_s": 270.9,
    "evals": 26,
    "inner_iters": 9,
    "inner_foc": 1.3221037843272e-13,
@@ -252,8 +252,8 @@
   {
    "outer": 3,
    "resid": 0.3999999999999983,
-   "secs": 152.1,
-   "completion_s": 146.3,
+   "secs": 148.2,
+   "completion_s": 142.7,
    "evals": 34,
    "inner_iters": 9,
    "inner_foc": 1.1129230012462449e-13,
@@ -292,8 +292,8 @@
   {
    "outer": 4,
    "resid": 0.14999999999999783,
-   "secs": 215.3,
-   "completion_s": 211.0,
+   "secs": 207.0,
+   "completion_s": 203.0,
    "evals": 40,
    "inner_iters": 7,
    "inner_foc": 8.801804677017396e-14,
@@ -332,8 +332,8 @@
   {
    "outer": 5,
    "resid": 0.16337829118074906,
-   "secs": 313.9,
-   "completion_s": 306.6,
+   "secs": 302.1,
+   "completion_s": 295.1,
    "evals": 51,
    "inner_iters": 12,
    "inner_foc": 2.991460513262752e-14,
@@ -372,8 +372,8 @@
   {
    "outer": 6,
    "resid": 0.0972715959125505,
-   "secs": 133.5,
-   "completion_s": 130.2,
+   "secs": 131.4,
+   "completion_s": 128.1,
    "evals": 56,
    "inner_iters": 6,
    "inner_foc": 4.2977281588562174e-14,
@@ -412,8 +412,8 @@
   {
    "outer": 7,
    "resid": 0.05820670326496626,
-   "secs": 146.6,
-   "completion_s": 144.6,
+   "secs": 143.2,
+   "completion_s": 141.2,
    "evals": 59,
    "inner_iters": 4,
    "inner_foc": 5.741766458942286e-14,
@@ -452,8 +452,8 @@
   {
    "outer": 8,
    "resid": 0.0345515203109846,
-   "secs": 142.9,
-   "completion_s": 141.5,
+   "secs": 139.2,
+   "completion_s": 137.9,
    "evals": 61,
    "inner_iters": 3,
    "inner_foc": 6.768684369850751e-14,
@@ -492,8 +492,8 @@
   {
    "outer": 9,
    "resid": 0.021458555470527052,
-   "secs": 114.8,
-   "completion_s": 114.7,
+   "secs": 111.0,
+   "completion_s": 111.0,
    "evals": 61,
    "inner_iters": 1,
    "inner_foc": 7.420480095733409e-14,
@@ -532,8 +532,8 @@
   {
    "outer": 10,
    "resid": 0.016883455262693078,
-   "secs": 123.2,
-   "completion_s": 122.5,
+   "secs": 118.5,
+   "completion_s": 117.9,
    "evals": 62,
    "inner_iters": 2,
    "inner_foc": 7.645567999450764e-14,
@@ -572,8 +572,8 @@
   {
    "outer": 11,
    "resid": 0.015375249216487336,
-   "secs": 102.9,
-   "completion_s": 102.8,
+   "secs": 98.3,
+   "completion_s": 98.3,
    "evals": 62,
    "inner_iters": 1,
    "inner_foc": 7.842173439612706e-14,
@@ -612,8 +612,8 @@
   {
    "outer": 12,
    "resid": 0.014211841066012572,
-   "secs": 94.4,
-   "completion_s": 94.4,
+   "secs": 91.1,
+   "completion_s": 91.1,
    "evals": 62,
    "inner_iters": 1,
    "inner_foc": 7.869175336565352e-14,
@@ -652,8 +652,8 @@
   {
    "outer": 13,
    "resid": 0.013114133994707814,
-   "secs": 97.5,
-   "completion_s": 97.5,
+   "secs": 95.4,
+   "completion_s": 95.4,
    "evals": 62,
    "inner_iters": 1,
    "inner_foc": 8.053873620754792e-14,
@@ -692,8 +692,8 @@
   {
    "outer": 14,
    "resid": 0.012415782353730965,
-   "secs": 93.2,
-   "completion_s": 93.2,
+   "secs": 91.1,
+   "completion_s": 91.1,
    "evals": 62,
    "inner_iters": 1,
    "inner_foc": 8.101967411141755e-14,
@@ -732,8 +732,8 @@
   {
    "outer": 15,
    "resid": 0.01176912702280896,
-   "secs": 95.4,
-   "completion_s": 95.4,
+   "secs": 93.6,
+   "completion_s": 93.6,
    "evals": 62,
    "inner_iters": 1,
    "inner_foc": 8.134588563402653e-14,
@@ -772,8 +772,8 @@
   {
    "outer": 16,
    "resid": 0.011055185794566718,
-   "secs": 92.1,
-   "completion_s": 92.1,
+   "secs": 90.9,
+   "completion_s": 90.8,
    "evals": 62,
    "inner_iters": 1,
    "inner_foc": 8.133035626970082e-14,
@@ -812,8 +812,8 @@
   {
    "outer": 17,
    "resid": 0.01044311532555176,
-   "secs": 96.1,
-   "completion_s": 96.0,
+   "secs": 93.8,
+   "completion_s": 93.8,
    "evals": 62,
    "inner_iters": 1,
    "inner_foc": 8.166130041936536e-14,
@@ -852,8 +852,8 @@
   {
    "outer": 18,
    "resid": 0.009403862686337985,
-   "secs": 105.8,
-   "completion_s": 105.7,
+   "secs": 102.8,
+   "completion_s": 102.8,
    "evals": 62,
    "inner_iters": 1,
    "inner_foc": 8.06159745101192e-14,
@@ -888,1658 +888,18 @@
     "storage4": -153475.0,
     "storage8": -334466.0
    }
-  },
-  {
-   "outer": 19,
-   "resid": 0.00891506877314625,
-   "secs": 97.8,
-   "completion_s": 97.8,
-   "evals": 62,
-   "inner_iters": 1,
-   "inner_foc": 8.165123794374174e-14,
-   "p_hat": NaN,
-   "K": {
-    "nuclear": 0,
-    "ccgt": 105029,
-    "ct": 27697,
-    "coal": 0,
-    "solar": 21056,
-    "wind": 28839,
-    "storage4": 0,
-    "storage8": 0
-   },
-   "I_eff": {
-    "nuclear": 557901.0,
-    "ccgt": 168596.0,
-    "ct": 154242.0,
-    "coal": 459380.0,
-    "solar": 97341.0,
-    "wind": 104618.0,
-    "storage4": 278923.0,
-    "storage8": 491542.0
-   },
-   "rho_star": {
-    "nuclear": -192234.0,
-    "ccgt": -24.0,
-    "ct": -0.0,
-    "coal": -286887.0,
-    "solar": -663.0,
-    "wind": -1.0,
-    "storage4": -153444.0,
-    "storage8": -334412.0
-   }
-  },
-  {
-   "outer": 20,
-   "resid": 0.008450742274545814,
-   "secs": 93.5,
-   "completion_s": 93.5,
-   "evals": 62,
-   "inner_iters": 1,
-   "inner_foc": 8.182161452888187e-14,
-   "p_hat": NaN,
-   "K": {
-    "nuclear": 0,
-    "ccgt": 104997,
-    "ct": 27721,
-    "coal": 0,
-    "solar": 21042,
-    "wind": 28954,
-    "storage4": 0,
-    "storage8": 0
-   },
-   "I_eff": {
-    "nuclear": 557921.0,
-    "ccgt": 168601.0,
-    "ct": 154242.0,
-    "coal": 459399.0,
-    "solar": 97376.0,
-    "wind": 104619.0,
-    "storage4": 278938.0,
-    "storage8": 491557.0
-   },
-   "rho_star": {
-    "nuclear": -192229.0,
-    "ccgt": -19.0,
-    "ct": -0.0,
-    "coal": -286883.0,
-    "solar": -628.0,
-    "wind": 2.0,
-    "storage4": -153404.0,
-    "storage8": -334355.0
-   }
-  },
-  {
-   "outer": 21,
-   "resid": 0.008135093659181619,
-   "secs": 97.0,
-   "completion_s": 97.0,
-   "evals": 62,
-   "inner_iters": 1,
-   "inner_foc": 8.181980424901735e-14,
-   "p_hat": NaN,
-   "K": {
-    "nuclear": 0,
-    "ccgt": 104967,
-    "ct": 27737,
-    "coal": 0,
-    "solar": 21016,
-    "wind": 29164,
-    "storage4": 0,
-    "storage8": 0
-   },
-   "I_eff": {
-    "nuclear": 557921.0,
-    "ccgt": 168605.0,
-    "ct": 154242.0,
-    "coal": 459399.0,
-    "solar": 97408.0,
-    "wind": 104618.0,
-    "storage4": 278938.0,
-    "storage8": 491557.0
-   },
-   "rho_star": {
-    "nuclear": -192245.0,
-    "ccgt": -35.0,
-    "ct": -0.0,
-    "coal": -286899.0,
-    "solar": -605.0,
-    "wind": 2.0,
-    "storage4": -153364.0,
-    "storage8": -334309.0
-   }
-  },
-  {
-   "outer": 22,
-   "resid": 0.007711390864432416,
-   "secs": 89.0,
-   "completion_s": 89.0,
-   "evals": 62,
-   "inner_iters": 1,
-   "inner_foc": 8.21617098570436e-14,
-   "p_hat": NaN,
-   "K": {
-    "nuclear": 0,
-    "ccgt": 104964,
-    "ct": 27740,
-    "coal": 0,
-    "solar": 21016,
-    "wind": 29164,
-    "storage4": 0,
-    "storage8": 0
-   },
-   "I_eff": {
-    "nuclear": 557940.0,
-    "ccgt": 168612.0,
-    "ct": 154242.0,
-    "coal": 459419.0,
-    "solar": 97440.0,
-    "wind": 104616.0,
-    "storage4": 278938.0,
-    "storage8": 491572.0
-   },
-   "rho_star": {
-    "nuclear": -192238.0,
-    "ccgt": -28.0,
-    "ct": 0.0,
-    "coal": -286892.0,
-    "solar": -574.0,
-    "wind": 10.0,
-    "storage4": -153313.0,
-    "storage8": -334255.0
-   }
-  },
-  {
-   "outer": 23,
-   "resid": 0.007309755923577284,
-   "secs": 94.4,
-   "completion_s": 94.4,
-   "evals": 62,
-   "inner_iters": 1,
-   "inner_foc": 8.21590313576388e-14,
-   "p_hat": NaN,
-   "K": {
-    "nuclear": 0,
-    "ccgt": 104962,
-    "ct": 27743,
-    "coal": 0,
-    "solar": 21016,
-    "wind": 29164,
-    "storage4": 0,
-    "storage8": 0
-   },
-   "I_eff": {
-    "nuclear": 557940.0,
-    "ccgt": 168617.0,
-    "ct": 154242.0,
-    "coal": 459419.0,
-    "solar": 97470.0,
-    "wind": 104610.0,
-    "storage4": 278938.0,
-    "storage8": 491572.0
-   },
-   "rho_star": {
-    "nuclear": -192233.0,
-    "ccgt": -23.0,
-    "ct": -0.0,
-    "coal": -286886.0,
-    "solar": -544.0,
-    "wind": 25.0,
-    "storage4": -153252.0,
-    "storage8": -334208.0
-   }
-  },
-  {
-   "outer": 24,
-   "resid": 0.006925256377625252,
-   "secs": 88.4,
-   "completion_s": 88.3,
-   "evals": 62,
-   "inner_iters": 1,
-   "inner_foc": 8.215687403603429e-14,
-   "p_hat": NaN,
-   "K": {
-    "nuclear": 0,
-    "ccgt": 104958,
-    "ct": 27746,
-    "coal": 0,
-    "solar": 21016,
-    "wind": 29164,
-    "storage4": 0,
-    "storage8": 0
-   },
-   "I_eff": {
-    "nuclear": 557940.0,
-    "ccgt": 168622.0,
-    "ct": 154242.0,
-    "coal": 459419.0,
-    "solar": 97498.0,
-    "wind": 104593.0,
-    "storage4": 278938.0,
-    "storage8": 491572.0
-   },
-   "rho_star": {
-    "nuclear": -192209.0,
-    "ccgt": 1.0,
-    "ct": 0.0,
-    "coal": -286862.0,
-    "solar": -515.0,
-    "wind": 26.0,
-    "storage4": -153163.0,
-    "storage8": -334162.0
-   }
-  },
-  {
-   "outer": 25,
-   "resid": 0.006564565941290573,
-   "secs": 1.5,
-   "completion_s": 1.5,
-   "evals": 62,
-   "inner_iters": 1,
-   "inner_foc": 8.215699757966425e-14,
-   "p_hat": NaN,
-   "K": {
-    "nuclear": 0,
-    "ccgt": 104958,
-    "ct": 27746,
-    "coal": 0,
-    "solar": 21016,
-    "wind": 29164,
-    "storage4": 0,
-    "storage8": 0
-   },
-   "I_eff": {
-    "nuclear": 557921.0,
-    "ccgt": 168621.0,
-    "ct": 154242.0,
-    "coal": 459399.0,
-    "solar": 97525.0,
-    "wind": 104575.0,
-    "storage4": 278923.0,
-    "storage8": 491557.0
-   },
-   "rho_star": {
-    "nuclear": -192209.0,
-    "ccgt": 1.0,
-    "ct": -0.0,
-    "coal": -286863.0,
-    "solar": -488.0,
-    "wind": 8.0,
-    "storage4": -153092.0,
-    "storage8": -334136.0
-   }
-  },
-  {
-   "outer": 26,
-   "resid": 0.006222661465181338,
-   "secs": 1.5,
-   "completion_s": 1.5,
-   "evals": 62,
-   "inner_iters": 1,
-   "inner_foc": 8.21570970905146e-14,
-   "p_hat": NaN,
-   "K": {
-    "nuclear": 0,
-    "ccgt": 104958,
-    "ct": 27746,
-    "coal": 0,
-    "solar": 21016,
-    "wind": 29164,
-    "storage4": 0,
-    "storage8": 0
-   },
-   "I_eff": {
-    "nuclear": 557921.0,
-    "ccgt": 168621.0,
-    "ct": 154242.0,
-    "coal": 459399.0,
-    "solar": 97550.0,
-    "wind": 104570.0,
-    "storage4": 278923.0,
-    "storage8": 491557.0
-   },
-   "rho_star": {
-    "nuclear": -192209.0,
-    "ccgt": 1.0,
-    "ct": -0.0,
-    "coal": -286863.0,
-    "solar": -463.0,
-    "wind": 3.0,
-    "storage4": -153042.0,
-    "storage8": -334097.0
-   }
-  },
-  {
-   "outer": 27,
-   "resid": 0.005898564513869821,
-   "secs": 1.5,
-   "completion_s": 1.5,
-   "evals": 62,
-   "inner_iters": 1,
-   "inner_foc": 8.2157177243608e-14,
-   "p_hat": NaN,
-   "K": {
-    "nuclear": 0,
-    "ccgt": 104958,
-    "ct": 27746,
-    "coal": 0,
-    "solar": 21016,
-    "wind": 29164,
-    "storage4": 0,
-    "storage8": 0
-   },
-   "I_eff": {
-    "nuclear": 557921.0,
-    "ccgt": 168621.0,
-    "ct": 154242.0,
-    "coal": 459399.0,
-    "solar": 97574.0,
-    "wind": 104568.0,
-    "storage4": 278923.0,
-    "storage8": 491557.0
-   },
-   "rho_star": {
-    "nuclear": -192209.0,
-    "ccgt": 1.0,
-    "ct": -0.0,
-    "coal": -286863.0,
-    "solar": -439.0,
-    "wind": 1.0,
-    "storage4": -153000.0,
-    "storage8": -334055.0
-   }
-  },
-  {
-   "outer": 28,
-   "resid": 0.005591347612105288,
-   "secs": 1.5,
-   "completion_s": 1.5,
-   "evals": 62,
-   "inner_iters": 1,
-   "inner_foc": 8.198464255707555e-14,
-   "p_hat": NaN,
-   "K": {
-    "nuclear": 0,
-    "ccgt": 104958,
-    "ct": 27746,
-    "coal": 0,
-    "solar": 21016,
-    "wind": 29164,
-    "storage4": 0,
-    "storage8": 0
-   },
-   "I_eff": {
-    "nuclear": 557921.0,
-    "ccgt": 168621.0,
-    "ct": 154242.0,
-    "coal": 459399.0,
-    "solar": 97597.0,
-    "wind": 104567.0,
-    "storage4": 278923.0,
-    "storage8": 491557.0
-   },
-   "rho_star": {
-    "nuclear": -192209.0,
-    "ccgt": 1.0,
-    "ct": 0.0,
-    "coal": -286863.0,
-    "solar": -416.0,
-    "wind": 0.0,
-    "storage4": -152963.0,
-    "storage8": -334014.0
-   }
-  },
-  {
-   "outer": 29,
-   "resid": 0.00530013159064019,
-   "secs": 1.5,
-   "completion_s": 1.5,
-   "evals": 62,
-   "inner_iters": 1,
-   "inner_foc": 8.21572938064951e-14,
-   "p_hat": NaN,
-   "K": {
-    "nuclear": 0,
-    "ccgt": 104958,
-    "ct": 27746,
-    "coal": 0,
-    "solar": 21016,
-    "wind": 29164,
-    "storage4": 0,
-    "storage8": 0
-   },
-   "I_eff": {
-    "nuclear": 557921.0,
-    "ccgt": 168621.0,
-    "ct": 154242.0,
-    "coal": 459399.0,
-    "solar": 97619.0,
-    "wind": 104567.0,
-    "storage4": 278923.0,
-    "storage8": 491557.0
-   },
-   "rho_star": {
-    "nuclear": -192209.0,
-    "ccgt": 0.0,
-    "ct": -0.0,
-    "coal": -286863.0,
-    "solar": -394.0,
-    "wind": 0.0,
-    "storage4": -152928.0,
-    "storage8": -333974.0
-   }
-  },
-  {
-   "outer": 30,
-   "resid": 0.005024083070293709,
-   "secs": 1.5,
-   "completion_s": 1.5,
-   "evals": 62,
-   "inner_iters": 1,
-   "inner_foc": 8.232993513722521e-14,
-   "p_hat": NaN,
-   "K": {
-    "nuclear": 0,
-    "ccgt": 104958,
-    "ct": 27746,
-    "coal": 0,
-    "solar": 21016,
-    "wind": 29164,
-    "storage4": 0,
-    "storage8": 0
-   },
-   "I_eff": {
-    "nuclear": 557921.0,
-    "ccgt": 168621.0,
-    "ct": 154242.0,
-    "coal": 459399.0,
-    "solar": 97639.0,
-    "wind": 104567.0,
-    "storage4": 278923.0,
-    "storage8": 491557.0
-   },
-   "rho_star": {
-    "nuclear": -192210.0,
-    "ccgt": 0.0,
-    "ct": -0.0,
-    "coal": -286863.0,
-    "solar": -374.0,
-    "wind": 0.0,
-    "storage4": -152896.0,
-    "storage8": -333936.0
-   }
-  },
-  {
-   "outer": 31,
-   "resid": 0.004762412077049057,
-   "secs": 1.5,
-   "completion_s": 1.5,
-   "evals": 62,
-   "inner_iters": 1,
-   "inner_foc": 8.215736943040251e-14,
-   "p_hat": NaN,
-   "K": {
-    "nuclear": 0,
-    "ccgt": 104958,
-    "ct": 27746,
-    "coal": 0,
-    "solar": 21016,
-    "wind": 29164,
-    "storage4": 0,
-    "storage8": 0
-   },
-   "I_eff": {
-    "nuclear": 557921.0,
-    "ccgt": 168621.0,
-    "ct": 154242.0,
-    "coal": 459399.0,
-    "solar": 97659.0,
-    "wind": 104567.0,
-    "storage4": 278923.0,
-    "storage8": 491557.0
-   },
-   "rho_star": {
-    "nuclear": -192210.0,
-    "ccgt": 0.0,
-    "ct": -0.0,
-    "coal": -286863.0,
-    "solar": -354.0,
-    "wind": 0.0,
-    "storage4": -152865.0,
-    "storage8": -333901.0
-   }
-  },
-  {
-   "outer": 32,
-   "resid": 0.004514369781369689,
-   "secs": 88.9,
-   "completion_s": 88.8,
-   "evals": 62,
-   "inner_iters": 1,
-   "inner_foc": 8.198479703256709e-14,
-   "p_hat": NaN,
-   "K": {
-    "nuclear": 0,
-    "ccgt": 104958,
-    "ct": 27746,
-    "coal": 0,
-    "solar": 21016,
-    "wind": 29164,
-    "storage4": 0,
-    "storage8": 0
-   },
-   "I_eff": {
-    "nuclear": 557921.0,
-    "ccgt": 168621.0,
-    "ct": 154242.0,
-    "coal": 459399.0,
-    "solar": 97677.0,
-    "wind": 104567.0,
-    "storage4": 278923.0,
-    "storage8": 491557.0
-   },
-   "rho_star": {
-    "nuclear": -192210.0,
-    "ccgt": 0.0,
-    "ct": 0.0,
-    "coal": -286863.0,
-    "solar": -336.0,
-    "wind": 0.0,
-    "storage4": -152835.0,
-    "storage8": -333867.0
-   }
-  },
-  {
-   "outer": 33,
-   "resid": 0.004279246355257091,
-   "secs": 1.5,
-   "completion_s": 1.5,
-   "evals": 62,
-   "inner_iters": 1,
-   "inner_foc": 8.215741849379495e-14,
-   "p_hat": NaN,
-   "K": {
-    "nuclear": 0,
-    "ccgt": 104958,
-    "ct": 27746,
-    "coal": 0,
-    "solar": 21016,
-    "wind": 29164,
-    "storage4": 0,
-    "storage8": 0
-   },
-   "I_eff": {
-    "nuclear": 557921.0,
-    "ccgt": 168620.0,
-    "ct": 154242.0,
-    "coal": 459399.0,
-    "solar": 97695.0,
-    "wind": 104567.0,
-    "storage4": 278923.0,
-    "storage8": 491557.0
-   },
-   "rho_star": {
-    "nuclear": -192210.0,
-    "ccgt": 0.0,
-    "ct": -0.0,
-    "coal": -286863.0,
-    "solar": -318.0,
-    "wind": 0.0,
-    "storage4": -152808.0,
-    "storage8": -333835.0
-   }
-  },
-  {
-   "outer": 34,
-   "resid": 0.004056368940920143,
-   "secs": 1.5,
-   "completion_s": 1.5,
-   "evals": 62,
-   "inner_iters": 1,
-   "inner_foc": 8.198483646861343e-14,
-   "p_hat": NaN,
-   "K": {
-    "nuclear": 0,
-    "ccgt": 104958,
-    "ct": 27746,
-    "coal": 0,
-    "solar": 21016,
-    "wind": 29164,
-    "storage4": 0,
-    "storage8": 0
-   },
-   "I_eff": {
-    "nuclear": 557921.0,
-    "ccgt": 168620.0,
-    "ct": 154242.0,
-    "coal": 459399.0,
-    "solar": 97711.0,
-    "wind": 104567.0,
-    "storage4": 278923.0,
-    "storage8": 491557.0
-   },
-   "rho_star": {
-    "nuclear": -192210.0,
-    "ccgt": 0.0,
-    "ct": 0.0,
-    "coal": -286863.0,
-    "solar": -302.0,
-    "wind": 0.0,
-    "storage4": -152781.0,
-    "storage8": -333804.0
-   }
-  },
-  {
-   "outer": 35,
-   "resid": 0.0038450997252479045,
-   "secs": 1.5,
-   "completion_s": 1.5,
-   "evals": 62,
-   "inner_iters": 1,
-   "inner_foc": 8.19848506396424e-14,
-   "p_hat": NaN,
-   "K": {
-    "nuclear": 0,
-    "ccgt": 104958,
-    "ct": 27746,
-    "coal": 0,
-    "solar": 21016,
-    "wind": 29164,
-    "storage4": 0,
-    "storage8": 0
-   },
-   "I_eff": {
-    "nuclear": 557921.0,
-    "ccgt": 168620.0,
-    "ct": 154242.0,
-    "coal": 459399.0,
-    "solar": 97727.0,
-    "wind": 104567.0,
-    "storage4": 278923.0,
-    "storage8": 491557.0
-   },
-   "rho_star": {
-    "nuclear": -192210.0,
-    "ccgt": 0.0,
-    "ct": -0.0,
-    "coal": -286863.0,
-    "solar": -286.0,
-    "wind": 0.0,
-    "storage4": -152756.0,
-    "storage8": -333775.0
-   }
-  },
-  {
-   "outer": 36,
-   "resid": 0.0036448341145579695,
-   "secs": 1.5,
-   "completion_s": 1.5,
-   "evals": 62,
-   "inner_iters": 1,
-   "inner_foc": 8.215746176355967e-14,
-   "p_hat": NaN,
-   "K": {
-    "nuclear": 0,
-    "ccgt": 104958,
-    "ct": 27746,
-    "coal": 0,
-    "solar": 21016,
-    "wind": 29164,
-    "storage4": 0,
-    "storage8": 0
-   },
-   "I_eff": {
-    "nuclear": 557921.0,
-    "ccgt": 168620.0,
-    "ct": 154242.0,
-    "coal": 459399.0,
-    "solar": 97742.0,
-    "wind": 104567.0,
-    "storage4": 278923.0,
-    "storage8": 491557.0
-   },
-   "rho_star": {
-    "nuclear": -192210.0,
-    "ccgt": 0.0,
-    "ct": -0.0,
-    "coal": -286864.0,
-    "solar": -271.0,
-    "wind": 0.0,
-    "storage4": -152733.0,
-    "storage8": -333748.0
-   }
-  },
-  {
-   "outer": 37,
-   "resid": 0.0034549990044239532,
-   "secs": 1.5,
-   "completion_s": 1.5,
-   "evals": 62,
-   "inner_iters": 1,
-   "inner_foc": 8.215747097680796e-14,
-   "p_hat": NaN,
-   "K": {
-    "nuclear": 0,
-    "ccgt": 104958,
-    "ct": 27746,
-    "coal": 0,
-    "solar": 21016,
-    "wind": 29164,
-    "storage4": 0,
-    "storage8": 0
-   },
-   "I_eff": {
-    "nuclear": 557921.0,
-    "ccgt": 168620.0,
-    "ct": 154242.0,
-    "coal": 459399.0,
-    "solar": 97756.0,
-    "wind": 104567.0,
-    "storage4": 278923.0,
-    "storage8": 491557.0
-   },
-   "rho_star": {
-    "nuclear": -192210.0,
-    "ccgt": 0.0,
-    "ct": -0.0,
-    "coal": -286864.0,
-    "solar": -257.0,
-    "wind": 0.0,
-    "storage4": -152710.0,
-    "storage8": -333722.0
-   }
-  },
-  {
-   "outer": 38,
-   "resid": 0.0032750511396109822,
-   "secs": 1.5,
-   "completion_s": 1.5,
-   "evals": 62,
-   "inner_iters": 1,
-   "inner_foc": 8.215747839779657e-14,
-   "p_hat": NaN,
-   "K": {
-    "nuclear": 0,
-    "ccgt": 104958,
-    "ct": 27746,
-    "coal": 0,
-    "solar": 21016,
-    "wind": 29164,
-    "storage4": 0,
-    "storage8": 0
-   },
-   "I_eff": {
-    "nuclear": 557921.0,
-    "ccgt": 168620.0,
-    "ct": 154242.0,
-    "coal": 459399.0,
-    "solar": 97769.0,
-    "wind": 104567.0,
-    "storage4": 278923.0,
-    "storage8": 491557.0
-   },
-   "rho_star": {
-    "nuclear": -192210.0,
-    "ccgt": 0.0,
-    "ct": -0.0,
-    "coal": -286864.0,
-    "solar": -244.0,
-    "wind": 0.0,
-    "storage4": -152689.0,
-    "storage8": -333697.0
-   }
-  },
-  {
-   "outer": 39,
-   "resid": 0.00310447555942369,
-   "secs": 1.5,
-   "completion_s": 1.5,
-   "evals": 62,
-   "inner_iters": 1,
-   "inner_foc": 8.215748437517477e-14,
-   "p_hat": NaN,
-   "K": {
-    "nuclear": 0,
-    "ccgt": 104958,
-    "ct": 27746,
-    "coal": 0,
-    "solar": 21016,
-    "wind": 29164,
-    "storage4": 0,
-    "storage8": 0
-   },
-   "I_eff": {
-    "nuclear": 557921.0,
-    "ccgt": 168620.0,
-    "ct": 154242.0,
-    "coal": 459399.0,
-    "solar": 97782.0,
-    "wind": 104567.0,
-    "storage4": 278923.0,
-    "storage8": 491557.0
-   },
-   "rho_star": {
-    "nuclear": -192210.0,
-    "ccgt": 0.0,
-    "ct": -0.0,
-    "coal": -286864.0,
-    "solar": -231.0,
-    "wind": 0.0,
-    "storage4": -152669.0,
-    "storage8": -333674.0
-   }
-  },
-  {
-   "outer": 40,
-   "resid": 0.002942784124037797,
-   "secs": 1.5,
-   "completion_s": 1.5,
-   "evals": 62,
-   "inner_iters": 1,
-   "inner_foc": 8.215748918976903e-14,
-   "p_hat": NaN,
-   "K": {
-    "nuclear": 0,
-    "ccgt": 104958,
-    "ct": 27746,
-    "coal": 0,
-    "solar": 21016,
-    "wind": 29164,
-    "storage4": 0,
-    "storage8": 0
-   },
-   "I_eff": {
-    "nuclear": 557921.0,
-    "ccgt": 168620.0,
-    "ct": 154242.0,
-    "coal": 459399.0,
-    "solar": 97794.0,
-    "wind": 104567.0,
-    "storage4": 278923.0,
-    "storage8": 491557.0
-   },
-   "rho_star": {
-    "nuclear": -192210.0,
-    "ccgt": 0.0,
-    "ct": -0.0,
-    "coal": -286864.0,
-    "solar": -219.0,
-    "wind": 0.0,
-    "storage4": -152650.0,
-    "storage8": -333652.0
-   }
-  },
-  {
-   "outer": 41,
-   "resid": 0.0027895141175773366,
-   "secs": 1.5,
-   "completion_s": 1.4,
-   "evals": 62,
-   "inner_iters": 1,
-   "inner_foc": 8.215749306777648e-14,
-   "p_hat": NaN,
-   "K": {
-    "nuclear": 0,
-    "ccgt": 104958,
-    "ct": 27746,
-    "coal": 0,
-    "solar": 21016,
-    "wind": 29164,
-    "storage4": 0,
-    "storage8": 0
-   },
-   "I_eff": {
-    "nuclear": 557921.0,
-    "ccgt": 168620.0,
-    "ct": 154242.0,
-    "coal": 459399.0,
-    "solar": 97806.0,
-    "wind": 104567.0,
-    "storage4": 278923.0,
-    "storage8": 491557.0
-   },
-   "rho_star": {
-    "nuclear": -192210.0,
-    "ccgt": 0.0,
-    "ct": -0.0,
-    "coal": -286864.0,
-    "solar": -207.0,
-    "wind": 0.0,
-    "storage4": -152632.0,
-    "storage8": -333631.0
-   }
-  },
-  {
-   "outer": 42,
-   "resid": 0.0026442269239534055,
-   "secs": 1.5,
-   "completion_s": 1.5,
-   "evals": 62,
-   "inner_iters": 1,
-   "inner_foc": 8.215749619139205e-14,
-   "p_hat": NaN,
-   "K": {
-    "nuclear": 0,
-    "ccgt": 104958,
-    "ct": 27746,
-    "coal": 0,
-    "solar": 21016,
-    "wind": 29164,
-    "storage4": 0,
-    "storage8": 0
-   },
-   "I_eff": {
-    "nuclear": 557921.0,
-    "ccgt": 168620.0,
-    "ct": 154242.0,
-    "coal": 459399.0,
-    "solar": 97816.0,
-    "wind": 104567.0,
-    "storage4": 278923.0,
-    "storage8": 491557.0
-   },
-   "rho_star": {
-    "nuclear": -192210.0,
-    "ccgt": 0.0,
-    "ct": -0.0,
-    "coal": -286864.0,
-    "solar": -197.0,
-    "wind": 0.0,
-    "storage4": -152615.0,
-    "storage8": -333611.0
-   }
-  },
-  {
-   "outer": 43,
-   "resid": 0.0025065067716645486,
-   "secs": 1.5,
-   "completion_s": 1.4,
-   "evals": 62,
-   "inner_iters": 1,
-   "inner_foc": 8.215749870736812e-14,
-   "p_hat": NaN,
-   "K": {
-    "nuclear": 0,
-    "ccgt": 104958,
-    "ct": 27746,
-    "coal": 0,
-    "solar": 21016,
-    "wind": 29164,
-    "storage4": 0,
-    "storage8": 0
-   },
-   "I_eff": {
-    "nuclear": 557921.0,
-    "ccgt": 168620.0,
-    "ct": 154242.0,
-    "coal": 459399.0,
-    "solar": 97827.0,
-    "wind": 104567.0,
-    "storage4": 278923.0,
-    "storage8": 491557.0
-   },
-   "rho_star": {
-    "nuclear": -192210.0,
-    "ccgt": 0.0,
-    "ct": -0.0,
-    "coal": -286864.0,
-    "solar": -186.0,
-    "wind": 0.0,
-    "storage4": -152598.0,
-    "storage8": -333592.0
-   }
-  },
-  {
-   "outer": 44,
-   "resid": 0.0023759595439736265,
-   "secs": 1.5,
-   "completion_s": 1.4,
-   "evals": 62,
-   "inner_iters": 1,
-   "inner_foc": 8.198490094245151e-14,
-   "p_hat": NaN,
-   "K": {
-    "nuclear": 0,
-    "ccgt": 104958,
-    "ct": 27746,
-    "coal": 0,
-    "solar": 21016,
-    "wind": 29164,
-    "storage4": 0,
-    "storage8": 0
-   },
-   "I_eff": {
-    "nuclear": 557921.0,
-    "ccgt": 168620.0,
-    "ct": 154242.0,
-    "coal": 459399.0,
-    "solar": 97836.0,
-    "wind": 104567.0,
-    "storage4": 278923.0,
-    "storage8": 491557.0
-   },
-   "rho_star": {
-    "nuclear": -192210.0,
-    "ccgt": 0.0,
-    "ct": -0.0,
-    "coal": -286864.0,
-    "solar": -177.0,
-    "wind": 0.0,
-    "storage4": -152583.0,
-    "storage8": -333574.0
-   }
-  },
-  {
-   "outer": 45,
-   "resid": 0.002252211651058666,
-   "secs": 1.5,
-   "completion_s": 1.4,
-   "evals": 62,
-   "inner_iters": 1,
-   "inner_foc": 8.19849025713387e-14,
-   "p_hat": NaN,
-   "K": {
-    "nuclear": 0,
-    "ccgt": 104958,
-    "ct": 27746,
-    "coal": 0,
-    "solar": 21016,
-    "wind": 29164,
-    "storage4": 0,
-    "storage8": 0
-   },
-   "I_eff": {
-    "nuclear": 557921.0,
-    "ccgt": 168620.0,
-    "ct": 154242.0,
-    "coal": 459399.0,
-    "solar": 97845.0,
-    "wind": 104567.0,
-    "storage4": 278923.0,
-    "storage8": 491557.0
-   },
-   "rho_star": {
-    "nuclear": -192210.0,
-    "ccgt": 0.0,
-    "ct": 0.0,
-    "coal": -286864.0,
-    "solar": -167.0,
-    "wind": 0.0,
-    "storage4": -152568.0,
-    "storage8": -333558.0
-   }
-  },
-  {
-   "outer": 46,
-   "resid": 0.0021349089608998046,
-   "secs": 1.5,
-   "completion_s": 1.5,
-   "evals": 62,
-   "inner_iters": 1,
-   "inner_foc": 8.198490388335712e-14,
-   "p_hat": NaN,
-   "K": {
-    "nuclear": 0,
-    "ccgt": 104958,
-    "ct": 27746,
-    "coal": 0,
-    "solar": 21016,
-    "wind": 29164,
-    "storage4": 0,
-    "storage8": 0
-   },
-   "I_eff": {
-    "nuclear": 557921.0,
-    "ccgt": 168620.0,
-    "ct": 154242.0,
-    "coal": 459399.0,
-    "solar": 97854.0,
-    "wind": 104567.0,
-    "storage4": 278923.0,
-    "storage8": 491557.0
-   },
-   "rho_star": {
-    "nuclear": -192210.0,
-    "ccgt": 0.0,
-    "ct": -0.0,
-    "coal": -286864.0,
-    "solar": -159.0,
-    "wind": 0.0,
-    "storage4": -152554.0,
-    "storage8": -333542.0
-   }
-  },
-  {
-   "outer": 47,
-   "resid": 0.0020237157858526236,
-   "secs": 1.5,
-   "completion_s": 1.4,
-   "evals": 62,
-   "inner_iters": 1,
-   "inner_foc": 8.198490494014747e-14,
-   "p_hat": NaN,
-   "K": {
-    "nuclear": 0,
-    "ccgt": 104958,
-    "ct": 27746,
-    "coal": 0,
-    "solar": 21016,
-    "wind": 29164,
-    "storage4": 0,
-    "storage8": 0
-   },
-   "I_eff": {
-    "nuclear": 557921.0,
-    "ccgt": 168620.0,
-    "ct": 154242.0,
-    "coal": 459399.0,
-    "solar": 97862.0,
-    "wind": 104567.0,
-    "storage4": 278923.0,
-    "storage8": 491557.0
-   },
-   "rho_star": {
-    "nuclear": -192210.0,
-    "ccgt": 0.0,
-    "ct": -0.0,
-    "coal": -286864.0,
-    "solar": -151.0,
-    "wind": 0.0,
-    "storage4": -152541.0,
-    "storage8": -333526.0
-   }
-  },
-  {
-   "outer": 48,
-   "resid": 0.0019183139220059755,
-   "secs": 1.5,
-   "completion_s": 1.4,
-   "evals": 62,
-   "inner_iters": 1,
-   "inner_foc": 8.198490579135949e-14,
-   "p_hat": NaN,
-   "K": {
-    "nuclear": 0,
-    "ccgt": 104958,
-    "ct": 27746,
-    "coal": 0,
-    "solar": 21016,
-    "wind": 29164,
-    "storage4": 0,
-    "storage8": 0
-   },
-   "I_eff": {
-    "nuclear": 557921.0,
-    "ccgt": 168620.0,
-    "ct": 154242.0,
-    "coal": 459399.0,
-    "solar": 97870.0,
-    "wind": 104567.0,
-    "storage4": 278923.0,
-    "storage8": 491557.0
-   },
-   "rho_star": {
-    "nuclear": -192210.0,
-    "ccgt": 0.0,
-    "ct": -0.0,
-    "coal": -286864.0,
-    "solar": -143.0,
-    "wind": 0.0,
-    "storage4": -152529.0,
-    "storage8": -333512.0
-   }
-  },
-  {
-   "outer": 49,
-   "resid": 0.0018184017385684543,
-   "secs": 1.5,
-   "completion_s": 1.5,
-   "evals": 62,
-   "inner_iters": 1,
-   "inner_foc": 8.198490647698451e-14,
-   "p_hat": NaN,
-   "K": {
-    "nuclear": 0,
-    "ccgt": 104958,
-    "ct": 27746,
-    "coal": 0,
-    "solar": 21016,
-    "wind": 29164,
-    "storage4": 0,
-    "storage8": 0
-   },
-   "I_eff": {
-    "nuclear": 557921.0,
-    "ccgt": 168620.0,
-    "ct": 154242.0,
-    "coal": 459399.0,
-    "solar": 97878.0,
-    "wind": 104567.0,
-    "storage4": 278923.0,
-    "storage8": 491557.0
-   },
-   "rho_star": {
-    "nuclear": -192210.0,
-    "ccgt": 0.0,
-    "ct": -0.0,
-    "coal": -286864.0,
-    "solar": -135.0,
-    "wind": 0.0,
-    "storage4": -152517.0,
-    "storage8": -333498.0
-   }
-  },
-  {
-   "outer": 50,
-   "resid": 0.0017236933146843546,
-   "secs": 1.5,
-   "completion_s": 1.5,
-   "evals": 62,
-   "inner_iters": 1,
-   "inner_foc": 8.215750683350638e-14,
-   "p_hat": NaN,
-   "K": {
-    "nuclear": 0,
-    "ccgt": 104958,
-    "ct": 27746,
-    "coal": 0,
-    "solar": 21016,
-    "wind": 29164,
-    "storage4": 0,
-    "storage8": 0
-   },
-   "I_eff": {
-    "nuclear": 557921.0,
-    "ccgt": 168620.0,
-    "ct": 154242.0,
-    "coal": 459399.0,
-    "solar": 97885.0,
-    "wind": 104567.0,
-    "storage4": 278923.0,
-    "storage8": 491557.0
-   },
-   "rho_star": {
-    "nuclear": -192210.0,
-    "ccgt": 0.0,
-    "ct": -0.0,
-    "coal": -286864.0,
-    "solar": -128.0,
-    "wind": -0.0,
-    "storage4": -152506.0,
-    "storage8": -333485.0
-   }
-  },
-  {
-   "outer": 51,
-   "resid": 0.0016339176212110918,
-   "secs": 1.5,
-   "completion_s": 1.4,
-   "evals": 62,
-   "inner_iters": 1,
-   "inner_foc": 8.198490747405448e-14,
-   "p_hat": NaN,
-   "K": {
-    "nuclear": 0,
-    "ccgt": 104958,
-    "ct": 27746,
-    "coal": 0,
-    "solar": 21016,
-    "wind": 29164,
-    "storage4": 0,
-    "storage8": 0
-   },
-   "I_eff": {
-    "nuclear": 557921.0,
-    "ccgt": 168620.0,
-    "ct": 154242.0,
-    "coal": 459399.0,
-    "solar": 97891.0,
-    "wind": 104567.0,
-    "storage4": 278923.0,
-    "storage8": 491557.0
-   },
-   "rho_star": {
-    "nuclear": -192210.0,
-    "ccgt": 0.0,
-    "ct": -0.0,
-    "coal": -286864.0,
-    "solar": -122.0,
-    "wind": -0.0,
-    "storage4": -152495.0,
-    "storage8": -333473.0
-   }
-  },
-  {
-   "outer": 52,
-   "resid": 0.001548817745106212,
-   "secs": 1.5,
-   "completion_s": 1.5,
-   "evals": 62,
-   "inner_iters": 1,
-   "inner_foc": 8.19849078323434e-14,
-   "p_hat": NaN,
-   "K": {
-    "nuclear": 0,
-    "ccgt": 104958,
-    "ct": 27746,
-    "coal": 0,
-    "solar": 21016,
-    "wind": 29164,
-    "storage4": 0,
-    "storage8": 0
-   },
-   "I_eff": {
-    "nuclear": 557921.0,
-    "ccgt": 168620.0,
-    "ct": 154242.0,
-    "coal": 459399.0,
-    "solar": 97898.0,
-    "wind": 104567.0,
-    "storage4": 278923.0,
-    "storage8": 491557.0
-   },
-   "rho_star": {
-    "nuclear": -192210.0,
-    "ccgt": 0.0,
-    "ct": 0.0,
-    "coal": -286864.0,
-    "solar": -115.0,
-    "wind": -0.0,
-    "storage4": -152485.0,
-    "storage8": -333461.0
-   }
-  },
-  {
-   "outer": 53,
-   "resid": 0.0014681501542148177,
-   "secs": 1.5,
-   "completion_s": 1.5,
-   "evals": 62,
-   "inner_iters": 1,
-   "inner_foc": 8.215750792750446e-14,
-   "p_hat": NaN,
-   "K": {
-    "nuclear": 0,
-    "ccgt": 104958,
-    "ct": 27746,
-    "coal": 0,
-    "solar": 21016,
-    "wind": 29164,
-    "storage4": 0,
-    "storage8": 0
-   },
-   "I_eff": {
-    "nuclear": 557921.0,
-    "ccgt": 168620.0,
-    "ct": 154242.0,
-    "coal": 459399.0,
-    "solar": 97904.0,
-    "wind": 104567.0,
-    "storage4": 278923.0,
-    "storage8": 491557.0
-   },
-   "rho_star": {
-    "nuclear": -192210.0,
-    "ccgt": 0.0,
-    "ct": 0.0,
-    "coal": -286864.0,
-    "solar": -109.0,
-    "wind": -0.0,
-    "storage4": -152476.0,
-    "storage8": -333450.0
-   }
-  },
-  {
-   "outer": 54,
-   "resid": 0.0013916840003493488,
-   "secs": 1.5,
-   "completion_s": 1.5,
-   "evals": 62,
-   "inner_iters": 1,
-   "inner_foc": 8.21575081604447e-14,
-   "p_hat": NaN,
-   "K": {
-    "nuclear": 0,
-    "ccgt": 104958,
-    "ct": 27746,
-    "coal": 0,
-    "solar": 21016,
-    "wind": 29164,
-    "storage4": 0,
-    "storage8": 0
-   },
-   "I_eff": {
-    "nuclear": 557921.0,
-    "ccgt": 168620.0,
-    "ct": 154242.0,
-    "coal": 459399.0,
-    "solar": 97909.0,
-    "wind": 104567.0,
-    "storage4": 278923.0,
-    "storage8": 491557.0
-   },
-   "rho_star": {
-    "nuclear": -192210.0,
-    "ccgt": 0.0,
-    "ct": -0.0,
-    "coal": -286864.0,
-    "solar": -104.0,
-    "wind": -0.0,
-    "storage4": -152467.0,
-    "storage8": -333440.0
-   }
-  },
-  {
-   "outer": 55,
-   "resid": 0.0013192004586644501,
-   "secs": 1.5,
-   "completion_s": 1.4,
-   "evals": 62,
-   "inner_iters": 1,
-   "inner_foc": 8.215750834807087e-14,
-   "p_hat": NaN,
-   "K": {
-    "nuclear": 0,
-    "ccgt": 104958,
-    "ct": 27746,
-    "coal": 0,
-    "solar": 21016,
-    "wind": 29164,
-    "storage4": 0,
-    "storage8": 0
-   },
-   "I_eff": {
-    "nuclear": 557921.0,
-    "ccgt": 168620.0,
-    "ct": 154242.0,
-    "coal": 459399.0,
-    "solar": 97915.0,
-    "wind": 104567.0,
-    "storage4": 278923.0,
-    "storage8": 491557.0
-   },
-   "rho_star": {
-    "nuclear": -192210.0,
-    "ccgt": 0.0,
-    "ct": -0.0,
-    "coal": -286864.0,
-    "solar": -98.0,
-    "wind": -0.0,
-    "storage4": -152458.0,
-    "storage8": -333430.0
-   }
-  },
-  {
-   "outer": 56,
-   "resid": 0.0012504921014428005,
-   "secs": 1.5,
-   "completion_s": 1.4,
-   "evals": 62,
-   "inner_iters": 1,
-   "inner_foc": 8.215750849919797e-14,
-   "p_hat": NaN,
-   "K": {
-    "nuclear": 0,
-    "ccgt": 104958,
-    "ct": 27746,
-    "coal": 0,
-    "solar": 21016,
-    "wind": 29164,
-    "storage4": 0,
-    "storage8": 0
-   },
-   "I_eff": {
-    "nuclear": 557921.0,
-    "ccgt": 168620.0,
-    "ct": 154242.0,
-    "coal": 459399.0,
-    "solar": 97920.0,
-    "wind": 104567.0,
-    "storage4": 278923.0,
-    "storage8": 491557.0
-   },
-   "rho_star": {
-    "nuclear": -192210.0,
-    "ccgt": 0.0,
-    "ct": -0.0,
-    "coal": -286864.0,
-    "solar": -93.0,
-    "wind": -0.0,
-    "storage4": -152450.0,
-    "storage8": -333421.0
-   }
-  },
-  {
-   "outer": 57,
-   "resid": 0.0011871537992742256,
-   "secs": 88.8,
-   "completion_s": 88.7,
-   "evals": 62,
-   "inner_iters": 1,
-   "inner_foc": 8.163970919684472e-14,
-   "p_hat": NaN,
-   "K": {
-    "nuclear": 0,
-    "ccgt": 104960,
-    "ct": 27746,
-    "coal": 0,
-    "solar": 21013,
-    "wind": 29162,
-    "storage4": 0,
-    "storage8": 0
-   },
-   "I_eff": {
-    "nuclear": 557921.0,
-    "ccgt": 168620.0,
-    "ct": 154242.0,
-    "coal": 459399.0,
-    "solar": 97925.0,
-    "wind": 104567.0,
-    "storage4": 278923.0,
-    "storage8": 491557.0
-   },
-   "rho_star": {
-    "nuclear": -192219.0,
-    "ccgt": -9.0,
-    "ct": -0.0,
-    "coal": -286873.0,
-    "solar": -88.0,
-    "wind": -0.0,
-    "storage4": -152453.0,
-    "storage8": -333424.0
-   }
-  },
-  {
-   "outer": 58,
-   "resid": 0.0011273144690469713,
-   "secs": 85.5,
-   "completion_s": 85.4,
-   "evals": 62,
-   "inner_iters": 1,
-   "inner_foc": 8.163883348974615e-14,
-   "p_hat": NaN,
-   "K": {
-    "nuclear": 0,
-    "ccgt": 104966,
-    "ct": 27749,
-    "coal": 0,
-    "solar": 20999,
-    "wind": 29152,
-    "storage4": 0,
-    "storage8": 0
-   },
-   "I_eff": {
-    "nuclear": 557930.0,
-    "ccgt": 168622.0,
-    "ct": 154242.0,
-    "coal": 459409.0,
-    "solar": 97929.0,
-    "wind": 104567.0,
-    "storage4": 278933.0,
-    "storage8": 491566.0
-   },
-   "rho_star": {
-    "nuclear": -192228.0,
-    "ccgt": -18.0,
-    "ct": -0.0,
-    "coal": -286881.0,
-    "solar": -84.0,
-    "wind": 0.0,
-    "storage4": -152457.0,
-    "storage8": -333429.0
-   }
-  },
-  {
-   "outer": 59,
-   "resid": 0.0008525475809326215,
-   "secs": 89.7,
-   "completion_s": 89.7,
-   "evals": 62,
-   "inner_iters": 1,
-   "inner_foc": 8.21549377805378e-14,
-   "p_hat": NaN,
-   "K": {
-    "nuclear": 0,
-    "ccgt": 104979,
-    "ct": 27760,
-    "coal": 0,
-    "solar": 20958,
-    "wind": 29122,
-    "storage4": 0,
-    "storage8": 0
-   },
-   "I_eff": {
-    "nuclear": 557940.0,
-    "ccgt": 168626.0,
-    "ct": 154242.0,
-    "coal": 459419.0,
-    "solar": 97934.0,
-    "wind": 104567.0,
-    "storage4": 278938.0,
-    "storage8": 491572.0
-   },
-   "rho_star": {
-    "nuclear": -192194.0,
-    "ccgt": 16.0,
-    "ct": 0.0,
-    "coal": -286848.0,
-    "solar": -63.0,
-    "wind": -0.0,
-    "storage4": -152454.0,
-    "storage8": -333423.0
-   }
   }
  ],
  "capacity_iterations": 1,
  "foc": {
-  "nuclear": -0.34452487847084706,
-  "ccgt": 8.21549377805378e-14,
-  "ct": 1.1321385681381817e-15,
-  "coal": -0.6244363238544272,
-  "solar": -4.368526002491779e-14,
-  "wind": 9.323950248186018e-15,
-  "storage4": -0.5465507157028873,
-  "storage8": -0.6782907111739273
+  "nuclear": -0.3446227416546134,
+  "ccgt": 8.06159745101192e-14,
+  "ct": 1.3208283294945454e-15,
+  "coal": -0.6245323882969804,
+  "solar": -4.232270488757736e-14,
+  "wind": 9.736893122161727e-15,
+  "storage4": -0.5502197628212676,
+  "storage8": -0.6804702466519766
  },
  "n_evaluations": 62,
  "params": {
@@ -2667,60 +1027,60 @@
  },
  "welfare": {
   "C_y": [
-   99823832953.9973,
-   105059407223.40445,
-   100980762257.45442,
-   97019640556.04385,
-   100815989119.39673,
-   101352433105.92667,
-   99046195066.42374,
-   103344273206.22517,
-   108389654835.62738
+   99892114257.73541,
+   105133159241.43404,
+   101054495912.48718,
+   97088422742.8781,
+   100888180882.18481,
+   101440567088.23267,
+   99119749317.3772,
+   103422415076.64447,
+   108466108956.313
   ],
-  "C_mean": 101759132036.05553,
-  "C_max": 108389654835.62738,
-  "C_risk_adjusted": 199309821388.12018,
+  "C_mean": 101833912608.3652,
+  "C_max": 108466108956.313,
+  "C_risk_adjusted": 199453410669.0469,
   "tau_welfare": 280.0,
   "components_mean": {
-   "variable_om_fuel": 21221441729.80821,
-   "carbon_at_tau_welfare": 63370831750.70719,
-   "lost_load": 496107624.17096835,
-   "capex_annualized": 16636650425.212704,
-   "reliability_psi": 34100506.156456135
+   "variable_om_fuel": 21246078061.70711,
+   "carbon_at_tau_welfare": 63444726803.26273,
+   "lost_load": 498323201.3205407,
+   "capex_annualized": 16610909364.427937,
+   "reliability_psi": 33875177.64688994
   },
   "emissions_y": [
-   222351829.06485444,
-   235273659.5184013,
-   225403604.6347913,
-   214946691.53645194,
-   224605171.48483163,
-   226568052.00770435,
-   220236835.27726233,
-   229317343.72172424,
-   238216404.74099496
+   222604549.1914452,
+   235527174.53977412,
+   225664707.637807,
+   215200389.30057275,
+   224862484.44871157,
+   226873574.89353347,
+   220501585.66058007,
+   229582389.3555854,
+   238477935.0768639
   ],
   "lost_load_mwh_y": [
-   5417.915484725148,
-   44742.35305950657,
-   6051.7618920078385,
-   1199.222543659038,
-   19644.282768008532,
+   5406.447730264423,
+   45247.193473982246,
+   6274.209636892454,
+   1205.1125360442675,
+   19855.587006692862,
    0.0,
-   6998.751029169129,
-   95957.52799961463,
-   266485.04697718064
+   7063.4395640082075,
+   96473.73340630942,
+   266965.1578342928
   ],
   "psi_load_mean": 2400047.922141878,
   "energy_share": {
    "nuclear": 0.0,
-   "ccgt": 0.8484019921630541,
-   "ct": 0.008084265234409325,
+   "ccgt": 0.8494470961960259,
+   "ct": 0.008058227964884868,
    "coal": 0.0,
-   "solar": 0.04179370462638746,
-   "wind": 0.10165712038302421,
+   "solar": 0.04200633608912802,
+   "wind": 0.10042514117187515,
    "storage4": 0.0,
    "storage8": 0.0,
-   "lost_load": 6.29175931247229e-05
+   "lost_load": 6.31985780861336e-05
   },
   "curtailment_share": {
    "solar": 0.0,
@@ -2786,5 +1146,5 @@
    0
   ]
  },
- "runtime_s": 3559.299429655075
+ "runtime_s": 2522.277850627899
 }

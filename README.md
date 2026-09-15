@@ -45,6 +45,7 @@ vintage, run `check-load` and `build-panel` first and read the diagnostics they 
 | `docs/github-actions.md` | how to dispatch a run, collect artifacts, and build the multi-γ figure |
 | `scripts/fetch_run.py` | download the latest CI run into `results/raw/<scenario>/g<γ>/`, check it, plot it |
 | `scripts/check_results.py` | verify a results tree: every regime present, every run converged |
+| `scripts/calibrate_gamma.py` | implied financing spread (bp) by γ and technology; interpolate the γ matching a cited spread |
 
 ## 2. Data pipeline
 
@@ -242,6 +243,22 @@ reported separately as `psi_load_mean` and is not included in C.
 the implied real discount rate r′ solving OCC·CRF(r′, L) + FOM = I_eff — i.e. the financing spread
 over r = 2.5 % that the merchant regime implies. `sweep` tabulates this against γ.
 
+**Capital-scaled γ (optional).** Under ρ = mean + γ·min, a technology's premium follows the
+volatility of its profits across weather years, not its capital cost, so baseload nuclear gets a
+comparatively small premium at a common γ. `--param gamma_scaling=capital` instead sets
+γ_z = γ × (OCC·CRF of z) / (OCC·CRF of CCGT), i.e. risk aversion proportional to capital intensity:
+
+| tech | nuclear | ccgt | ct | coal | solar | wind | storage4 | storage8 |
+|---|---|---|---|---|---|---|---|---|
+| γ_z / γ | 3.30 | 1.00 | 0.88 | 2.59 | 0.88 | 1.04 | 1.86 | 3.27 |
+
+It applies to the market agents only; the welfare metric keeps the scalar γ. Nothing in the LPs
+changes, since γ only enters the per-technology risk measure and contract choice. Two things to keep in
+mind: 8-hour storage is as capital-heavy per MW as nuclear and is scaled the same way, and with Q̄
+fixed, a more risk-averse nuclear partly gains contracts by crowding other technologies out of the
+pool. At high γ the effective γ_z reaches ~3, where convergence is hardest. Run it as its own
+scenario (results are keyed by regime and γ, not by this setting).
+
 ## 5. Open parameters and documented deviations from the .tex files
 
 Each item below is a point where the appendix is silent or internally inconsistent. Each has an
@@ -278,6 +295,7 @@ explicit switch in `ModelParams`, and the default is stated.
 | parameter | default | switch |
 |---|---|---|
 | γ (risk aversion) | 0 | `--gamma`, `--param gamma=` |
+| γ per technology | uniform | `--param gamma_scaling=capital` (γ_z ∝ capital cost; reference `gamma_reference_tech`, default ccgt) |
 | τ_SCC | $280/t (2025$) | `--param tau_scc=` |
 | Q̄ (total contracted capacity) | 112,108.1 MW = 70 % of the observed PJM RTO peak | `q_bar_rule ∈ {fixed, mean_profile_peak, peak_load, mean_load}`, `q_bar_mw`, `q_bar_coverage` |
 | τ in the welfare metric for τ = 0 regimes | SCC everywhere | `welfare_tau_always_scc` |

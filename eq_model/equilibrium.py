@@ -355,6 +355,7 @@ class RegimeResult:
     Pbar: np.ndarray                        # (Y,)
     runtime: float
     markdown: Dict[str, float] = field(default_factory=dict)   # a_z ($/MWh) applied to contracted energy
+    gamma_by_tech: Dict[str, float] = field(default_factory=dict)  # gamma_z each technology's agents used
 
 
 def default_start(panel: HourlyPanel, params: ModelParams) -> Dict[str, float]:
@@ -383,6 +384,7 @@ def solve_regime(panel: HourlyPanel, params: ModelParams, regime: Regime, gamma:
     cost split is recorded in ``outer_history`` (``secs``, ``completion_s``)."""
     t0 = time.time()
     gamma = params.gamma if gamma is None else gamma
+    gamma_z = params.gamma_by_tech(gamma)          # per-technology; uniform unless params.gamma_scaling
     tau = params.tau_scc if regime.carbon_priced else 0.0
     if cap is None or cap.tau != tau:
         cap = CapacityProblem(panel, params, tau)
@@ -401,7 +403,8 @@ def solve_regime(panel: HourlyPanel, params: ModelParams, regime: Regime, gamma:
         Pbar = (lam_hy * ev.price).sum(axis=1)
         rs = {z: rho(ev.margins[z] - cost[z], 0.0) for z in names}   # planner: risk neutral, cost incl. psi
         return RegimeResult(regime, 0.0, tau, cr.K, I, psi, cost, {z: 0.0 for z in names}, ev.margins, rs, None,
-                            ev, cr, [], cr.converged, 0.0, Lambda, Pbar, time.time() - t0, {})
+                            ev, cr, [], cr.converged, 0.0, Lambda, Pbar, time.time() - t0, {},
+                            {z: 0.0 for z in names})
 
     # ----------------------------------------------------------- market regimes
     contracts = regime.contracts
@@ -428,8 +431,9 @@ def solve_regime(panel: HourlyPanel, params: ModelParams, regime: Regime, gamma:
     # made every step (1+gamma*Y)/(1+gamma) times too short, so the residual fell by a fixed factor
     # 1 - 1/(1+gamma*Y) per iteration - 0.90 at gamma=1, needing ~66 iterations and blowing past
     # max_outer.  Measured slopes are ~1.0-1.4 against the 3.7-10 this used to assume.
-    slope_max = 2.0 * (1.0 + gamma * panel.Y) + 1.0         # generous ceiling for secant estimates
-    slope = np.full(len(names), 1.0 + gamma)
+    g_arr = np.array([gamma_z[z] for z in names], float)   # the slope is per technology, so is gamma
+    slope_max = 2.0 * (1.0 + g_arr * panel.Y) + 1.0         # generous ceiling for secant estimates
+    slope = 1.0 + g_arr
     max_step_frac = 0.25
     best = None                                             # (x, resid) of the best iterate so far
     best_state = None
@@ -442,7 +446,7 @@ def solve_regime(panel: HourlyPanel, params: ModelParams, regime: Regime, gamma:
         ev = cr.evaluation
         Kc = cr.K
         Pbar = (lam_hy * ev.price).sum(axis=1)
-        fwd = forward_market(ev.margins, I, cr.K, Pbar, Lambda, gamma, q_bar, markdown, contracts)
+        fwd = forward_market(ev.margins, I, cr.K, Pbar, Lambda, gamma_z, q_bar, markdown, contracts)
         rs = np.array([fwd.rho_star[z] for z in names])
         Karr = np.array([cr.K[z] for z in names])
         active = Karr > 1.0
@@ -517,4 +521,5 @@ def solve_regime(panel: HourlyPanel, params: ModelParams, regime: Regime, gamma:
     cost = dict(zip(names, map(float, I_solved)))
     premium = {z: cost[z] - I[z] for z in names}
     return RegimeResult(regime, gamma, tau, cr.K, I, psi, cost, premium, ev.margins, fwd.rho_star, fwd, ev, cr,
-                        outer_hist, converged, q_bar, Lambda, Pbar, time.time() - t0, dict(markdown))
+                        outer_hist, converged, q_bar, Lambda, Pbar, time.time() - t0, dict(markdown),
+                        dict(gamma_z))

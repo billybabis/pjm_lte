@@ -109,6 +109,20 @@ before plotting.
 values emissions in *every* regime's welfare metric — that is deliberate, and is what makes P1 and
 P2 comparable — so editing it moves the welfare numbers for all seven regimes, not just three.
 
+Risk aversion scaled by capital cost (nuclear ≈ 3.3× the γ you enter, CCGT exactly γ) is a
+`params` entry: type `gamma_scaling=capital`. Fetch it under its own name, e.g.
+`python scripts/fetch_run.py --scenario gcap`.
+
+To set the γ level, dispatch that scenario at several γ (e.g. 0, 0.3, 0.6, 0.9), fetch each, then:
+
+```
+python scripts/calibrate_gamma.py results/raw/gcap --target-spread-bp 250
+```
+
+It prints each technology's implied financing spread over the risk-free rate, in bp, by γ and regime.
+It then interpolates the γ at which merchant CCGT (R2) matches your cited spread, and refuses if the
+target lies outside the grid. Dispatch that γ as the headline run.
+
 Changing `tau_scc` (or anything in `params`) makes it a different **scenario** — give it its own
 scenario name when you fetch it, or results at the same (regime, gamma) will collide. See below.
 

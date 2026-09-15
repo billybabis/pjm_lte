@@ -44,6 +44,11 @@ class Tech:
         """I_z = OCC_z * CRF(r, L_z) + FOM_z, in $/MW-yr (eq. annualization)."""
         return 1000.0 * (self.occ_per_kw * crf(r, self.life_yr) + self.fom_per_kw_yr)
 
+    def annualized_capital(self, r: float) -> float:
+        """Capital-recovery part of I_z: OCC_z * CRF(r, L_z) in $/MW-yr, excluding FOM.  The basis
+        for capital-scaled risk aversion - financing costs apply to capital, not O&M."""
+        return 1000.0 * self.occ_per_kw * crf(r, self.life_yr)
+
 
 def crf(r: float, life: float) -> float:
     """Capital recovery factor CRF(r, L) = r(1+r)^L / ((1+r)^L - 1)."""
@@ -111,6 +116,13 @@ class ModelParams:
     voll: float = 10_000.0            # $/MWh
     tau_scc: float = 280.0            # social cost of carbon, $/t (2025$)
     gamma: float = 0.0                # risk aversion (CALIBRATED - no value in appendix)
+    # Per-technology risk aversion of the market agents.  "none": every agent uses gamma.
+    # "capital": gamma_z = gamma * capital cost of z / capital cost of the reference technology,
+    # so capital-heavy technologies (nuclear) are more risk averse - encoding that financing costs
+    # weigh most on them.  gamma keeps its meaning for the reference technology.  The welfare
+    # metric keeps the scalar gamma (society's risk aversion has no per-technology meaning).
+    gamma_scaling: str = "none"               # "none" | "capital"
+    gamma_reference_tech: str = "ccgt"
 
     # --- Storage ---------------------------------------------------------
     storage_eff_oneway: float = math.sqrt(0.85)   # epsilon_s = 0.922
@@ -241,6 +253,16 @@ class ModelParams:
             return {"solar": a_solar, "wind": a_wind}
         raise ValueError(f"unknown markdown_mode {self.markdown_mode!r}")
 
+    def gamma_by_tech(self, gamma: Optional[float] = None) -> Dict[str, float]:
+        """gamma_z used by each technology's agents (see ``gamma_scaling``)."""
+        g = self.gamma if gamma is None else gamma
+        if self.gamma_scaling == "none":
+            return {t.name: g for t in self.techs}
+        if self.gamma_scaling == "capital":
+            ref = self.tech(self.gamma_reference_tech).annualized_capital(self.r)
+            return {t.name: g * t.annualized_capital(self.r) / ref for t in self.techs}
+        raise ValueError(f"unknown gamma_scaling {self.gamma_scaling!r}")
+
     def with_(self, **kw) -> "ModelParams":
         return replace(self, **kw)
 
@@ -256,6 +278,10 @@ class ModelParams:
                      f"psi_solar = {self.psi_solar_per_mw_daylight_hour():.4f} $/MW-daylight-h "
                      f"(solar basis={self.solar_capacity_basis}, divisor={self.solar_divisor})")
         lines.append(f"markdowns a_r ({self.markdown_mode}): {self.markdowns()}")
+        if self.gamma_scaling != "none":
+            gz = self.gamma_by_tech()
+            lines.append(f"gamma_scaling={self.gamma_scaling} (ref {self.gamma_reference_tech}): "
+                         + ", ".join(f"{z}={v:.3g}" for z, v in gz.items()))
         return "\n".join(lines)
 
 
