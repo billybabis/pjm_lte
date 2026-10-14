@@ -9,10 +9,10 @@ on:
     inputs:
       regimes:
         description: "Comma-separated regimes, one matrix job each"
-        default: "P1,P2,R2,R3,R4,R5,R6"
+        default: "SP,DM,DM-FC,DM-FC-tau,DM-tau"
       gamma:
         description: "Risk aversion gamma"
-        default: "0.3"
+        default: "1.25"
       workers:
         description: "Parallel yearly-dispatch processes inside each job (runner has 4 vCPU)"
         default: "3"
@@ -20,7 +20,7 @@ on:
         description: "Zero-profit convergence target as a fraction of annual capital cost (0.01 = 1%)"
         default: "0.01"
       tau_scc:
-        description: "Carbon price $/tCO2 (priced into P2/R5/R6; values emissions in every regime's welfare)"
+        description: "Carbon price $/tCO2 (priced into SP/DM-FC-tau/DM-tau; values emissions in every regime's welfare)"
         default: "280"
       params:
         description: "Extra --param overrides, space separated, e.g. voll=20000 markdown_mode=full"
@@ -30,7 +30,7 @@ on:
         default: ""
       sweep_regime:
         description: "Regime for the gamma sweep"
-        default: "R2"
+        default: "DM"
   push:
     branches: [main]
     paths: ["eq_model/**", ".github/workflows/run-model.yml"]
@@ -41,8 +41,8 @@ concurrency:
 
 env:
   PYTHON_VERSION: "3.11"
-  REGIMES: ${{ github.event.inputs.regimes || 'P1,P2,R2,R3,R4,R5,R6' }}
-  GAMMA: ${{ github.event.inputs.gamma || '0.3' }}
+  REGIMES: ${{ github.event.inputs.regimes || 'SP,DM,DM-FC,DM-FC-tau,DM-tau' }}
+  GAMMA: ${{ github.event.inputs.gamma || '1.25' }}
   WORKERS: ${{ github.event.inputs.workers || '3' }}
   EXTRA_PARAMS: ${{ github.event.inputs.params || '' }}
   TAU_SCC: ${{ github.event.inputs.tau_scc || '280' }}
@@ -127,7 +127,7 @@ jobs:
           # without this they ride along in every artifact as stale results.
           rm -rf results
           # tau_scc is just a --param, given its own prefilled input. It enters the agents'
-          # costs only in the carbon-priced regimes (P2, R5, R6), but it also values emissions
+          # costs only in the carbon-priced regimes (SP, DM-FC-tau, DM-tau), but it also values emissions
           # in EVERY regime's welfare metric (welfare_tau_always_scc), which is what makes the
           # regimes comparable - so it is passed to all of them, not only the priced ones.
           PARAMS="$EXTRA_PARAMS"
@@ -170,14 +170,14 @@ jobs:
           name: panel
       - name: sweep gamma=${{ matrix.gamma }}
         env:
-          SWEEP_REGIME: ${{ github.event.inputs.sweep_regime || 'R2' }}
+          SWEEP_REGIME: ${{ github.event.inputs.sweep_regime || 'DM' }}
           GAMMA_VALUE: ${{ matrix.gamma }}
         run: |
           # The repo has files committed under results/, and this job uploads the whole directory;
           # without this they ride along in every artifact as stale results.
           rm -rf results
           # tau_scc is just a --param, given its own prefilled input. It enters the agents'
-          # costs only in the carbon-priced regimes (P2, R5, R6), but it also values emissions
+          # costs only in the carbon-priced regimes (SP, DM-FC-tau, DM-tau), but it also values emissions
           # in EVERY regime's welfare metric (welfare_tau_always_scc), which is what makes the
           # regimes comparable - so it is passed to all of them, not only the priced ones.
           PARAMS="$EXTRA_PARAMS"

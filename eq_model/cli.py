@@ -4,8 +4,8 @@ Command line interface.
     python -m eq_model params                      # print the parameter table
     python -m eq_model check-load  --load DIR      # area-resolution report only
     python -m eq_model build-panel --load DIR --gen DIR --capacity FILE|--eia-active F --eia-retired F --out panel.npz
-    python -m eq_model run   --panel panel.npz --regimes P1,P2,R2,R3,R4,R5,R6 --gamma 0.3 --out results/
-    python -m eq_model sweep --panel panel.npz --regime R2 --gammas 0,0.1,0.25,0.5,1 --out results/
+    python -m eq_model run   --panel panel.npz --regimes SP,DM,DM-FC,DM-FC-tau,DM-tau --gamma 1.25 --out results/
+    python -m eq_model sweep --panel panel.npz --regime DM --gammas 0,0.1,0.25,0.5,1 --out results/
     python -m eq_model combine results/ --out results/summary.csv
     python -m eq_model plot results/ --gammas 0,0.3,1 --out figs/capacity.pdf
 
@@ -200,7 +200,7 @@ def _solve_and_write(panel, P: ModelParams, name: str, gamma: float, out: str, c
     w = evaluate_welfare(panel, P, res)
     row = summary_row(w, res, P)
     # The planner regimes are risk-neutral by construction and always report gamma=0, so the
-    # gamma the run was launched with is recorded separately; without it the P1/P2 rows of
+    # gamma the run was launched with is recorded separately; without it the SP rows of
     # different gamma runs are indistinguishable and collapse into one.
     row["gamma_requested"] = float(gamma)
     # How much of the runtime is the single-process completion LP: the part extra cores cannot help.
@@ -225,7 +225,7 @@ def _solve_and_write(panel, P: ModelParams, name: str, gamma: float, out: str, c
                    # results directory is a record rather than an assertion about which
                    # --param flags were typed.
                    "params": dataclasses.asdict(P),
-                   "welfare": {"C_y": w.C_y, "C_mean": w.C_mean, "C_max": w.C_max, "C_risk_adjusted": w.C_risk_adjusted,
+                   "welfare": {"C_y": w.C_y, "C_mean": w.C_mean, "C_max": w.C_max,
                                "tau_welfare": w.tau_welfare, "components_mean": w.components_mean, "emissions_y": w.emissions_y,
                                "lost_load_mwh_y": w.lost_load_mwh_y, "psi_load_mean": w.psi_load_mean,
                                "energy_share": w.energy_share, "curtailment_share": w.curtailment_share,
@@ -308,7 +308,7 @@ def run_regimes(panel, P: ModelParams, regimes: List[str], gamma: float, out: st
     return df
 
 
-_RUN_COLS = ["regime", "gamma", "converged", "C_mean_$bn", "C_risk_adj_$bn", "emissions_Mt_mean",
+_RUN_COLS = ["regime", "gamma", "converged", "C_mean_$bn", "C_max_$bn", "emissions_Mt_mean",
              "lost_load_hours_mean", "price_load_wtd", "p_hat"]
 
 
@@ -488,15 +488,15 @@ def main(argv=None):
                        help="parallel processes over regimes (run) / gammas (sweep); each holds ~3 GB at full size")
         s.add_argument("--quiet", action="store_true")
         if name == "run":
-            s.add_argument("--regimes", default="P1,P2,R2,R3,R4,R5,R6"); s.add_argument("--gamma", type=float, default=0.0)
+            s.add_argument("--regimes", default="SP,DM,DM-FC,DM-FC-tau,DM-tau"); s.add_argument("--gamma", type=float, default=0.0)
         else:
-            s.add_argument("--regime", default="R2"); s.add_argument("--gammas", default="0,0.1,0.25,0.5,1.0")
+            s.add_argument("--regime", default="DM"); s.add_argument("--gammas", default="0,0.1,0.25,0.5,1.0")
         s.set_defaults(fn=fn)
 
     s = sub.add_parser("combine", help="merge per-regime row_*.json (from parallel jobs) into one summary.csv")
     s.add_argument("dirs", nargs="+", help="directories to scan recursively for row_*.json")
     s.add_argument("--out", required=True, help="output CSV")
-    s.add_argument("--regimes", help="column order, e.g. P1,P2,R2,R3,R4,R5,R6 (default: the REGIMES order)")
+    s.add_argument("--regimes", help="column order, e.g. SP,DM,DM-FC,DM-FC-tau,DM-tau (default: the REGIMES order)")
     s.add_argument("--by-gamma", action="store_true", help="sort by gamma first (for sweeps)")
     s.set_defaults(fn=cmd_combine)
 
@@ -523,7 +523,7 @@ def main(argv=None):
     s.add_argument("--no-price", action="store_true", help="drop the forward-price overlay (contract)")
     s.add_argument("--keep-empty", action="store_true",
                    help="contract figure: keep slots for regimes with no forward market "
-                        "(P1/P2/R2/R6), so the regime axis matches the other figures")
+                        "(SP/DM/DM-tau), so the regime axis matches the other figures")
     s.set_defaults(fn=cmd_plot)
 
     args = ap.parse_args(argv)

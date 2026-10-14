@@ -160,6 +160,16 @@ def test_best_chi_matches_grid_search():
         assert abs(rho(pi0 + s * lo, g) - v) < 1e-6 * (1 + abs(v)) and abs(rho(pi0 + s * hi, g) - v) < 1e-6 * (1 + abs(v))
 
 
+def test_best_chi_linear_cases():
+    pi0 = np.array([1e4, -2e4, 3e4]); s = np.array([5e3, -5e3, 0.0])    # mean(s) = 0
+    assert best_chi(pi0, s, 0.0)[:2] == (0.0, 1.0)                     # risk-neutral: indifferent
+    assert best_chi(pi0, s + 1e3, 0.0)[:2] == (1.0, 1.0)               # profitable swap: full
+    assert best_chi(pi0, s - 1e3, 0.0)[:2] == (0.0, 0.0)               # costly swap: none
+    s2 = -2.0 * (pi0 - pi0.mean())                                      # fair swap hedging half the risk
+    lo, hi, _ = best_chi(pi0, s2, 1.0)                                  # risk-averse: unique chi at the
+    assert lo == hi and abs(lo - 0.5) < 1e-12                           # minimum-variance hedge ratio
+
+
 def test_forward_market_clears_and_is_monotone():
     Lambda = 7000.0
     m = {"a": np.array([9e4, 8e4, 12e4, 7e4]), "b": np.array([6e4, 9e4, 5e4, 8e4]), "c": np.array([10e4] * 4)}
@@ -187,7 +197,7 @@ def test_planner_cutting_planes_match_monolithic_lp(panel3):
     P = ModelParams()
     ref = SystemLP(panel3, P, tau=P.tau_scc, include_psi=True).solve()
     cap = CapacityProblem(panel3, P, tau=P.tau_scc)
-    r = solve_regime(panel3, P, REGIMES["P2"], cap=cap, verbose=False)
+    r = solve_regime(panel3, P, REGIMES["SP"], cap=cap, verbose=False)
     assert r.converged and r.capacity_result.completed
     for z in ref.K:
         assert abs(r.K[z] - ref.K[z]) <= 1e-4 * max(1.0, ref.K[z]) + 0.5, z
@@ -200,14 +210,14 @@ def test_market_at_gamma0_equals_planner_without_reliability_cost(panel3):
     P = ModelParams()
     cap = CapacityProblem(panel3, P, tau=0.0)
     ref = SystemLP(panel3, P, tau=0.0, include_psi=False).solve()
-    r = solve_regime(panel3, P, REGIMES["R2"], gamma=0.0, cap=cap, verbose=False)
+    r = solve_regime(panel3, P, REGIMES["DM"], gamma=0.0, cap=cap, verbose=False)
     assert r.converged and len(r.outer_history) == 1
     for z in ref.K:
         assert abs(r.K[z] - ref.K[z]) <= 1e-4 * max(1.0, ref.K[z]) + 0.5, z
     assert all(abs(v) < 1e-9 for v in r.risk_premium.values())
 
 
-@pytest.mark.parametrize("regime", ["R2", "R3", "R4", "R6"])
+@pytest.mark.parametrize("regime", ["DM", "DM-FC", "DM-FC-tau", "DM-tau"])
 def test_market_equilibrium_zero_risk_adjusted_profit(panel3, regime):
     P = ModelParams(gamma=0.4)
     r = solve_regime(panel3, P, REGIMES[regime], verbose=False, tol=1e-3)
@@ -222,9 +232,9 @@ def test_market_equilibrium_zero_risk_adjusted_profit(panel3, regime):
     else:
         assert all(v == 0.0 for v in r.forward.chi.values())
     w = evaluate_welfare(panel3, P, r)
-    assert w.C_risk_adjusted >= w.C_mean and np.isfinite(w.C_mean)
+    assert w.C_max >= w.C_mean and np.isfinite(w.C_mean)
     # active technologies carry a positive risk premium in the merchant regime
-    if regime == "R2":
+    if regime == "DM":
         assert all(r.risk_premium[z] > 0 for z, K in r.K.items() if K > 1.0)
 
 
@@ -232,13 +242,13 @@ def test_first_best_planner_has_lowest_risk_neutral_welfare_cost(panel3):
     P = ModelParams(gamma=0.4)
     caps = {}
     costs = {}
-    for name in ["P2", "R5", "R6"]:
+    for name in ["SP", "DM-FC-tau", "DM-tau"]:
         reg = REGIMES[name]
         tau = P.tau_scc if reg.carbon_priced else 0.0
         caps.setdefault(tau, CapacityProblem(panel3, P, tau))
         r = solve_regime(panel3, P, reg, cap=caps[tau], verbose=False)
         costs[name] = evaluate_welfare(panel3, P, r).C_mean
-    assert costs["P2"] <= min(costs.values()) * (1 + 1e-6)
+    assert costs["SP"] <= min(costs.values()) * (1 + 1e-6)
 
 # ----------------------------------------------------------------------------- capital-scaled gamma
 def test_gamma_by_tech():
@@ -248,7 +258,7 @@ def test_gamma_by_tech():
     g = Pc.gamma_by_tech()
     assert g == Pc.gamma_by_tech(0.3)
     assert abs(g["ccgt"] - 0.3) < 1e-12                                  # reference keeps gamma
-    assert 3.2 < g["nuclear"] / g["ccgt"] < 3.4                          # capital recovery ratio
+    assert 4.8 < g["nuclear"] / g["ccgt"] < 5.0                          # overnight capital ratio
     assert g["ct"] < g["ccgt"] < g["nuclear"]
     with pytest.raises(ValueError):
         ModelParams(gamma_scaling="bogus").gamma_by_tech(0.3)
@@ -267,7 +277,7 @@ def test_forward_market_uniform_dict_equals_scalar():
         assert (np.isnan(a.p_hat) and np.isnan(b.p_hat)) or a.p_hat == b.p_hat
 
 
-@pytest.mark.parametrize("regime", ["R2", "R3"])
+@pytest.mark.parametrize("regime", ["DM", "DM-FC"])
 def test_market_equilibrium_capital_scaled_gamma(panel3, regime):
     P = ModelParams(gamma=0.4, gamma_scaling="capital")
     r = solve_regime(panel3, P, REGIMES[regime], verbose=False, tol=1e-3)

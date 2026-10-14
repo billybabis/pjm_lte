@@ -73,7 +73,7 @@ def _tech_columns(df: pd.DataFrame) -> List[str]:
 
 
 def _gamma_col(df: pd.DataFrame) -> str:
-    """Group panels by the gamma the run was launched with.  The planner regimes P1/P2 are
+    """Group panels by the gamma the run was launched with.  The planner regime SP is
     risk-neutral by construction and report gamma=0 in every run, so grouping on their own
     ``gamma`` would drop them from every panel but the first."""
     return "gamma_requested" if "gamma_requested" in df.columns else "gamma"
@@ -225,7 +225,7 @@ def contract_panels(df: pd.DataFrame, gammas: Optional[Sequence[float]] = None,
     contracts, and how that reallocates as agents become more risk averse.  The forward
     clearing price p_hat goes on the secondary axis.
 
-    Planner (P1, P2) and merchant (R2, R6) regimes have no forward market -- chi_z = 0 by
+    Planner (SP) and merchant (DM, DM-tau) regimes have no forward market -- chi_z = 0 by
     construction -- so they carry no information here and are omitted.  ``show_empty=True``
     keeps their slots, labelled, when the regime axis must line up with the capacity and
     energy figures.
@@ -254,7 +254,7 @@ def contract_panels(df: pd.DataFrame, gammas: Optional[Sequence[float]] = None,
                      "the slots)", ", ".join(dropped))
         if not keep:
             raise SystemExit("no regime in this selection has a forward market (chi = 0 everywhere); "
-                             "the contract figure needs R3, R4 or R5")
+                             "the contract figure needs DM-FC or DM-FC-tau")
         bar_order = keep
 
     fig, axes = _panel_figure(len(gs), panel_width, height)

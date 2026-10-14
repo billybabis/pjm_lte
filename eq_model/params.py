@@ -44,11 +44,6 @@ class Tech:
         """I_z = OCC_z * CRF(r, L_z) + FOM_z, in $/MW-yr (eq. annualization)."""
         return 1000.0 * (self.occ_per_kw * crf(r, self.life_yr) + self.fom_per_kw_yr)
 
-    def annualized_capital(self, r: float) -> float:
-        """Capital-recovery part of I_z: OCC_z * CRF(r, L_z) in $/MW-yr, excluding FOM.  The basis
-        for capital-scaled risk aversion - financing costs apply to capital, not O&M."""
-        return 1000.0 * self.occ_per_kw * crf(r, self.life_yr)
-
 
 def crf(r: float, life: float) -> float:
     """Capital recovery factor CRF(r, L) = r(1+r)^L / ((1+r)^L - 1)."""
@@ -95,13 +90,11 @@ class Regime:
 
 
 REGIMES: Dict[str, Regime] = {
-    "P1": Regime("P1", "Reliability benchmark planner (tau=0)", True, "internalized", False, False),
-    "P2": Regime("P2", "First-best benchmark planner (tau=SCC)", True, "internalized", False, True),
-    "R2": Regime("R2", "Unreformed merchant market (chi_z=0)", False, "socialized", False, False),
-    "R3": Regime("R3", "E-SFPFC contracted market", False, "socialized", True, False),
-    "R4": Regime("R4", "E-SFPFC-RA (reliability priced via a_r)", False, "priced", True, False),
-    "R5": Regime("R5", "E-SFPFC-RA + carbon price", False, "priced", True, True),
-    "R6": Regime("R6", "Carbon price only, merchant", False, "socialized", False, True),
+    "SP": Regime("SP", "Social planner (carbon at SCC, reliability cost internalized)", True, "internalized", False, True),
+    "DM": Regime("DM", "Decentralized market (merchant, chi_z=0)", False, "socialized", False, False),
+    "DM-FC": Regime("DM-FC", "Decentralized market with SFPFCs", False, "socialized", True, False),
+    "DM-FC-tau": Regime("DM-FC-tau", "Decentralized market with SFPFCs and carbon price", False, "socialized", True, True),
+    "DM-tau": Regime("DM-tau", "Decentralized market with carbon price (merchant)", False, "socialized", False, True),
 }
 
 
@@ -115,12 +108,15 @@ class ModelParams:
     r: float = 0.025                  # real discount rate
     voll: float = 10_000.0            # $/MWh
     tau_scc: float = 280.0            # social cost of carbon, $/t (2025$)
-    gamma: float = 0.0                # risk aversion (CALIBRATED - no value in appendix)
+    # Risk aversion in rho = mean - gamma * Var of per-MW annual profit, with profit measured in
+    # $M per MW-yr (agents._RISK_UNIT): gamma ~ 1.25 gives CCGT a ~25 % merchant premium.
+    gamma: float = 0.0                # CALIBRATED - no value in appendix
     # Per-technology risk aversion of the market agents.  "none": every agent uses gamma.
-    # "capital": gamma_z = gamma * capital cost of z / capital cost of the reference technology,
-    # so capital-heavy technologies (nuclear) are more risk averse - encoding that financing costs
-    # weigh most on them.  gamma keeps its meaning for the reference technology.  The welfare
-    # metric keeps the scalar gamma (society's risk aversion has no per-technology meaning).
+    # "capital": gamma_z = gamma * OCC_z / OCC_ref (overnight capital per MW), i.e. risk aversion
+    # proportional to the dollars at stake, so capital-heavy technologies (nuclear) are more risk
+    # averse - encoding that revenue risk raises financing costs in proportion to the capital
+    # financed.  Overnight (not annualised) capital, so a long asset life does not dilute it.
+    # gamma keeps its meaning for the reference technology.
     gamma_scaling: str = "none"               # "none" | "capital"
     gamma_reference_tech: str = "ccgt"
 
@@ -167,7 +163,7 @@ class ModelParams:
     curtailment_hour_threshold_mw: float = 1.0
 
     # --- Welfare evaluation ----------------------------------------------
-    # Carbon valued at the SCC in the welfare metric for ALL regimes (so that P2 is the
+    # Carbon valued at the SCC in the welfare metric for ALL regimes (so that SP is the
     # first-best benchmark).  Set False to value emissions only where tau is priced.
     welfare_tau_always_scc: bool = True
 
@@ -259,8 +255,8 @@ class ModelParams:
         if self.gamma_scaling == "none":
             return {t.name: g for t in self.techs}
         if self.gamma_scaling == "capital":
-            ref = self.tech(self.gamma_reference_tech).annualized_capital(self.r)
-            return {t.name: g * t.annualized_capital(self.r) / ref for t in self.techs}
+            ref = self.tech(self.gamma_reference_tech).occ_per_kw
+            return {t.name: g * t.occ_per_kw / ref for t in self.techs}
         raise ValueError(f"unknown gamma_scaling {self.gamma_scaling!r}")
 
     def with_(self, **kw) -> "ModelParams":

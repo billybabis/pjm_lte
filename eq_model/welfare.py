@@ -2,7 +2,7 @@
 Welfare and summary statistics for a solved regime (eq. cost / eq. welfare):
 
     C_y = sum_h [ sum_m (c_m + e_m tau_w) q_mhy + VOLL l_hy ] + sum_z I_z K_z + sum_r Psi_ry
-    C   = (1/Y) sum_y C_y + gamma * max_y C_y
+    C   = (1/Y) sum_y C_y        (consumers, the contract buyers, are risk-neutral)
 
 ``tau_w`` is the SCC for every regime when ``params.welfare_tau_always_scc`` (default), so
 that unpriced emissions in tau=0 regimes still count as a social cost; otherwise it is the
@@ -32,7 +32,6 @@ class Welfare:
     C_y: np.ndarray                   # (Y,)
     C_mean: float
     C_max: float
-    C_risk_adjusted: float            # mean + gamma * max
     components_mean: Dict[str, float] # variable, carbon, voll, capex, psi (annual means, $)
     emissions_y: np.ndarray           # (Y,) tCO2
     lost_load_mwh_y: np.ndarray       # (Y,)
@@ -100,7 +99,7 @@ def evaluate_welfare(panel: HourlyPanel, params: ModelParams, res: RegimeResult)
         vre_spill += float(spill_hy.sum())
     p = ev.price
     return Welfare(regime=res.regime.name, gamma=gamma, tau_market=res.tau, tau_welfare=tau_w, C_y=C_y,
-                   C_mean=float(C_y.mean()), C_max=float(C_y.max()), C_risk_adjusted=float(C_y.mean() + gamma * C_y.max()),
+                   C_mean=float(C_y.mean()), C_max=float(C_y.max()),
                    components_mean=comps, emissions_y=emis, lost_load_mwh_y=ll.sum(axis=1),
                    lost_load_hours_y=(ll > 1e-6).sum(axis=1), psi_load_mean=psi_load, energy_share=shares,
                    curtailment_share=curt, curtailment_mwh_y=curt_mwh, curtailment_hours_y=curt_hrs,
@@ -112,7 +111,7 @@ def evaluate_welfare(panel: HourlyPanel, params: ModelParams, res: RegimeResult)
 
 def summary_row(w: Welfare, res: RegimeResult, params: ModelParams) -> dict:
     row = {"regime": w.regime, "gamma": w.gamma, "tau_market": w.tau_market, "converged": res.converged,
-           "C_mean_$bn": w.C_mean / 1e9, "C_max_$bn": w.C_max / 1e9, "C_risk_adj_$bn": w.C_risk_adjusted / 1e9,
+           "C_mean_$bn": w.C_mean / 1e9, "C_max_$bn": w.C_max / 1e9,
            "emissions_Mt_mean": float(w.emissions_y.mean()) / 1e6,
            "lost_load_GWh_mean": float(w.lost_load_mwh_y.mean()) / 1e3,
            "lost_load_hours_mean": float(w.lost_load_hours_y.mean()),

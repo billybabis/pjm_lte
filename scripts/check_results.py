@@ -14,7 +14,7 @@ import json
 import os
 import sys
 
-EXPECTED = ["P1", "P2", "R2", "R3", "R4", "R5", "R6"]
+EXPECTED = ["SP", "DM", "DM-FC", "DM-FC-tau", "DM-tau"]
 
 
 def load_rows(dirs):

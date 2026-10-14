@@ -8,7 +8,7 @@ The model turns each technology's equilibrium risk premium into an equivalent re
 risk-loaded capital cost.  Its excess over the model's risk-free rate r is the financing spread that
 the risk-averse market implies.  This script lays those spreads out as a gamma x technology table per
 market regime, and, given a cited target spread, interpolates the gamma at which the calibration
-technology (default: CCGT in the unreformed merchant market R2) reproduces it.
+technology (default: CCGT in the merchant market DM) reproduces it.
 
 gamma is the value each run was launched with (``gamma_requested``).  Under gamma_scaling=capital it
 is the reference technology's gamma, from which every other technology's follows.  Read-only.
@@ -99,7 +99,7 @@ def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("dirs", nargs="+", help="one scenario's results tree, e.g. results/raw/gcap")
     ap.add_argument("--target-spread-bp", type=float, help="cited financing spread to match, in basis points")
-    ap.add_argument("--calib-regime", default="R2", help="regime whose spread is matched (default R2, merchant)")
+    ap.add_argument("--calib-regime", default="DM", help="regime whose spread is matched (default DM, merchant)")
     ap.add_argument("--calib-tech", default="ccgt", help="technology whose spread is matched (default ccgt)")
     args = ap.parse_args(argv)
 

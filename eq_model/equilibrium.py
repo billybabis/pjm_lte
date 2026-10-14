@@ -2,7 +2,7 @@
 Capacity problems solved by trust-region cutting planes over the yearly dispatch LPs,
 and the risk-averse market equilibrium on top of them.
 
-Planner (P1, P2):
+Planner (SP):
     min_K  sum_z c_z K_z + sum_y f_y V_y(K),   c_z = I_z + psi_z   (psi: reliability cost per MW)
 
 V_y(K) is the convex piecewise-linear optimal dispatch cost of year y (dispatch.py).  Each
@@ -10,7 +10,7 @@ evaluation of a candidate K yields V_y(K) and a subgradient (-m_y(K)), i.e. one 
 per year.  Cuts depend only on the panel and tau, so a pool is shared across regimes,
 gamma values and the outer iterations of the market solver.
 
-Market (R2-R6): the risk-averse competitive equilibrium is NOT the solution of a single
+Market (DM, DM-FC, DM-FC-tau, DM-tau): the risk-averse competitive equilibrium is NOT the solution of a single
 optimisation problem (agents hold heterogeneous risk-adjusted probabilities), but given
 prices every agent's problem is an LP whose zero-profit condition can be written as
 
@@ -415,25 +415,22 @@ def solve_regime(panel: HourlyPanel, params: ModelParams, regime: Regime, gamma:
     I_arr = I_eff.copy()
     Kc = dict(K0)
     # Outer iteration on the effective capacity costs.  Natural map: I_eff <- f.m - rho*.
-    # Its slope d(rho*_z)/d(I_eff_z) is >= 1 for active technologies and can reach 1 + gamma*Y
-    # when the re-priced scarcity hour falls in the agent's worst year, so a plain damped
-    # iteration is slow/oscillatory.  We use a per-technology safeguarded secant (quasi-Newton)
-    # step for active technologies; inactive ones (K=0) take the natural step, which is exact
-    # for them (their rho* does not depend on their own I_eff).
+    # Its slope d(rho*_z)/d(I_eff_z) is about 1 for active technologies but moves with the
+    # re-priced scarcity hours, so a plain damped iteration is slow/oscillatory.  We use a
+    # per-technology safeguarded secant (quasi-Newton) step for active technologies; inactive
+    # ones (K=0) take the natural step, which is exact for them (their rho* does not depend on
+    # their own I_eff).
     converged = False
     resid = np.inf
     cr = fwd = ev = None
     I_solved = I_eff.copy()
     x_prev = None; F_prev = None
-    # d(rho*)/d(I_eff) for a technology: rho(pi) = mean_y pi_y + gamma * min_y pi_y, and a unit
-    # rise in I_eff lowers every year's pi by one, so the derivative is -(1 + gamma).  It does NOT
-    # scale with the number of years: the mean already averages over them.  Using 1 + gamma*Y here
-    # made every step (1+gamma*Y)/(1+gamma) times too short, so the residual fell by a fixed factor
-    # 1 - 1/(1+gamma*Y) per iteration - 0.90 at gamma=1, needing ~66 iterations and blowing past
-    # max_outer.  Measured slopes are ~1.0-1.4 against the 3.7-10 this used to assume.
-    g_arr = np.array([gamma_z[z] for z in names], float)   # the slope is per technology, so is gamma
-    slope_max = 2.0 * (1.0 + g_arr * panel.Y) + 1.0         # generous ceiling for secant estimates
-    slope = 1.0 + g_arr
+    # d(rho*)/d(I_eff) for a technology: rho(pi) = mean_y pi_y - gamma * Var_y pi_y, and a unit
+    # rise in I_eff lowers every year's pi by one, which lowers the mean by one and leaves the
+    # variance unchanged, so the derivative is -1 before the induced change in K and prices.
+    # The secant estimates below correct for the latter.
+    slope_max = np.full(len(names), 5.0)                   # generous ceiling for secant estimates
+    slope = np.ones(len(names))
     max_step_frac = 0.25
     best = None                                             # (x, resid) of the best iterate so far
     best_state = None

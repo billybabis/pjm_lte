@@ -15,12 +15,13 @@ its optimal value is 0 (K_z = 0) or +inf, and a competitive equilibrium requires
 *per-MW risk-adjusted profit* to be exactly zero for every active technology and
 non-positive for inactive ones:
 
-    rho_z^*(K, p_hat) := max_{chi in [0,1]} [ mean_y pi_zy(chi) + gamma * min_y pi_zy(chi) ] = 0,
+    rho_z^*(K, p_hat) := max_{chi in [0,1]} [ mean_y pi_zy(chi) - gamma * Var_y pi_zy(chi) ] = 0,
     pi_zy(chi) = m_zy(K) - I_z + s_zy(p_hat) * chi ,
     s_zy      = Lambda * (p_hat - a_z) - Pbar_y ,   Lambda = sum_h lambda_h ,  Pbar_y = sum_h lambda_h p_hy ,
 
 where m_zy(K) is the spot margin per MW of z in year y at the competitive dispatch
-given K, and a_z is the E-SFPFC-RA markdown ($/MWh, VRE only in R4/R5).
+given K, and a_z is the E-SFPFC-RA markdown ($/MWh, VRE only when reliability is "priced"; no current regime uses it).  The variance is taken
+with profits in $M per MW-yr (see ``rho``), so gamma has units 1/($M per MW-yr).
 """
 from __future__ import annotations
 
@@ -38,47 +39,44 @@ log = logging.getLogger("eq_model")
 
 
 # ---------------------------------------------------------------------------
-# risk measure  rho(Pi) = mean_y Pi_y + gamma * min_y Pi_y      (eq. rho)
+# risk measure  rho(Pi) = mean_y Pi_y - gamma * Var_y Pi_y      (eq. rho)
 # ---------------------------------------------------------------------------
+
+# Profits are in $/MW-yr; the variance is measured in ($M/MW-yr)^2, so gamma is per $M and of
+# order 1 (gamma ~ 1.25 gives CCGT a ~25 % premium in the merchant regime).
+_RISK_UNIT = 1e6
+
 
 def rho(pi: np.ndarray, gamma: float) -> float:
-    return float(np.mean(pi) + gamma * np.min(pi))
-
-
-def risk_weights(pi: np.ndarray, gamma: float) -> np.ndarray:
-    """A subgradient of rho at pi: 1/Y on every year plus gamma on (one of) the worst
-    year(s) -> the agent's risk-adjusted probability measure (sums to 1 + gamma)."""
-    Y = len(pi)
-    w = np.full(Y, 1.0 / Y)
-    worst = np.flatnonzero(np.isclose(pi, pi.min(), rtol=0, atol=1e-9 * (1 + abs(pi.min()))))
-    w[worst] += gamma / len(worst)
-    return w
+    """Mean-variance risk-adjusted profit; equal weights 1/Y (population variance)."""
+    return float(np.mean(pi) - gamma / _RISK_UNIT * np.var(pi))
 
 
 # ---------------------------------------------------------------------------
-# contract choice: maximise concave piecewise-linear  g(chi) = rho(pi0 + s chi) on [0,1]
+# contract choice: maximise the concave quadratic  g(chi) = rho(pi0 + s chi) on [0,1]
 # ---------------------------------------------------------------------------
 
 def best_chi(pi0: np.ndarray, s: np.ndarray, gamma: float, tol: float = 1e-9) -> Tuple[float, float, float]:
     """Return (chi_lo, chi_hi, value): the interval of maximisers of
-    g(chi) = mean(pi0 + s*chi) + gamma*min(pi0 + s*chi) on [0, 1] and the maximum.
-    g is concave and piecewise linear, so it suffices to evaluate the end points and every
-    crossing chi where two of the lines pi0_y + s_y chi intersect."""
-    cands = [0.0, 1.0]
-    Y = len(pi0)
-    for i in range(Y):
-        for j in range(i + 1, Y):
-            ds = s[i] - s[j]
-            if abs(ds) > 1e-12:
-                x = (pi0[j] - pi0[i]) / ds
-                if 0.0 < x < 1.0:
-                    cands.append(float(x))
-    cands = np.unique(np.array(cands))
-    vals = np.array([rho(pi0 + s * x, gamma) for x in cands])
-    best = vals.max()
-    scale = 1.0 + abs(best)
-    ok = cands[vals >= best - tol * scale]
-    return float(ok.min()), float(ok.max()), float(best)
+    g(chi) = mean(pi0) + chi*mean(s) - gamma'*(Var(pi0) + 2 chi Cov(pi0,s) + chi^2 Var(s)) on [0, 1]
+    and the maximum, gamma' = gamma / _RISK_UNIT.  For gamma' Var(s) > 0 g is strictly concave and
+    the maximiser is unique (the minimum-variance hedge ratio -Cov/Var plus a speculative term
+    mean(s)/(2 gamma' Var(s)), clipped to [0,1]).  Otherwise g is linear in chi: a corner, or every
+    chi in [0,1] when mean(s) is zero (indifference, e.g. at gamma = 0)."""
+    g = gamma / _RISK_UNIT
+    ms = float(np.mean(s))
+    vs = float(np.var(s))
+    cov = float(np.mean((pi0 - pi0.mean()) * (s - ms)))
+    if g * vs > 0:
+        x = float(np.clip((ms - 2 * g * cov) / (2 * g * vs), 0.0, 1.0))
+        return x, x, rho(pi0 + s * x, gamma)
+    slope = ms - 2 * g * cov
+    scale = 1.0 + float(np.max(np.abs(s)))
+    if slope > tol * scale:
+        return 1.0, 1.0, rho(pi0 + s, gamma)
+    if slope < -tol * scale:
+        return 0.0, 0.0, rho(pi0, gamma)
+    return 0.0, 1.0, rho(pi0, gamma)
 
 
 # ---------------------------------------------------------------------------
@@ -139,7 +137,7 @@ def forward_market(m: Dict[str, np.ndarray], I: Dict[str, float], K: Dict[str, f
 
     m[z] : (Y,) spot margin per MW; I[z] : $/MW-yr; K[z] : MW; Pbar : (Y,) sum_h lambda_h p_hy;
     markdown[z] : a_z ($/MWh; 0 unless priced).  With ``contracts=False`` every chi_z = 0
-    (merchant regimes R2, R6) and p_hat is reported as NaN.
+    (merchant regimes DM, DM-tau) and p_hat is reported as NaN.
     """
     names = list(m.keys())
     # gamma may be one value for every agent or {z: gamma_z} (params.gamma_scaling); each agent's

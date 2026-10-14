@@ -1,8 +1,8 @@
 # Running the model on GitHub Actions
 
 The `run-model` workflow (`.github/workflows/run-model.yml`) builds the panel once, then solves
-**one regime per parallel job**. A full seven-regime run takes about as long as its slowest single
-regime instead of the sum of all seven.
+**one regime per parallel job**. A full five-regime run takes about as long as its slowest single
+regime instead of the sum of all five.
 
 One dispatch = one γ. The four-panel paper figure needs four dispatches, then one local command.
 
@@ -17,13 +17,13 @@ them before clicking Run (e.g. type `0.6` into `gamma`).
 
 | field | prefilled with | what it does |
 |---|---|---|
-| `regimes` | `P1,P2,R2,R3,R4,R5,R6` | one matrix job per entry |
+| `regimes` | `SP,DM,DM-FC,DM-FC-tau,DM-tau` | one matrix job per entry |
 | `gamma` | `0.3` | risk aversion for this dispatch |
 | `workers` | `3` | parallel yearly-dispatch processes inside each job (runner has 4 vCPU) |
 | `tau_scc` | `280` | carbon price $/tCO2 (2025$) |
 | `params` | *(empty)* | any other overrides, space separated: `voll=20000 markdown_mode=full` |
 | `sweep_gammas` | *(empty)* | if set, also sweeps one regime across these γ; leave empty to skip |
-| `sweep_regime` | `R2` | which regime the sweep uses |
+| `sweep_regime` | `DM` | which regime the sweep uses |
 
 No commit or YAML edit is needed — the form exists because the workflow declares
 `workflow_dispatch`, and the values apply to that dispatch only. To produce the four-panel figure,
@@ -40,7 +40,7 @@ The Run workflow button appears only once the workflow file is on the default br
 
 ## 2. Watch it
 
-Actions → the run. Jobs are listed as `regime (P1)`, `regime (P2)`, … Each streams its solver log
+Actions → the run. Jobs are listed as `regime (SP)`, `regime (DM)`, … Each streams its solver log
 and prints a one-row summary at the end. `gh run watch` does the same from a terminal.
 
 `fail-fast` is off, so one diverging regime does not cancel the others, and the `combine` job still
@@ -99,15 +99,15 @@ That writes `all_capacity.png`, `all_energy.png` and `all_contract.png` under
 `results/figs/default/`. The single-γ figure inside each `summary` artifact is not the same
 thing — the multi-panel version only comes from this step.
 
-`--panel-width 4.5` because seven regimes per panel is cramped at the 3.4-inch default.
+`--panel-width 4.5` because five regimes per panel is cramped at the 3.4-inch default.
 
 To do it by hand instead (no `gh`), download the artifacts from the run page and unzip them under
 `results/raw/<scenario>/g<gamma>/`, then run `python scripts/check_results.py` on that directory
 before plotting.
 
-`tau_scc` enters the agents' own costs only in the carbon-priced regimes (P2, R5, R6). It also
-values emissions in *every* regime's welfare metric — that is deliberate, and is what makes P1 and
-P2 comparable — so editing it moves the welfare numbers for all seven regimes, not just three.
+`tau_scc` enters the agents' own costs only in the carbon-priced regimes (SP, DM-FC-tau, DM-tau). It also
+values emissions in *every* regime's welfare metric — that is deliberate, and is what makes the
+regimes comparable — so editing it moves the welfare numbers for all five regimes, not just three.
 
 Risk aversion scaled by capital cost (nuclear ≈ 3.3× the γ you enter, CCGT exactly γ) is a
 `params` entry: type `gamma_scaling=capital`. Fetch it under its own name, e.g.
@@ -120,7 +120,7 @@ python scripts/calibrate_gamma.py results/raw/gcap --target-spread-bp 250
 ```
 
 It prints each technology's implied financing spread over the risk-free rate, in bp, by γ and regime.
-It then interpolates the γ at which merchant CCGT (R2) matches your cited spread, and refuses if the
+It then interpolates the γ at which merchant CCGT (DM) matches your cited spread, and refuses if the
 target lies outside the grid. Dispatch that γ as the headline run.
 
 Changing `tau_scc` (or anything in `params`) makes it a different **scenario** — give it its own
@@ -139,7 +139,7 @@ was produced with.
 * **Cost.** Standard runners on a public repository are free and unmetered. Nothing in this
   workflow uses paid infrastructure, and no payment method is required.
 * **The 6-hour job limit** is the binding constraint. Jobs are capped at 350 minutes so they fail
-  cleanly just under GitHub's 360-minute kill. The τ = SCC regimes (R5, R6) are the ones to watch.
+  cleanly just under GitHub's 360-minute kill. The τ = SCC market regimes (DM-FC-tau, DM-tau) are the ones to watch.
 * **The `push:` trigger** starts a run at the default γ whenever `eq_model/**` changes on `main`.
   Delete that block if every run should be deliberate.
 * **`concurrency: cancel-in-progress`** means a push during a long run cancels it. Set to `false`

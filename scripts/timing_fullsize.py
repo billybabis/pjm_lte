@@ -13,15 +13,15 @@ years = tuple(range(2017, 2026))
 t = time.time()
 panel = make_synthetic_panel(years=years)
 print("panel built", round(time.time() - t, 1), "s", panel.summary(), flush=True)
-P = ModelParams(gamma=0.3)
+P = ModelParams(gamma=1.25)
 cap = CapacityProblem(panel, P, tau=0.0)
 rows = []
-t = time.time(); p1 = solve_regime(panel, P, REGIMES["P1"], cap=cap, verbose=True)
-print("P1 TOTAL", round(time.time() - t, 1), "s; iters", p1.capacity_result.iterations, "evals", cap.n_eval,
+t = time.time(); p1 = solve_regime(panel, P, REGIMES["SP"], cap=cap, verbose=True)
+print("SP TOTAL", round(time.time() - t, 1), "s; iters", p1.capacity_result.iterations, "evals", cap.n_eval,
       "completion", round(p1.capacity_result.completion_time, 1), "s; K", {k: round(v) for k, v in p1.K.items()},
       "FOC", p1.capacity_result.foc_residual, flush=True)
 rows.append(summary_row(evaluate_welfare(panel, P, p1), p1, P))
-for reg in ["R2", "R3"]:
+for reg in ["DM", "DM-FC"]:
     t = time.time(); r = solve_regime(panel, P, REGIMES[reg], cap=cap, K0=p1.K, verbose=True)
     print(reg, "TOTAL", round(time.time() - t, 1), "s; outer", len(r.outer_history), "evals", cap.n_eval, "conv", r.converged,
           "K", {k: round(v) for k, v in r.K.items()}, "premium%", {z: round(100 * r.risk_premium[z] / r.I[z], 2) for z in r.K if r.K[z] > 1},

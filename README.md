@@ -1,10 +1,10 @@
 # eq_model — PJM-calibrated long-run equilibrium model
 
 A greenfield, single-node, 8760 h × Y weather-year capacity-expansion model of PJM with two
-risk-neutral planner benchmarks (P1, P2) and five decentralised market regimes (R2–R6) in which
+risk-neutral social-planner benchmark (SP) and four decentralised market regimes in which
 risk-averse generators and storage evaluate annual profits with
 
-    ρ(Π) = mean_y Π_y + γ · min_y Π_y
+    ρ(Π) = mean_y Π_y − γ · Var_y Π_y        (Π per MW, in $M/MW-yr for the variance)
 
 and can hedge with an E-SFPFC forward contract. It implements the model of
 `empirical_model_setup.tex` with the parameters of `parameters.tex`.
@@ -90,8 +90,8 @@ What the loaders do, and what to check in their output:
 ## 3. Running the model
 
 ```
-python -m eq_model run   --panel data/panel.npz --regimes P1,P2,R2,R3,R4,R5,R6 --gamma 0.3 --out results/raw/default/g0.3
-python -m eq_model sweep --panel data/panel.npz --regime R2 --gammas 0,0.1,0.25,0.5,1 --out results/raw/sweep
+python -m eq_model run   --panel data/panel.npz --regimes SP,DM,DM-FC,DM-FC-tau,DM-tau --gamma 1.25 --out results/raw/default/g1.25
+python -m eq_model sweep --panel data/panel.npz --regime DM --gammas 0,0.1,0.25,0.5,1 --out results/raw/sweep
 python -m eq_model run   --panel data/panel.npz --years 2017-2020,2022-2025 ...   # leave-one-year-out
 python -m eq_model run   ... --param voll=20000 --param q_bar_rule=peak_load --param markdown_mode=full
 python -m eq_model run   ... --workers 4                                          # parallel yearly dispatch
@@ -141,7 +141,7 @@ python -m eq_model plot results/raw/default --kind all --gammas 0,0.3,0.6,1 --ou
 * **contract** — contracted capacity Q_z = χ_z·K_z stacked by technology, with the forward
   clearing price p̂ on the secondary axis and a dashed line at Q̄. Every contracting regime clears
   at Σ_z Q_z = Q̄, so the bars are all the same height and the figure is about the *mix*. Only
-  R3/R4/R5 have forward markets; the other regimes are omitted (`--keep-empty` keeps their slots
+  DM-FC and DM-FC-tau have forward markets; the other regimes are omitted (`--keep-empty` keeps their slots
   labelled, so the regime axis lines up with the other two figures).
 
 All three share the γ-panel layout: Technology colours are fixed in
@@ -149,7 +149,7 @@ All three share the γ-panel layout: Technology colours are fixed in
 every figure. Output format follows the extension — `.png` by default, `.pdf` for LaTeX —
 and `--unit MW`, `--panel-width`, `--height`, `--dpi` control the rest.
 
-The planner regimes P1 and P2 are risk-neutral by construction and solve identically at every γ.
+The planner regime SP is risk-neutral by construction and solve identically at every γ.
 They are drawn in every panel as the fixed benchmark, which is why the summary rows carry both
 `gamma` (what the regime used — always 0 for a planner) and `gamma_requested` (what the run was
 launched with). Panels group on the latter.
@@ -182,14 +182,14 @@ artifact-collection and figure-building steps.
 
 ### Runtime
 
-At full size (9 × 8760 h, synthetic data, γ = 0.3) on two cores: P1 2.8 min, P2 4.4 min, R2
-6.2 min, R3 6.9 min, R4 8.0 min — 4–5 outer iterations each, one exact price completion per outer
+At full size (9 × 8760 h, synthetic data, γ = 0.3, old min risk measure, old regime names) on two
+cores: planner 2.8–4.4 min, merchant 6.2 min, SFPFC market 6.9–8.0 min — 4–5 outer iterations each, one exact price completion per outer
 iteration. The τ = SCC market regimes carry 7 active technologies and take ≈ 5 min per outer
 iteration, i.e. 20–40 min each. Memory ≈ 3 GB per process.
 
 ## 4. Model → code mapping and the solution method
 
-**Planner (P1/P2)** is exactly eq. (planner): the LP in `lp.py::SystemLP`. It is *solved* by
+**Planner (SP)** is exactly eq. (planner): the LP in `lp.py::SystemLP`. It is *solved* by
 decomposition, because the monolithic LP has 8 dense columns (each K_z touches every hour), which
 makes interior point slow (215 s for one year at full size). `dispatch.py::DispatchLP` solves one
 year with K fixed as variable bounds in ~0.2–0.8 s; `equilibrium.py::CapacityProblem` runs a
@@ -206,11 +206,11 @@ recovers the exact prices by re-solving the monolithic LP warm-started from the 
 with K boxed around the cutting-plane optimum (≈ 1.5 min at full size instead of a cold solve).
 The prices used everywhere are these KKT-consistent prices.
 
-**Market regimes (R2–R6).** With Q_z := χ_z K_z (0 ≤ Q_z ≤ K_z) every agent's problem is an LP for
+**Market regimes (DM, DM-FC, DM-FC-tau, DM-tau).** With Q_z := χ_z K_z (0 ≤ Q_z ≤ K_z) every agent's problem is an LP for
 given prices, and the forward clearing is Σ_z Q_z = Q̄ (`agents.py`). The *equilibrium* of
 risk-averse agents with a single, incomplete hedging instrument is not itself a single LP or QP:
-each agent weights years with its own risk-adjusted probability (1/Y + γ on its own worst year),
-so there is no common objective (Ehrenmann–Smeers 2011; Ralph–Smeers 2015). What does hold is that,
+each agent weights years with its own risk-adjusted probability (under mean–variance,
+(1/Y)·(1 − 2γ(Π_y − mean Π)), i.e. more weight on its own bad years), so there is no common objective (Ehrenmann–Smeers 2011; Ralph–Smeers 2015). What does hold is that,
 given prices, every agent's problem is homogeneous of degree 1 in (K_z, Q_z), so equilibrium ⇔ zero
 per-MW risk-adjusted profit for active technologies and ≤ 0 for inactive ones, with the spot
 dispatch being the cost-minimising dispatch given K. Writing the active condition as
@@ -222,41 +222,46 @@ market each time:
 
 * spot margins per MW: thermal Σ_h (p − c − eτ)⁺, VRE Σ_h θ p⁺, storage = arbitrage LP with
   K_s = 1 (exact also when K_s = 0, where LP duals are degenerate);
-* contract choice: χ_z maximises the concave piecewise-linear ρ(π₀ + s χ) on [0, 1] — the
-  maximiser can be an interval; p̂ is found by bisection on the (set-valued, monotone) contract
-  supply, and indifferent agents share the residual pro rata (`forward_market`);
-* markdown a_r (R4/R5) enters as s_y = Λ(p̂ − a_z) − P̄_y with Λ = Σ_h λ_h, P̄_y = Σ_h λ_h p_hy;
+* contract choice: χ_z maximises the concave quadratic ρ(π₀ + s χ) on [0, 1], in closed form:
+  χ* = clip(−Cov(π₀, s)/Var(s) + mean(s)/(2γ′Var(s)), 0, 1), γ′ = γ/10⁶ (minimum-variance hedge
+  ratio plus a speculative term). At γ = 0 the maximiser can be an interval; p̂ is found by
+  bisection on the (monotone) contract supply, and indifferent agents share the residual pro
+  rata (`forward_market`);
+* markdown a_r (only when `reliability="priced"`; no current regime uses it) enters as s_y = Λ(p̂ − a_z) − P̄_y with Λ = Σ_h λ_h, P̄_y = Σ_h λ_h p_hy;
 * merchant regimes: χ = 0.
 
-Convergence criterion: max_z |ρ*_z|/I_z ≤ `--tol` (1e-3) over active technologies and
+Convergence criterion: max_z |ρ*_z|/I_z ≤ `--tol` (default 1e-2) over active technologies and
 ρ*_z ≤ tol·I_z for inactive ones, plus the FOC of the capacity problem. `result_<R>.json` records
 the full history. At γ = 0 the market regimes reproduce the planner without Ψ in one step
 (`test_market_at_gamma0…`).
 
 **Welfare** (`welfare.py`): C_y of eq. (cost) with Σ_r Ψ_r evaluated from the regime's K and
-hourly θ; 𝒞 = mean + γ·max. Emissions are valued at the SCC in *every* regime by default
-(`welfare_tau_always_scc=True`), since otherwise P1 scores better than P2; set it to False to value
+hourly θ; 𝒞 = mean_y C_y (consumers, the buyers of the contracts, are risk-neutral; C_max is
+reported alongside). Emissions are valued at the SCC in *every* regime by default
+(`welfare_tau_always_scc=True`), since otherwise a planner without a carbon price would score better than SP; set it to False to value
 them at the regime's own τ. The load-driven regulation term 0.01·D (identical across regimes) is
 reported separately as `psi_load_mean` and is not included in C.
 
-**Calibrating γ.** `result_<R>.json` reports, per active technology, the risk premium I_eff − I and
+**Calibrating γ.** γ is per $M: variance is taken of per-MW annual profit measured in $M/MW-yr,
+so γ ≈ 1.25 gives CCGT a ≈ 25 % merchant premium (implied WACC ≈ 5 % vs r = 2.5 %).
+`result_<R>.json` reports, per active technology, the risk premium I_eff − I and
 the implied real discount rate r′ solving OCC·CRF(r′, L) + FOM = I_eff — i.e. the financing spread
 over r = 2.5 % that the merchant regime implies. `sweep` tabulates this against γ.
 
-**Capital-scaled γ (optional).** Under ρ = mean + γ·min, a technology's premium follows the
+**Capital-scaled γ (optional).** Under ρ = mean − γ·Var, a technology's premium follows the
 volatility of its profits across weather years, not its capital cost, so baseload nuclear gets a
 comparatively small premium at a common γ. `--param gamma_scaling=capital` instead sets
-γ_z = γ × (OCC·CRF of z) / (OCC·CRF of CCGT), i.e. risk aversion proportional to capital intensity:
+γ_z = γ × OCC_z / OCC_CCGT (overnight capital per MW), i.e. risk aversion proportional to the dollars
+at stake. Overnight rather than annualised capital, so nuclear's 60-year life does not dilute it:
 
 | tech | nuclear | ccgt | ct | coal | solar | wind | storage4 | storage8 |
 |---|---|---|---|---|---|---|---|---|
-| γ_z / γ | 3.30 | 1.00 | 0.88 | 2.59 | 0.88 | 1.04 | 1.86 | 3.27 |
+| γ_z / γ | 4.87 | 1.00 | 0.88 | 2.59 | 0.88 | 1.04 | 1.10 | 1.93 |
 
-It applies to the market agents only; the welfare metric keeps the scalar γ. Nothing in the LPs
-changes, since γ only enters the per-technology risk measure and contract choice. Two things to keep in
-mind: 8-hour storage is as capital-heavy per MW as nuclear and is scaled the same way, and with Q̄
-fixed, a more risk-averse nuclear partly gains contracts by crowding other technologies out of the
-pool. At high γ the effective γ_z reaches ~3, where convergence is hardest. Run it as its own
+It applies to the market agents only. Nothing in the LPs
+changes, since γ only enters the per-technology risk measure and contract choice. With Q̄ fixed, a more
+risk-averse nuclear partly gains contracts by crowding other technologies out of the pool. Nuclear's
+γ_z is ≈ 5× the reference, which is where convergence is hardest. Run it as its own
 scenario (results are keyed by regime and γ, not by this setting).
 
 ## 5. Open parameters and documented deviations from the .tex files
@@ -274,9 +279,9 @@ explicit switch in `ModelParams`, and the default is stated.
    0.00136. The printed markdown is therefore on an AC basis while the printed reserve formula is
    not. Default: `solar_capacity_basis="AC"` → divisor 1, consistent with the printed a_r.
    `--param solar_capacity_basis=DC` reproduces the formula literally (divisor 1.34).
-2. **Scope of a_r.** The R4/R5 appendix markdowns (0.0015, 0.0018 $/MWh) price only the
+2. **Scope of a_r.** The appendix markdowns (used by the former regimes R4/R5, now removed) (0.0015, 0.0018 $/MWh) price only the
    *regulation* term ψ_A. The flexibility-reserve term ψ_E (1.52 × 0.189 = $0.287/MWh of wind;
-   ≈ $0.23/MWh of solar energy) is ~200× larger and is not in a_r, which makes R4 ≈ R3
+   ≈ $0.23/MWh of solar energy) is ~200× larger and is not in a_r, which made R4 ≈ R3
    numerically. Default `markdown_mode="regulation"` computes a_r from the active regulation
    coefficients. If "priced via a_r" is meant to internalise Ψ in full, use
    `--param markdown_mode=full` (a_wind ≈ 0.289, a_solar ≈ 0.233 $/MWh); `markdown_mode=appendix`
@@ -312,8 +317,8 @@ Everything else in the parameter tables is reproduced exactly
 * **Price indeterminacy is a property of the model, not only of the solver.** With inelastic
   demand and a finite sample of hours, the equilibrium K sits at an LP vertex where, in a few hours
   per year, the price is not pinned by dispatch. The zero-profit conditions pin
-  Σ_y f_y·(those prices), not their split across years — but the split determines which year is an
-  agent's worst year, and hence ρ. The code uses the KKT-consistent prices of the planner-form
+  Σ_y f_y·(those prices), not their split across years — but the split determines the variance of
+  each agent's profit across years, and hence ρ. The code uses the KKT-consistent prices of the planner-form
   problem, a definite and reproducible selection, but other equilibria with the same K and slightly
   different scarcity-hour prices exist. A small price-responsive demand block (an
   operating-reserve-demand-curve-like tiering of VOLL) would make prices unique; it is not
