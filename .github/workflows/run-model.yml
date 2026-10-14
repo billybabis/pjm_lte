@@ -1,4 +1,6 @@
 name: run-model
+# Title shown in the Actions list: the name given in the form, or the commit for push runs.
+run-name: ${{ github.event.inputs.run_name || format('push {0}', github.sha) }}
 
 # One matrix job per regime. Each job builds nothing but the solve: the panel is built once in
 # the `panel` job and passed down as an artifact, so every regime sees identical inputs. The
@@ -7,12 +9,21 @@ name: run-model
 on:
   workflow_dispatch:
     inputs:
+      run_name:
+        description: "Name for this run (becomes its results folder, e.g. baseline, uniform_gamma)"
+        required: true
+        type: string
       regimes:
         description: "Comma-separated regimes, one matrix job each"
         default: "SP,DM,DM-FC,DM-FC-tau,DM-tau"
       gamma:
         description: "Risk aversion gamma"
         default: "1.25"
+      gamma_scaling:
+        description: "Per-technology gamma: capital = scaled by overnight capital cost (CCGT keeps gamma); none = same gamma for all"
+        type: choice
+        options: ["capital", "none"]
+        default: "capital"
       workers:
         description: "Parallel yearly-dispatch processes inside each job (runner has 4 vCPU)"
         default: "3"
@@ -35,8 +46,10 @@ on:
     branches: [main]
     paths: ["eq_model/**", ".github/workflows/run-model.yml"]
 
+# A push cancels an earlier push run on the same branch; each manual dispatch gets its own group
+# (keyed by run id), so several named runs can go side by side without cancelling each other.
 concurrency:
-  group: run-model-${{ github.ref }}
+  group: run-model-${{ github.ref }}-${{ github.event_name == 'workflow_dispatch' && github.run_id || 'push' }}
   cancel-in-progress: true
 
 env:
@@ -46,6 +59,7 @@ env:
   WORKERS: ${{ github.event.inputs.workers || '3' }}
   EXTRA_PARAMS: ${{ github.event.inputs.params || '' }}
   TAU_SCC: ${{ github.event.inputs.tau_scc || '280' }}
+  GAMMA_SCALING: ${{ github.event.inputs.gamma_scaling || 'capital' }}
   TOL: ${{ github.event.inputs.tol || '0.01' }}
 
 jobs:
@@ -66,6 +80,26 @@ jobs:
           echo "regimes=$(to_json "$REGIMES")" >> "$GITHUB_OUTPUT"
           echo "gammas=$(to_json "${SWEEP_GAMMAS:-0}")" >> "$GITHUB_OUTPUT"
           if [ -n "$SWEEP_GAMMAS" ]; then echo "run_sweep=true" >> "$GITHUB_OUTPUT"; else echo "run_sweep=false" >> "$GITHUB_OUTPUT"; fi
+      # Record the run's name and settings, so fetch_run.py can file the results under that name.
+      - name: run info
+        shell: bash
+        env:
+          RUN_NAME: ${{ github.event.inputs.run_name }}
+        run: |
+          python3 - <<'PY'
+          import json, os
+          info = {k.lower(): os.environ.get(k, "") for k in
+                  ("RUN_NAME", "REGIMES", "GAMMA", "GAMMA_SCALING", "TAU_SCC", "EXTRA_PARAMS", "TOL")}
+          info["run_id"] = os.environ.get("GITHUB_RUN_ID", "")
+          info["sha"] = os.environ.get("GITHUB_SHA", "")
+          json.dump(info, open("run_info.json", "w"), indent=2)
+          print(json.dumps(info, indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: run-info
+          path: run_info.json
+          retention-days: 30
 
   # ---------------------------------------------------------------- panel, built once
   panel:
@@ -130,7 +164,7 @@ jobs:
           # costs only in the carbon-priced regimes (SP, DM-FC-tau, DM-tau), but it also values emissions
           # in EVERY regime's welfare metric (welfare_tau_always_scc), which is what makes the
           # regimes comparable - so it is passed to all of them, not only the priced ones.
-          PARAMS="$EXTRA_PARAMS"
+          PARAMS="gamma_scaling=$GAMMA_SCALING $EXTRA_PARAMS"
           if [ -n "$TAU_SCC" ]; then PARAMS="$PARAMS tau_scc=$TAU_SCC"; fi
           python -m eq_model run \
             --panel panel.npz \
@@ -180,7 +214,7 @@ jobs:
           # costs only in the carbon-priced regimes (SP, DM-FC-tau, DM-tau), but it also values emissions
           # in EVERY regime's welfare metric (welfare_tau_always_scc), which is what makes the
           # regimes comparable - so it is passed to all of them, not only the priced ones.
-          PARAMS="$EXTRA_PARAMS"
+          PARAMS="gamma_scaling=$GAMMA_SCALING $EXTRA_PARAMS"
           if [ -n "$TAU_SCC" ]; then PARAMS="$PARAMS tau_scc=$TAU_SCC"; fi
           python -m eq_model sweep \
             --panel panel.npz \

@@ -12,13 +12,15 @@ One dispatch = one γ. The four-panel paper figure needs four dispatches, then o
 
 **Actions** tab → **run-model** in the left sidebar → **Run workflow** (top right). A form appears:
 
-Every field is a free-text box. The values below are only what GitHub prefills — overwrite any of
-them before clicking Run (e.g. type `0.6` into `gamma`).
+Every field except `gamma_scaling` is a free-text box. The values below are only what GitHub
+prefills — overwrite any of them before clicking Run (e.g. type `0.6` into `gamma`).
 
 | field | prefilled with | what it does |
 |---|---|---|
+| `run_name` | *(required)* | name for the run: its title in the Actions list and its results folder (`results/raw/<run_name>/`) |
 | `regimes` | `SP,DM,DM-FC,DM-FC-tau,DM-tau` | one matrix job per entry |
-| `gamma` | `0.3` | risk aversion for this dispatch |
+| `gamma` | `1.25` | risk aversion for this dispatch |
+| `gamma_scaling` | `capital` | drop-down: `capital` scales each technology's γ by its overnight capital cost relative to CCGT; `none` gives every technology the same γ |
 | `workers` | `3` | parallel yearly-dispatch processes inside each job (runner has 4 vCPU) |
 | `tau_scc` | `280` | carbon price $/tCO2 (2025$) |
 | `params` | *(empty)* | any other overrides, space separated: `voll=20000 markdown_mode=full` |
@@ -65,22 +67,24 @@ Retention is a real deadline: download anything you intend to cite.
 `scripts/fetch_run.py` does the whole download-check-plot step. Run it once per dispatch:
 
 ```
-python scripts/fetch_run.py --scenario default
+python scripts/fetch_run.py                      # most recent completed run
+python scripts/fetch_run.py --run-id 12345678    # a specific run
 ```
 
-It takes the most recent completed run, downloads it, reads the γ from the results themselves,
-and files everything as:
+It downloads the run, reads the γ from the results themselves, and files everything under the
+`run_name` typed into the form:
 
 ```
-results/raw/default/g0.3/      <- the artifacts
-results/figs/default/g0.3_capacity.png
-results/figs/default/g0.3_energy.png
-results/figs/default/g0.3_contract.png
+results/raw/baseline/g1.25/      <- the artifacts
+results/figs/baseline/g1.25_capacity.png
+results/figs/baseline/g1.25_energy.png
+results/figs/baseline/g1.25_contract.png
 ```
 
-Only the **scenario** name is yours to choose; the `g<gamma>` level is derived. Artifact names
-repeat across dispatches, which is exactly why each run needs its own directory — the script
-handles that for you.
+**Nothing is overwritten.** If `results/raw/<run_name>/g<gamma>` already exists, the run is filed
+as `<run_name>1` (then `<run_name>2`, …) and the script says so. Pass `--overwrite` to replace the
+existing folder instead, or `--scenario <name>` to file it under a different name. Runs from before
+the `run_name` field (and push-triggered runs) have no name, so the script asks for one.
 
 Figures are PNG by default, which is what you want for looking at them. Pass `--format pdf`
 (or use a `.pdf` extension on `--out` for the plot command) for the vector version to drop
@@ -142,7 +146,9 @@ was produced with.
   cleanly just under GitHub's 360-minute kill. The τ = SCC market regimes (DM-FC-tau, DM-tau) are the ones to watch.
 * **The `push:` trigger** starts a run at the default γ whenever `eq_model/**` changes on `main`.
   Delete that block if every run should be deliberate.
-* **`concurrency: cancel-in-progress`** means a push during a long run cancels it. Set to `false`
-  to let long runs finish.
+* **Several runs at once.** Each manual dispatch runs independently, so you can launch several
+  named runs back to back. Only push-triggered runs cancel an earlier push run on the same branch.
+  The free tier allows about 20 concurrent jobs per account; with 5 regimes per run, a fifth
+  simultaneous run waits in the queue (each job's own run time is unaffected).
 * **`--jobs` is for local runs.** Inside a CI job leave it at 1: each process holds ~3 GB and the
   runner has 16 GB. Parallelism in CI comes from the matrix, not from `--jobs`.

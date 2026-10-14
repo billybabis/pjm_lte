@@ -1,8 +1,8 @@
 """Fetch a finished GitHub Actions run, check it, and build its figures.
 
-    python scripts/fetch_run.py                      # latest run, prompts for the scenario name
-    python scripts/fetch_run.py --scenario default   # no prompt
-    python scripts/fetch_run.py --run-id 12345678 --scenario high_voll
+    python scripts/fetch_run.py                      # latest run, filed under the name it was given
+    python scripts/fetch_run.py --scenario default   # file under a different name
+    python scripts/fetch_run.py --run-id 12345678
 
 Downloads land in ``results/raw/<scenario>/g<gamma>/`` and figures in
 ``results/figs/<scenario>/g<gamma>_{capacity,energy,contract}.png`` (``--format pdf`` for
@@ -14,13 +14,20 @@ A scenario is a set of --param overrides; give each one its own name.  Results a
 (regime, gamma) with no scenario field, so two scenarios must never share a directory tree -
 that is what the per-scenario level is for.
 
+The scenario name defaults to the run name typed into the workflow form (saved in the run's
+``run-info`` artifact).  Existing results are never overwritten: if
+``results/raw/<name>/g<gamma>`` already exists the name gets a numeric suffix (``<name>1``,
+``<name>2``, ...) unless ``--overwrite`` is passed.
+
 Requires the GitHub CLI (`winget install --id GitHub.cli`, then `gh auth login`).
 """
 from __future__ import annotations
 
 import argparse
+import glob
 import json
 import os
+import re
 import shutil
 import stat
 import subprocess
@@ -95,6 +102,33 @@ def latest_run(workflow=WORKFLOW):
     return done[0]
 
 
+def _clean_name(name):
+    """A folder-safe scenario name: spaces become underscores, anything else odd is dropped."""
+    return re.sub(r"[^A-Za-z0-9._-]", "", name.strip().replace(" ", "_"))
+
+
+def run_name_of(stage):
+    """The name typed into the workflow form, from the run-info artifact (None for older runs)."""
+    for fn in glob.glob(os.path.join(stage, "**", "run_info.json"), recursive=True):
+        with open(fn) as fh:
+            name = json.load(fh).get("run_name") or ""
+        if _clean_name(name):
+            return _clean_name(name)
+    return None
+
+
+def free_scenario(scenario, gamma):
+    """``scenario`` if results/raw/<scenario>/g<gamma> is free, else the first free <scenario>N."""
+    def taken(s):
+        return os.path.exists(os.path.join(ROOT, RAW_DIR, s, f"g{gamma:g}"))
+    if not taken(scenario):
+        return scenario
+    n = 1
+    while taken(f"{scenario}{n}"):
+        n += 1
+    return f"{scenario}{n}"
+
+
 def gamma_of(rows):
     gs = sorted({r.get("gamma_requested", r.get("gamma")) for r in rows})
     if len(gs) != 1:
@@ -106,7 +140,8 @@ def gamma_of(rows):
 
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--scenario", help="name under results/raw/ and results/figs/ (e.g. default, high_voll)")
+    ap.add_argument("--scenario", help="name under results/raw/ and results/figs/ "
+                                       "(default: the run name given in the workflow form)")
     ap.add_argument("--run-id", help="which run to fetch (default: the most recent completed one)")
     ap.add_argument("--workflow", default=WORKFLOW)
     ap.add_argument("--panel-width", type=float, default=4.5, help="inches per gamma panel")
@@ -115,7 +150,8 @@ def main(argv=None):
     ap.add_argument("--no-figures", action="store_true", help="download and check only")
     ap.add_argument("--force-figures", action="store_true",
                     help="build figures even if the check found problems")
-    ap.add_argument("--overwrite", action="store_true", help="replace an existing target directory")
+    ap.add_argument("--overwrite", action="store_true",
+                    help="replace an existing target directory instead of adding a numeric suffix")
     args = ap.parse_args(argv)
 
     require_gh()
@@ -130,11 +166,6 @@ def main(argv=None):
         print(f"  NOTE: this run's conclusion is {run['conclusion']!r} - some matrix jobs may be "
               "missing. The check below will say which.")
 
-    scenario = args.scenario
-    while not scenario:
-        scenario = input("scenario folder name (e.g. default, high_voll): ").strip()
-    scenario = scenario.replace(" ", "_")
-
     # Download to a staging directory first: the gamma, and therefore the final path, is only
     # known once the results are on disk.
     stage = tempfile.mkdtemp(prefix="eqrun_")
@@ -147,13 +178,20 @@ def main(argv=None):
                              f"(staged at {stage})")
         gamma = gamma_of(rows)
 
-        dest = os.path.join(ROOT, RAW_DIR, scenario, f"g{gamma:g}")
-        if os.path.exists(dest):
-            if not args.overwrite:
-                ans = input(f"{os.path.relpath(dest, ROOT)} already exists - overwrite? [y/N] ")
-                if ans.strip().lower() not in ("y", "yes"):
-                    raise SystemExit(f"stopping; the download is staged at {stage}")
-            _replace_dir(dest)
+        scenario = _clean_name(args.scenario) if args.scenario else run_name_of(stage)
+        while not scenario:            # runs from before the run-name field, or push runs
+            scenario = _clean_name(input("scenario folder name (e.g. default, high_voll): "))
+        if args.overwrite:
+            dest = os.path.join(ROOT, RAW_DIR, scenario, f"g{gamma:g}")
+            if os.path.exists(dest):
+                _replace_dir(dest)
+        else:
+            requested = scenario
+            scenario = free_scenario(scenario, gamma)
+            if scenario != requested:
+                print(f"  {RAW_DIR}/{requested}/g{gamma:g} already exists; filing this run as "
+                      f"{scenario!r} instead (pass --overwrite to replace it)")
+            dest = os.path.join(ROOT, RAW_DIR, scenario, f"g{gamma:g}")
         os.makedirs(os.path.dirname(dest), exist_ok=True)
         shutil.move(stage, dest)
         stage = None
